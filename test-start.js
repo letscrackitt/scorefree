@@ -18,6 +18,7 @@
     S.sec=900;
     S.paused=false;
     clock();
+    trackEvent('test_started',{exam:S.exam,section:S.type,test_number:S.i+1});
     const a=document.getElementById('answer');
     if(a){a.focus();a.setSelectionRange(a.value.length,a.value.length)}
   };
@@ -26,6 +27,7 @@
     const modal=document.getElementById('start-notice');
     if(modal)modal.remove();
     stop();
+    trackEvent('test_start_cancelled',{exam:S.exam,section:S.type,test_number:S.i+1});
     S.screen='tests';
     render();
   };
