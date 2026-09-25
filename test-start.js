@@ -15,7 +15,7 @@
   window.beginTest=function(){
     const modal=document.getElementById('start-notice');
     if(modal)modal.remove();
-    S.sec=900;
+    S.sec=practiceSeconds();
     S.paused=false;
     clock();
     trackEvent('test_started',{exam:S.exam,section:S.type,test_number:S.i+1});
