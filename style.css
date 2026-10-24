@@ -93,3 +93,189 @@ footer{margin-top:18px;border-top-color:#ddd4e3}footer a{text-decoration:none}fo
 .welcome-choice-icon{width:46px;height:46px;display:grid;place-items:center;margin-bottom:12px;border-radius:15px;background:linear-gradient(135deg,#7868d8,#ef7767);color:#fff;font-size:1.35rem}
 .welcome-choice h3{margin:0 0 8px;color:var(--ink);font-size:1.2rem}
 .welcome-choice p{margin:0;max-width:560px}
+
+
+/* ==========================================================
+   SCOREFREE — PREMIUM UI POLISH
+   Visual-only overrides. Existing markup and app logic remain.
+   ========================================================== */
+
+/* 1. Consistent typography, contrast and elevation tokens */
+:root {
+  --ink: #201d35;
+  --muted: #625e73;
+  --line: #e4deeb;
+  --purple: #6d5bd0;
+  --purple-dark: #5545b0;
+  --shadow-sm: 0 2px 5px rgba(35,28,65,.035), 0 5px 14px rgba(35,28,65,.045);
+  --shadow-md: 0 3px 8px rgba(35,28,65,.035), 0 12px 28px rgba(35,28,65,.075);
+  --shadow-lg: 0 5px 12px rgba(35,28,65,.04), 0 20px 44px rgba(35,28,65,.11);
+  --focus-ring: 0 0 0 4px rgba(109,91,208,.16);
+}
+body {
+  color: var(--ink);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+p, .muted, .lead, .small { color: var(--muted); }
+h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; }
+button, a, .card, .type, .test, .section-card, .section-test-card,
+.pattern-card, .progress-item, .home-tab, .navlink, .primary, .secondary, .ghost {
+  transition: all .2s ease;
+}
+button { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, a:focus-visible, textarea:focus-visible {
+  outline: 3px solid rgba(109,91,208,.55);
+  outline-offset: 3px;
+}
+
+/* 2. Navigation */
+header {
+  background: rgba(255,250,249,.94);
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 3px 14px rgba(35,28,65,.025);
+}
+.nav { min-height: 70px; }
+.brand { color: var(--ink); letter-spacing: -.045em; }
+.mark { box-shadow: 0 5px 14px rgba(109,91,208,.24); }
+.navlink {
+  position: relative; border-radius: 10px; color: #514c65; padding: 10px 13px;
+}
+.navlink:hover { color: var(--purple-dark); background: #f0edff; transform: translateY(-1px); }
+
+/* 3. Main exam tabs and selected state */
+.home-tabs {
+  gap: 7px; padding: 7px; background: rgba(255,255,255,.86);
+  border: 1px solid var(--line); border-radius: 17px; box-shadow: var(--shadow-sm);
+}
+.home-tab {
+  position: relative; border: 1px solid transparent; border-radius: 11px;
+  padding: 14px 16px; color: #514c65; font-weight: 800;
+}
+.home-tab:hover { color: var(--purple-dark); background: #f2efff; border-color: #e4ddff; }
+.home-tab.active {
+  color: #fff; background: linear-gradient(135deg,#302950,#44386f);
+  border-color: #514581;
+  box-shadow: 0 4px 9px rgba(41,36,74,.14), 0 8px 18px rgba(41,36,74,.12);
+}
+.home-tab.active:hover { background: linear-gradient(135deg,#3b315f,#514284); }
+
+/* 4. Cards: crisp borders and layered shadows */
+.card, .section-card, .type, .pattern-card, .progress-panel, .scorecard, .learncard {
+  border: 1px solid var(--line); box-shadow: var(--shadow-sm); border-radius: 19px;
+}
+.card:hover, .type:hover, .pattern-card:hover, .progress-item:hover {
+  transform: translateY(-2px); border-color: #cfc5eb; box-shadow: var(--shadow-md);
+}
+.section-card {
+  position: relative; background: rgba(255,255,255,.97); padding: 23px;
+}
+.section-card:hover {
+  transform: translateY(-3px); border-color: #cfc3f0; box-shadow: var(--shadow-lg);
+}
+.section-card h3 { font-size: 1.22rem; letter-spacing: -.035em; }
+.section-card p { line-height: 1.55; }
+.badge { background: #eeebff; color: #4e409d; font-weight: 800; }
+.badge.coral { background: #ffebe6; color: #9f392b; }
+
+/* 5. Buttons: hover, keyboard focus and tactile press */
+.primary, .secondary, .ghost { min-height: 44px; border-radius: 12px; font-weight: 800; }
+.primary {
+  background: linear-gradient(135deg,#7665d6,#5c4bb7); border: 1px solid #6755c5;
+  box-shadow: 0 3px 6px rgba(74,59,150,.10), 0 8px 18px rgba(74,59,150,.14);
+}
+.primary:hover {
+  background: linear-gradient(135deg,#6755c8,#5140a9); border-color: #5140a9;
+  box-shadow: 0 10px 23px rgba(74,59,150,.23); transform: translateY(-2px);
+}
+.secondary {
+  background: #fff; border: 1px solid #ded7e9; color: var(--ink); box-shadow: var(--shadow-sm);
+}
+.secondary:hover {
+  background: #f8f6ff; border-color: #c6b9ed; transform: translateY(-2px); box-shadow: var(--shadow-md);
+}
+.ghost { color: var(--purple-dark); }
+.ghost:hover { background: #efecff; border-color: #e2dbff; }
+.primary:active, .secondary:active, .ghost:active, .home-tab:active {
+  transform: translateY(0); box-shadow: none;
+}
+
+/* 6. Test cards: more legible metrics and clearer hover feedback */
+.section-test-card, .test {
+  position: relative; background: rgba(255,255,255,.98);
+  border-right: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  border-left: 1px solid var(--line); box-shadow: var(--shadow-sm);
+}
+.section-test-card { border-top-width: 4px; border-radius: 16px; padding: 18px; min-height: 155px; }
+.section-test-card:hover, .test:hover {
+  transform: translateY(-3px); border-right-color: #cfc3eb;
+  border-bottom-color: #cfc3eb; border-left-color: #cfc3eb; box-shadow: var(--shadow-md);
+}
+.test-number, .num { color: var(--navy); font-weight: 900; letter-spacing: -.035em; }
+.test-metrics { color: #343047; line-height: 1.5; }
+.test-time { line-height: 1.45; }
+.test-open { color: var(--purple-dark); font-weight: 850; line-height: 1.45; }
+.section-test-card:focus-visible, .test:focus-visible {
+  outline: none; border-color: var(--purple); box-shadow: var(--focus-ring), var(--shadow-sm);
+}
+
+/* 7. Empty states and progress history */
+.welcome-choice {
+  background: radial-gradient(circle at 100% 0%,rgba(224,217,255,.35),transparent 42%), #fff;
+  border: 1px solid var(--line); border-radius: 22px; padding: 38px 25px; box-shadow: var(--shadow-sm);
+}
+.welcome-choice-icon { box-shadow: 0 7px 17px rgba(109,91,208,.20); }
+.welcome-choice h3 { font-size: 1.25rem; letter-spacing: -.035em; }
+.welcome-choice p { max-width: 540px; line-height: 1.75; }
+.progress-panel { background: rgba(255,255,255,.9); padding: 25px; box-shadow: var(--shadow-sm); }
+.progress-panel .muted { line-height: 1.7; }
+.progress-grid { gap: 13px; }
+.progress-item {
+  background: #faf9ff; border: 1px solid #e6e1f4; border-radius: 14px; padding: 16px;
+}
+.progress-item b { color: #302b46; line-height: 1.45; }
+.progress-item span { line-height: 1.5; }
+.history-list { border-top-color: #e7e1ed; }
+.history-row { padding: 15px 3px; }
+.history-row:hover { background: rgba(239,236,255,.45); }
+.history-row strong { color: var(--purple-dark); }
+
+/* 8. Test-taking interface */
+.prompt, .textarea, .timer, .scorecard, .learncard { border-radius: 17px; }
+.prompt { background: #fff; border-color: #e2dce9; box-shadow: var(--shadow-md); }
+.prompttext { color: #302d42; line-height: 1.8; }
+.textarea {
+  color: var(--ink); border-color: #d8d0e2; background: #fff;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.textarea:focus { border-color: var(--purple); box-shadow: var(--focus-ring); }
+.timer { box-shadow: 0 6px 16px rgba(41,36,74,.16); font-variant-numeric: tabular-nums; }
+.notice { border-radius: 15px; box-shadow: var(--shadow-sm); }
+
+/* 9. Footer links */
+footer { color: #625e73; }
+footer a { color: #40366f; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+footer a:hover { color: var(--purple-dark); }
+
+/* 10. Mobile refinements */
+@media (max-width: 800px) {
+  .section-card { padding: 20px; }
+  .progress-panel { padding: 20px; }
+}
+@media (max-width: 560px) {
+  body { font-size: 15px; }
+  .home-tabs { display: grid; grid-template-columns: 1fr; }
+  .home-tab { width: 100%; text-align: left; padding: 13px 15px; }
+  .welcome-choice { padding: 30px 20px; }
+  .section-test-card { padding: 14px; }
+  .progress-panel { padding: 17px; }
+  .primary, .secondary { min-height: 45px; }
+}
+
+/* 11. Honor reduced-motion accessibility preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+}
