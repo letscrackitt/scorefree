@@ -331,3 +331,29 @@ footer a:hover { color: var(--purple-dark); }
 .subject-flow-meta span{color:#b4adbf}
 @media(max-width:850px){.subject-columns{grid-template-columns:1fr}.subject-flow-card{padding:20px}.inline-tests{grid-template-columns:repeat(10,minmax(0,1fr))}}
 @media(max-width:560px){.inline-tests{grid-template-columns:repeat(5,minmax(0,1fr))}.inline-test-button{min-height:42px}}
+
+
+/* SCOREFREE readability upgrade — stronger type hierarchy and contrast */
+body{font-size:16.5px;line-height:1.7;color:#25223b;font-weight:450}
+p{line-height:1.75}
+h1,h2,h3,h4{color:#211d38;font-weight:900;line-height:1.18;letter-spacing:-.035em}
+h1{font-weight:950}
+h2{font-size:clamp(1.45rem,2.5vw,2rem)}
+h3{font-size:1.18rem;font-weight:900}
+.eyebrow,.passage-label{font-size:.78rem;font-weight:950;letter-spacing:.14em;color:#5d4dc0}
+.lead{font-size:1.12rem;line-height:1.8;color:#514d68;font-weight:500}
+.muted,.small,.count,.score-note{color:#5d586f}
+.navlink,.back{font-size:.95rem;font-weight:900;color:#514b67}
+.badge,.tag{font-size:.78rem;font-weight:950}
+.card h2,.pattern-card h2,.section-title h2{font-weight:950}
+.card p,.pattern-card p{font-size:1rem;line-height:1.75}
+.test{font-size:.98rem;font-weight:750}
+.num{font-size:1.5rem;font-weight:950;color:#29244a}
+.small{font-size:.86rem;font-weight:650}
+.primary,.secondary,.ghost{font-size:.98rem;font-weight:900}
+.notice{font-size:.98rem;font-weight:550;line-height:1.75}
+.stat{font-size:.86rem;font-weight:900}
+th{font-size:.9rem;font-weight:950;color:#30294e}
+td{font-size:.96rem;line-height:1.6}
+.history-row{font-size:.98rem;font-weight:600}
+@media(max-width:600px){body{font-size:16px}.lead{font-size:1.02rem}h1{line-height:1.02}}
