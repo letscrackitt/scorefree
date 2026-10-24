@@ -1,6 +1,6 @@
 
 (function(){
-  window.SF_HOME_TAB = window.SF_HOME_TAB || (new URLSearchParams(location.search).get('section') === 'descriptive' ? 'descriptive' : 'none');
+  var sfParams = new URLSearchParams(location.search); window.SF_HOME_TAB = window.SF_HOME_TAB || (sfParams.get('practice') === 'ibps-clerk' || sfParams.get('practice') === 'sbi-clerk' ? sfParams.get('practice') : sfParams.get('section') === 'descriptive' ? 'descriptive' : 'none');
   window.homeView = function(){
     var tab = window.SF_HOME_TAB || 'ibps-clerk';
     var descriptive = tab === 'descriptive';
@@ -31,7 +31,7 @@
       '<button class="home-tab '+(tab==='ibps-clerk'?'active':'')+'" role="tab" aria-selected="'+(tab==='ibps-clerk')+'" onclick="showHomeTab(\'ibps-clerk\')">IBPS Clerk Mains</button>'+
       '<button class="home-tab '+(tab==='sbi-clerk'?'active':'')+'" role="tab" aria-selected="'+(tab==='sbi-clerk')+'" onclick="showHomeTab(\'sbi-clerk\')">SBI Clerk Mains</button>'+
       '<button class="home-tab '+(tab==='descriptive'?'active':'')+'" role="tab" aria-selected="'+descriptive+'" onclick="showHomeTab(\'descriptive\')">Descriptive Test</button></div><section class="home-tab-content">'+content+'</section>'+progressPanel();
-    if(new URLSearchParams(location.search).get('section')==='descriptive') history.replaceState({},'',location.pathname);
+    if(new URLSearchParams(location.search).get('section')==='descriptive' || new URLSearchParams(location.search).has('practice')) history.replaceState({},'',location.pathname);
   };
   window.showHomeTab = function(tab){window.SF_HOME_TAB=tab;S.screen='home';homeView();window.scrollTo(0,0)};
   window.SF_SUBJECT_NAMES = {reasoning:'Reasoning & Computer Aptitude',quant:'Quantitative Aptitude',english:'English Language',awareness:'General / Financial Awareness'};
