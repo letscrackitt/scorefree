@@ -21,9 +21,9 @@
     } else if(tab==='none'){
       content = '<div class="section-title"><div><p class="eyebrow">Choose your practice</p><h2>Where would you like to start?</h2><p class="muted">Select an exam above to see its subjects and sectional tests.</p></div></div><div class="welcome-choice"><div class="welcome-choice-icon">✦</div><h3>Your next practice session starts here</h3><p class="muted">Choose <b>IBPS Clerk Mains</b>, <b>SBI Clerk Mains</b>, or <b>Descriptive Test</b> above to get started.</p></div>';
     } else {
-      content = '<div class="section-title"><div><p class="eyebrow">'+title+'</p><h2>Sectional Tests</h2><p class="muted">Choose a subject to see Test 1 through Test 10.</p></div></div><div class="subject-columns">'+
-      (exam==='ibps' ? subjectCard('ibps','reasoning','Reasoning Ability','35 min')+subjectCard('ibps','quant','Quantitative Aptitude','30 min')+subjectCard('ibps','english','English Language','35 min') : subjectCard('sbi','reasoning','Reasoning Ability','45 min · practice adaptation')+subjectCard('sbi','quant','Quantitative Aptitude','45 min')+subjectCard('sbi','english','English Language','35 min'))+
-      '</div><div class="notice" style="margin-top:18px"><b>Scoring:</b> objective tests use +1 for a correct answer, zero for unanswered, and a deduction of one-quarter of the marks assigned to that question for a wrong answer. Section details follow published Mains patterns; full-length question banks are still being built. SBI officially combines Reasoning and Computer Aptitude, so Scorefree’s Reasoning-only practice is labelled as an adaptation.</div>';
+      content = '<div class="section-title"><div><p class="eyebrow">'+title+'</p><h2>Sectional Tests</h2><p class="muted">Choose a section and a test (1–10). Section timings and marks follow the exam pattern.</p></div></div><div class="subject-columns">'+
+      (exam==='ibps' ? subjectCard('ibps','reasoning','Reasoning & Computer Aptitude','40 Q · 60 marks · 35 min')+subjectCard('ibps','quant','Quantitative Aptitude','40 Q · 50 marks · 35 min')+subjectCard('ibps','english','General English','40 Q · 40 marks · 35 min')+subjectCard('ibps','awareness','General / Financial Awareness','40 Q · 50 marks · 20 min') : subjectCard('sbi','reasoning','Reasoning & Computer Aptitude','50 Q · 60 marks · 45 min')+subjectCard('sbi','quant','Quantitative Aptitude','50 Q · 50 marks · 45 min')+subjectCard('sbi','english','General English','40 Q · 40 marks · 35 min')+subjectCard('sbi','awareness','General / Financial Awareness','50 Q · 50 marks · 35 min'))+
+      '</div><div class="notice" style="margin-top:18px"><b>Official-pattern marking:</b> each correct answer earns the marks assigned to that question (section marks ÷ section questions); each wrong answer loses one-quarter of those marks; unanswered questions score zero. Section counts, marks and timings are shown per exam pattern. SCOREFREE is an independent practice resource; full-length verified question banks are still being built.</div>';
     }
     document.getElementById('app').innerHTML =
       '<section class="site-intro"><p class="eyebrow">Free bank exam practice</p><h1>SCOREFREE</h1><p class="lead">Practice smarter for bank exams. Take sectional tests, improve descriptive writing, and keep track of your progress.</p></section>'+
@@ -34,10 +34,10 @@
     if(new URLSearchParams(location.search).get('section')==='descriptive') history.replaceState({},'',location.pathname);
   };
   window.showHomeTab = function(tab){window.SF_HOME_TAB=tab;S.screen='home';homeView();window.scrollTo(0,0)};
-  window.SF_SUBJECT_NAMES = {reasoning:'Reasoning Ability',quant:'Quantitative Aptitude',english:'English Language'};
+  window.SF_SUBJECT_NAMES = {reasoning:'Reasoning & Computer Aptitude',quant:'Quantitative Aptitude',english:'English Language',awareness:'General / Financial Awareness'};
   window.SF_SECTION_META = {
-    ibps:{reasoning:{questions:40,marks:60,minutes:35},quant:{questions:35,marks:50,minutes:30},english:{questions:40,marks:40,minutes:35}},
-    sbi:{reasoning:{questions:50,marks:60,minutes:45,note:'Reasoning-only adaptation; official SBI section combines Reasoning & Computer Aptitude'},quant:{questions:50,marks:50,minutes:45},english:{questions:40,marks:40,minutes:35}}
+    ibps:{reasoning:{questions:40,marks:60,minutes:35},quant:{questions:40,marks:50,minutes:35},english:{questions:40,marks:40,minutes:35},awareness:{questions:40,marks:50,minutes:20}},
+    sbi:{reasoning:{questions:50,marks:60,minutes:45},quant:{questions:50,marks:50,minutes:45},english:{questions:40,marks:40,minutes:35},awareness:{questions:50,marks:50,minutes:35}}
   };
   window.showSubjectTests = function(exam,subject){
     var meta=SF_SECTION_META[exam][subject], name=SF_SUBJECT_NAMES[subject], examName=exam==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains';
