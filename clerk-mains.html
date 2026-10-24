@@ -181,6 +181,16 @@ function solutionJump(i){solutionIdx=i;renderSolutionQuestion();}
 function solutionPrev(){if(solutionIdx>0){solutionIdx--;renderSolutionQuestion();}}
 function solutionNext(){if(solutionIdx<qs().length-1){solutionIdx++;renderSolutionQuestion();}}
 function retryTest(){openDemo(exam,subject);}
+let solutionTouchStartX=0,solutionTouchStartY=0;
+document.addEventListener('touchstart',function(ev){
+ if(!ev.target.closest('#solutionReview .qpanel'))return;
+ const t=ev.changedTouches[0];solutionTouchStartX=t.clientX;solutionTouchStartY=t.clientY;
+},{passive:true});
+document.addEventListener('touchend',function(ev){
+ if(!ev.target.closest('#solutionReview .qpanel'))return;
+ const t=ev.changedTouches[0],dx=t.clientX-solutionTouchStartX,dy=t.clientY-solutionTouchStartY;
+ if(Math.abs(dx)>65&&Math.abs(dx)>Math.abs(dy)*1.25){if(dx<0)solutionNext();else solutionPrev();}
+},{passive:true});
 
 function backHome(){clearInterval(clockId);document.getElementById('test').classList.add('hidden');document.getElementById('results').classList.add('hidden');document.getElementById('home').classList.remove('hidden')}
 const launchParams = new URLSearchParams(location.search);
