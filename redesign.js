@@ -72,7 +72,7 @@
         '</ul></section>' +
         '<section class="instructions-panel scoring-rules"><h2>Marking scheme</h2>' +
           '<div class="marking-row"><span><i class="mark-dot correct-dot"></i>Marks awarded for a correct answer</span><b>+'+(meta.marks/meta.questions).toFixed(2)+' marks</b></div>' +
-          '<div class="marking-row"><span><i class="mark-dot wrong-dot"></i>Marks deducted for a wrong answer</span><b>−'+(meta.marks/meta.questions/4).toFixed(3)+' marks</b></div>' +
+          '<div class="marking-row"><span><i class="mark-dot wrong-dot"></i>Marks deducted for a wrong answer</span><b>−'+Number((meta.marks/meta.questions/4).toFixed(4)).toString()+' marks</b></div>' +
           '<div class="marking-row"><span><i class="mark-dot blank-dot"></i>Unanswered</span><b>0 marks</b></div>' +
           '<p class="small">A minus (−) means these marks are subtracted from your score, not awarded. The penalty is one-quarter of the marks for that question. Unanswered questions: 0 marks.</p>' +
         '</section>' +
