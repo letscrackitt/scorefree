@@ -61,3 +61,11 @@ footer{margin-top:18px;border-top-color:#ddd4e3}footer a{text-decoration:none}fo
 .progress-badge{display:inline-flex;align-self:flex-start;border-radius:8px;background:var(--mint);color:#126b61;padding:5px 7px;font-size:.7rem;font-weight:900}
 @media(max-width:850px){.subject-columns{grid-template-columns:1fr}.section-card{min-height:0}.progress-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.site-intro h1{font-size:3.2rem}.home-tabs{display:grid;grid-template-columns:1fr}.home-tab{width:100%;text-align:left}.progress-grid{grid-template-columns:1fr}.section-card{padding:18px}.progress-panel{padding:17px}}
+
+
+.history-list{margin-top:20px;border-top:1px solid var(--line);padding-top:15px}
+.history-list h3{margin:0 0 10px}
+.history-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 2px;border-bottom:1px solid var(--line)}
+.history-row span{display:flex;flex-direction:column;gap:3px}
+.history-row small{display:block;font-size:.75rem;color:var(--muted);font-weight:500}
+.history-row strong{white-space:nowrap;color:var(--navy)}
