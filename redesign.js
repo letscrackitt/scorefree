@@ -66,7 +66,7 @@
           '<li>Unanswered questions receive zero marks.</li>' +
         '</ul></section>' +
         '<section class="instructions-panel scoring-rules"><h2>Marking scheme</h2>' +
-          '<div class="marking-row"><span><i class="mark-dot correct-dot"></i>Correct answer</span><b>+ marks</b></div>' +
+          '<div class="marking-row"><span><i class="mark-dot correct-dot"></i>Correct answer</span><b>+ full question marks</b></div>' +
           '<div class="marking-row"><span><i class="mark-dot wrong-dot"></i>Wrong answer</span><b>−¼ question marks</b></div>' +
           '<div class="marking-row"><span><i class="mark-dot blank-dot"></i>Unanswered</span><b>0 marks</b></div>' +
           '<p class="small">The penalty is one-quarter of the marks assigned to the question.</p>' +
