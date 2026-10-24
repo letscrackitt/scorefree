@@ -35,3 +35,12 @@ SCOREFREE provides a transparent **practice score out of 100** using relevance, 
 ### IBPS comprehension
 
 The IBPS Comprehension bank contains 50 complete practice passages. Each test includes the reading passage, a question, topic guidance, and a clearly labelled practice word target. The practice target is not presented as an official IBPS word limit.
+
+
+## Clerk Mains objective practice interface
+
+- The new `clerk-mains.html` page provides an exam-style interface preview: one question at a time, countdown timer, question palette, Save & Next, Clear Response, Mark for Review & Next, submit confirmation, and post-submit answer explanations.
+- The current page is explicitly labelled as an **interface preview**, not a full-length mock. Its short sample questions are not the planned 60-test bank.
+- Planned scope: 10 tests each for IBPS Clerk Mains and SBI Clerk Mains in Reasoning, Quantitative Aptitude, and English Language. General/Financial Awareness is excluded.
+- Scorefree's SBI Core Reasoning practice excludes Computer Aptitude. The custom 55-minute setting is a Scorefree practice format, not SBI's official combined-section timing.
+- Official SBI Junior Associate Mains pattern lists 40 English questions / 35 minutes, 50 Quantitative Aptitude questions / 45 minutes, and a combined 50-question Reasoning Ability & Computer Aptitude section / 45 minutes. IBPS Clerk Mains structure should be checked against the latest CRP-CSA-XVI notification before the full mock metadata is finalized.
