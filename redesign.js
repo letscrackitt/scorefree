@@ -35,7 +35,8 @@
     var groups={};
     history.forEach(function(r){var k=r.exam+'|'+r.type;if(!groups[k])groups[k]={exam:r.exam,type:r.type,attempts:0,best:0,latest:r};groups[k].attempts++;groups[k].best=Math.max(groups[k].best,Number(r.practiceScore100)||0);if(!groups[k].latest.date||r.date>groups[k].latest.date)groups[k].latest=r});
     var cards=Object.keys(groups).map(function(k){var g=groups[k];return '<div class="progress-item"><b>'+esc(meta[g.exam].title)+' · '+esc(names[g.exam][g.type])+'</b><span>Attempts: '+g.attempts+' · Best: '+g.best+'%</span><span class="small">Latest: Test '+g.latest.test+' · '+g.latest.score+'/'+g.latest.max+' marks</span></div>'}).join('');
-    return '<section class="progress-panel"><div class="progress-heading"><div><p class="eyebrow">Saved on this device</p><h2>Your progress</h2></div><button class="secondary" onclick="clearHistory()">Clear history</button></div><div class="progress-grid">'+cards+'</div></section>';
+    var recent=history.slice(0,12).map(function(r){return '<div class="history-row"><span><b>'+esc(meta[r.exam].title)+' · '+esc(names[r.exam][r.type])+'</b><small>Test '+r.test+' · '+new Date(r.date).toLocaleDateString()+'</small></span><strong>'+r.score+'/'+r.max+' <small>('+r.practiceScore100+'%)</small></strong></div>'}).join('');
+    return '<section class="progress-panel"><div class="progress-heading"><div><p class="eyebrow">Saved on this device</p><h2>Your progress</h2></div><button class="secondary" onclick="clearHistory()">Clear history</button></div><div class="progress-grid">'+cards+'</div><div class="history-list"><h3>Recent test scores</h3>'+recent+'</div></section>';
   };
   window.clearHistory = function(){if(confirm('Clear all saved SCOREFREE scores from this browser?')){localStorage.removeItem('sf-history');homeView()}};
   var oldSaveResult=window.saveResult;
