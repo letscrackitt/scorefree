@@ -115,6 +115,52 @@ button{font-size:.98rem;font-weight:900;transition:all .2s ease}
 .test-action-buttons .save-next-button{background:#5b4ce2;color:#fff;border-color:#4d3bcf}
 .test-action-buttons .save-next-button:hover{background:#4636c6;border-color:#392aa9}
 @media(max-width:780px){.test-action-buttons{grid-template-columns:1fr;gap:9px}.test-action-buttons button{width:100%;min-height:48px}}
+
+/* Color-coded exam workspace inspired by modern mock-test interfaces (original SCOREFREE styling) */
+:root{--sf-blue:#087fbd;--sf-cyan:#e7f7ff;--sf-lav:#eeeaff;--sf-mint:#e0f7ec;--sf-coral:#fff0ef;--sf-gold:#fff5d9}
+body.focus-mode{background:#f2f5fb}
+.focus-mode .exambar{background:linear-gradient(105deg,#fff 0%,#f0edff 65%,#e8f7ff 100%);border:1px solid #d9d7f3;border-radius:14px;padding:14px 18px;margin-bottom:14px}
+.focus-mode #testLabel{color:#5745c4;font-size:.78rem;letter-spacing:.13em}
+.focus-mode #testName{display:block;font-size:1.08rem;font-weight:950;color:#25203f;margin-top:3px}
+.focus-mode .timer{display:inline-flex;align-items:center;justify-content:center;min-width:104px;padding:7px 12px;background:#fff0ef;border:1px solid #f1c3c0;border-radius:10px;color:#b52f36;font-size:1.45rem;box-shadow:0 3px 10px #c4494910}
+.focus-mode .qpanel{border-color:#d8d6ef;box-shadow:0 7px 24px #2c25520b}
+.focus-mode .qhead{background:linear-gradient(90deg,#e9e5ff,#f1f7ff);border-bottom:2px solid #d4cdfd;align-items:center;min-height:58px}
+.focus-mode #qcount{font-size:1.08rem;font-weight:950;color:#34286f}
+.focus-mode #qmarks{display:inline-block;padding:5px 9px;border-radius:8px;background:#fff;color:#514a77;font-size:.78rem;font-weight:850}
+.focus-mode #qtopic{display:inline-block;padding:5px 10px;border-radius:7px;background:#e4f6ff;color:#086b96;font-size:.83rem;font-weight:900;margin-bottom:7px}
+.focus-mode .qtext{font-size:clamp(1.2rem,2vw,1.48rem);line-height:1.65;font-weight:900;color:#211d38}
+.focus-mode .option{background:#fff;border:1.5px solid #dcddea;box-shadow:0 2px 6px #24203c06}
+.focus-mode .option:hover{background:#f0f7ff;border-color:#7dc4e9}
+.focus-mode .option:has(input:checked){background:#eaf7ff;border:2px solid #42a5d4;color:#123d59;box-shadow:0 0 0 2px #d9f2ff}
+.focus-mode .option span{font-weight:650}
+.focus-mode .palette{background:linear-gradient(180deg,#fff 0%,#fbfaff 100%);border-color:#d9d7ec;box-shadow:0 7px 24px #2c25520b}
+.focus-mode .palette>b{display:block;font-size:1.15rem;font-weight:950;color:#2c2550;padding-bottom:10px;border-bottom:3px solid #eeeaff}
+.focus-mode .palette>p{font-size:.88rem!important;line-height:1.55;font-weight:650}
+.focus-mode .palette-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
+.focus-mode .qnum{min-height:42px;border-radius:10px;font-size:1rem;font-weight:950;background:#fff;border:1.5px solid #cfd1df;color:#45435a;box-shadow:0 2px 5px #25203b08}
+.focus-mode .qnum.notvisited{background:#fff;border-color:#c9cad8;color:#55536b}
+.focus-mode .qnum.notanswered{background:#fff0ef;border-color:#f0b8b5;color:#a83232}
+.focus-mode .qnum.answered{background:#d9f6e7;border-color:#8ed7b2;color:#126a45}
+.focus-mode .qnum.review{background:#efe4ff;border-color:#c9a8f4;color:#6734a5}
+.focus-mode .qnum.both{background:#fff0c9;border-color:#edcc70;color:#7b5200}
+.focus-mode .qnum.current{outline:3px solid #5b4ce2;outline-offset:2px;box-shadow:0 0 0 5px #e5e1ff;font-weight:1000}
+.focus-mode .legend{font-size:.85rem;line-height:1.5;font-weight:750}
+.focus-mode .legend span:before{width:12px;height:12px}
+.focus-mode .legend .l-answer:before{background:#d9f6e7;border-color:#8ed7b2}
+.focus-mode .legend .l-review:before{background:#efe4ff;border-color:#c9a8f4}
+.focus-mode .legend .l-unvisited:before{background:#fff;border-color:#c9cad8}
+.focus-mode .legend span:last-child:before{background:#fff0ef;border-color:#f0b8b5}
+.focus-mode .stats .stat{background:#eeeaff;color:#43347f;font-size:.9rem;font-weight:850;border:1px solid #ddd5ff}
+.focus-mode .stats .stat:last-child{background:#fff0d8;color:#7c4b0a;border-color:#f1d5a1}
+.focus-mode .test-action-buttons{background:#f7f6ff;border-top:1px solid #dedaf3}
+.focus-mode .test-action-buttons button{min-height:54px;font-size:1rem}
+.focus-mode .test-action-buttons .clear-response-button{background:#fff0ef;color:#a52f32;border-color:#e99b98}
+.focus-mode .test-action-buttons .mark-review-button{background:#efe4ff;color:#6532a6;border-color:#c6a0f0}
+.focus-mode .test-action-buttons .save-next-button{background:linear-gradient(135deg,#5b4ce2,#4c43c7);border-color:#4537c2}
+.focus-mode #submitTest{background:linear-gradient(135deg,#e45c55,#c63d49)!important;color:#fff!important;border:0!important;box-shadow:0 7px 16px #c4494930}
+.focus-mode .qnum:focus-visible,.focus-mode button:focus-visible{outline:3px solid #087fbd;outline-offset:3px}
+@media(max-width:780px){.focus-mode .palette-grid{grid-template-columns:repeat(5,minmax(0,1fr))}.focus-mode .qhead{align-items:flex-start;flex-direction:column;gap:6px}.focus-mode .timer{min-width:90px}}
+
 </style></head>
 <body>
 <header class="top"><a class="brand" href="./index.html">SCOREFREE</a><a class="muted" href="./index.html">← Main site</a></header>
@@ -177,7 +223,7 @@ function openDemo(e,s){exam=e;subject=s;idx=0;answers={};reviews={};visited={};s
 function startClock(){clearInterval(clockId);paintClock();clockId=setInterval(()=>{secs--;paintClock();if(secs<=0){clearInterval(clockId);finish()}},1000)}
 function paintClock(){document.getElementById('timer').textContent=String(Math.floor(Math.max(0,secs)/60)).padStart(2,'0')+':'+String(Math.max(0,secs)%60).padStart(2,'0')}
 function qs(){return demos.filter(q=>subject==='reasoning'?q.topic==='Reasoning Ability':subject==='quant'?q.topic==='Quantitative Aptitude':subject==='awareness'?q.topic==='General / Financial Awareness':q.topic==='English Language')}
-function renderQ(){const list=qs();if(idx>=list.length)idx=list.length-1;visited[idx]=true;const q=list[idx];document.getElementById('qcount').textContent='Question '+(idx+1)+' — '+({reasoning:'Reasoning & Computer Aptitude',quant:'Quantitative Aptitude',english:'English Language',awareness:'General / Financial Awareness'})[subject];document.getElementById('qmarks').textContent='Exam-style weighted marks · preview';document.getElementById('qtopic').textContent=q.topic;document.getElementById('qtext').textContent=q.q;document.getElementById('options').innerHTML=q.opts.map((o,i)=>'<label class="option"><input type="radio" name="option" value="'+i+'" '+(answers[idx]===i?'checked':'')+' onchange="chooseAnswer('+i+')"><span><b>'+String.fromCharCode(65+i)+'.</b> '+o+'</span></label>').join('');drawPalette()}
+function renderQ(){const list=qs();if(idx>=list.length)idx=list.length-1;visited[idx]=true;const q=list[idx];document.getElementById('qcount').textContent='Question '+(idx+1);document.getElementById('qmarks').textContent='Exam-style weighted marks · preview';document.getElementById('qtopic').textContent=q.topic;document.getElementById('qtext').textContent=q.q;document.getElementById('options').innerHTML=q.opts.map((o,i)=>'<label class="option"><input type="radio" name="option" value="'+i+'" '+(answers[idx]===i?'checked':'')+' onchange="chooseAnswer('+i+')"><span><b>'+String.fromCharCode(65+i)+'.</b> '+o+'</span></label>').join('');drawPalette()}
 function chooseAnswer(i){answers[idx]=i;drawPalette()}
 function drawPalette(){const list=qs();document.getElementById('palette').innerHTML=list.map((q,i)=>{const status=answers[i]!==undefined?(reviews[i]?'both':'answered'):(reviews[i]?'review':(visited[i]?'notanswered':'notvisited'));return '<button class="qnum '+status+' '+(i===idx?'current':'')+'" onclick="jump('+i+')">'+(i+1)+'</button>'}).join('');document.getElementById('answeredN').textContent=Object.keys(answers).length;document.getElementById('reviewN').textContent=Object.keys(reviews).filter(k=>reviews[k]).length}
 function jump(i){idx=i;renderQ()}
