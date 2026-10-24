@@ -55,6 +55,54 @@
 #solutionReview .actions button:disabled{opacity:.42;cursor:not-allowed;transform:none;box-shadow:none}
 @media(max-width:980px){.result-dashboard{grid-template-columns:repeat(3,minmax(0,1fr))}.result-hero,.result-footnote{grid-column:1/-1}}
 @media(max-width:600px){.result-dashboard{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.result-hero{padding:19px}.result-hero>strong{font-size:2.1rem}.result-metric{padding:12px 10px;gap:7px}.result-metric strong{font-size:1.3rem}.result-actions{display:grid;grid-template-columns:1fr}.solution-toolbar{align-items:flex-start;flex-direction:column}.solution-toolbar>button{width:100%}.solution-grid .palette{order:0}}
+
+/* SCOREFREE test readability upgrade */
+body{font-size:16.5px;line-height:1.7;color:#25223b;font-weight:450}
+p{line-height:1.75}
+h1,h2,h3,h4{color:#211d38;font-weight:900;line-height:1.18;letter-spacing:-.035em}
+h1{font-weight:950;font-size:clamp(2.25rem,4.5vw,3.5rem)}
+h2{font-size:clamp(1.4rem,2.4vw,1.9rem);font-weight:950}
+h3{font-size:1.15rem;font-weight:900}
+.eyebrow{font-size:.8rem;font-weight:950;letter-spacing:.14em;color:#5140c0}
+.muted{color:#56536e;font-size:.98rem}
+.intro>.muted{font-size:1.08rem;line-height:1.8}
+.pill{font-size:.82rem;font-weight:900;padding:6px 11px}
+.card{padding:25px;box-shadow:0 7px 24px #26234c0d}
+.card h2{margin:18px 0 12px}
+.card p{font-size:1rem;line-height:1.7}
+.notice{font-size:1rem;line-height:1.8;font-weight:550;border-left:5px solid #d9a441}
+button{font-size:.98rem;font-weight:900;transition:all .2s ease}
+.primary{box-shadow:0 7px 17px #5b4ce229}
+.primary:hover,.secondary:hover{transform:translateY(-2px)}
+.exambar{font-size:1rem;font-weight:800}
+.timer{font-size:1.45rem;font-weight:950}
+.qhead{font-size:1.02rem;font-weight:850;background:#f0edff;border-bottom:2px solid #dcd5ff}
+.qbody{padding:28px}
+.qtext{font-size:clamp(1.15rem,2vw,1.35rem);font-weight:850;line-height:1.65;color:#211d38;margin:14px 0 24px}
+.option{font-size:1.04rem;line-height:1.65;font-weight:600;padding:15px 16px;border-width:1.5px;transition:all .2s ease}
+.option:hover{border-color:#7765d9;background:#f5f2ff;transform:translateY(-1px)}
+.option input{transform:scale(1.15)}
+.palette{padding:20px}
+.palette> b,.palette>b:first-child{font-size:1.05rem;font-weight:950;color:#25203f}
+.qnum{font-size:.95rem;font-weight:950;min-height:40px;transition:all .2s ease}
+.legend{font-size:.88rem;font-weight:650;color:#56536e}
+.actions{padding:18px 22px}
+.result-hero>span{font-size:.85rem;font-weight:950;color:#51496f}
+.result-hero>strong{font-size:3rem;font-weight:950}
+.result-metric>span:last-child{font-size:.9rem;font-weight:800;color:#56536e}
+.result-metric strong{font-size:1.7rem;font-weight:950}
+.result-metric small{font-size:.78rem}
+.result-footnote{font-size:.92rem;line-height:1.7;color:#56536e}
+.solution-toolbar h2{font-size:clamp(1.5rem,3vw,2rem);font-weight:950}
+.solution-toolbar .muted{font-size:.96rem}
+.solution-status{font-size:.86rem;font-weight:950}
+.solution-option{font-size:1.02rem;line-height:1.7;font-weight:600;padding:15px 16px}
+.solution-letter{font-size:.95rem;font-weight:950}
+.option-verdict{font-size:.8rem;font-weight:950}
+.answer-explanation h3{font-size:1.15rem;font-weight:950;color:#32285f}
+.answer-explanation p{font-size:1rem;line-height:1.85;font-weight:550}
+.result-actions button{font-weight:950}
+@media(max-width:600px){body{font-size:16px}.qbody{padding:19px}.qtext{font-size:1.12rem}.result-hero>strong{font-size:2.45rem}}
 </style></head>
 <body>
 <header class="top"><a class="brand" href="./index.html">SCOREFREE</a><a class="muted" href="./index.html">← Main site</a></header>
