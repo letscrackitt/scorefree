@@ -41,7 +41,7 @@
     document.getElementById('app').innerHTML='<button class="ghost" onclick="showHomeTab(\''+(exam==='ibps'?'ibps-clerk':'sbi-clerk')+'\')">← Back to subjects</button><section class="test-list-heading"><p class="eyebrow">'+examName+'</p><h2>'+name+' — Sectional Tests</h2><p class="muted">Choose a test below. Each card shows the published section format for reference.</p><div class="test-summary"><span><b>'+meta.questions+'</b> questions</span><span><b>'+meta.marks+'</b> maximum marks</span><span><b>'+meta.minutes+' min</b> time limit</span></div>'+(meta.note?'<p class="small">'+meta.note+'</p>':'')+'</section><div class="section-test-grid">'+cards+'</div><div class="notice" style="margin-top:18px"><b>Important:</b> the links currently open a short interface preview, not a full-length test. The complete question bank and full-length timer are not yet available. Preview results are not official exam predictions.</div>';
     window.scrollTo(0,0);
   };
-  window.openClerkPreview = function(exam,subject,test){location.href='./clerk-mains.html?exam='+encodeURIComponent(exam)+'&subject='+encodeURIComponent(subject)+'&test='+(test||1)};
+  window.openClerkPreview = function(exam,subject,test){var url='./clerk-mains.html?exam='+encodeURIComponent(exam)+'&subject='+encodeURIComponent(subject)+'&test='+(test||1);var w=window.open(url,'_blank','popup=yes,width=1440,height=900,resizable=yes,scrollbars=yes');if(!w){alert('Your browser blocked the test window. Allow pop-ups for SCOREFREE, then select the test again.');}};
   window.readHistory = function(){try{return JSON.parse(localStorage.getItem('sf-history')||'[]')}catch(e){return []}};
   window.progressPanel = function(){
     var history=readHistory();
