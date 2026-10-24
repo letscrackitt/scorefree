@@ -38,9 +38,44 @@
     var meta=SF_SECTION_META[exam][subject], name=SF_SUBJECT_NAMES[subject], examName=exam==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains';
     var cards='';
     for(var i=1;i<=10;i++){
-      cards+='<button class="section-test-card" onclick="openClerkPreview(\''+exam+'\',\''+subject+'\','+i+')"><span class="test-number">Test '+i+'</span><span class="test-metrics">'+meta.questions+' questions · '+meta.marks+' marks</span><span class="test-time">'+meta.minutes+' minutes</span><span class="test-open">Open test preview →</span></button>';
+      cards+='<button class="section-test-card" onclick="showTestInstructions(\''+exam+'\',\''+subject+'\','+i+')"><span class="test-number">Test '+i+'</span><span class="test-metrics">'+meta.questions+' questions · '+meta.marks+' marks</span><span class="test-time">'+meta.minutes+' minutes</span><span class="test-open">View instructions →</span></button>';
     }
     document.getElementById('app').innerHTML='<button class="ghost" onclick="showHomeTab(\''+(exam==='ibps'?'ibps-clerk':'sbi-clerk')+'\')">← Back to subjects</button><section class="test-list-heading"><p class="eyebrow">'+examName+'</p><h2>'+name+' — Sectional Tests</h2><p class="muted">Choose a test below. Each card shows the published section format for reference.</p><div class="test-summary"><span><b>'+meta.questions+'</b> questions</span><span><b>'+meta.marks+'</b> maximum marks</span><span><b>'+meta.minutes+' min</b> time limit</span></div>'+(meta.note?'<p class="small">'+meta.note+'</p>':'')+'</section><div class="section-test-grid">'+cards+'</div><div class="notice" style="margin-top:18px"><b>Important:</b> the links currently open a short interface preview, not a full-length test. The complete question bank and full-length timer are not yet available. Preview results are not official exam predictions.</div>';
+    window.scrollTo(0,0);
+  };
+  window.showTestInstructions = function(exam,subject,test){
+    var meta=SF_SECTION_META[exam][subject], name=SF_SUBJECT_NAMES[subject];
+    var examName=exam==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains';
+    document.getElementById('app').innerHTML =
+      '<section class="test-instructions-page">' +
+      '<button class="ghost instructions-back" onclick="showSubjectTests(\''+exam+'\',\''+subject+'\')">← Back to tests</button>' +
+      '<div class="instructions-brandline"><span class="instructions-mark">S</span><span>SCOREFREE <i>/ Practice environment</i></span></div>' +
+      '<p class="eyebrow">'+examName+' · '+name+'</p><h1>Test '+test+' instructions</h1>' +
+      '<p class="instructions-lead">Review the test format and marking rules before you begin.</p>' +
+      '<div class="instructions-metrics">' +
+        '<div><span>Questions in full test</span><strong>'+meta.questions+'</strong></div>' +
+        '<div><span>Maximum marks</span><strong>'+meta.marks+'</strong></div>' +
+        '<div><span>Time limit</span><strong>'+meta.minutes+' min</strong></div>' +
+        '<div><span>Question format</span><strong>MCQ</strong></div>' +
+      '</div>' +
+      '<div class="instructions-columns">' +
+        '<section class="instructions-panel"><h2>Test guidelines</h2><ul>' +
+          '<li>Choose one option for each multiple-choice question.</li>' +
+          '<li>Use the question palette to navigate between questions.</li>' +
+          '<li>You can change an answer before submitting.</li>' +
+          '<li>Unanswered questions receive zero marks.</li>' +
+        '</ul></section>' +
+        '<section class="instructions-panel scoring-rules"><h2>Marking scheme</h2>' +
+          '<div class="marking-row"><span><i class="mark-dot correct-dot"></i>Correct answer</span><b>+ marks</b></div>' +
+          '<div class="marking-row"><span><i class="mark-dot wrong-dot"></i>Wrong answer</span><b>−¼ question marks</b></div>' +
+          '<div class="marking-row"><span><i class="mark-dot blank-dot"></i>Unanswered</span><b>0 marks</b></div>' +
+          '<p class="small">The penalty is one-quarter of the marks assigned to the question.</p>' +
+        '</section>' +
+      '</div>' +
+      '<div class="preview-disclosure"><b>Preview mode:</b> The current build contains sample questions, not the full '+meta.questions+'-question bank. Your score is for practice only.</div>' +
+      '<div class="instructions-footer"><div><b>Ready when you are?</b><span>The test opens in a separate window.</span></div>' +
+      '<button class="primary start-test-button" onclick="openClerkPreview(\''+exam+'\',\''+subject+'\','+test+')">Start Test '+test+' <span aria-hidden="true">→</span></button></div>' +
+      '</section>';
     window.scrollTo(0,0);
   };
   window.openClerkPreview = function(exam,subject,test){var url='./clerk-mains.html?exam='+encodeURIComponent(exam)+'&subject='+encodeURIComponent(subject)+'&test='+(test||1);var w=window.open(url,'_blank','popup=yes,width=1440,height=900,resizable=yes,scrollbars=yes');if(!w){alert('Your browser blocked the test window. Allow pop-ups for SCOREFREE, then select the test again.');}};
