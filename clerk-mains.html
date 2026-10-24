@@ -103,6 +103,18 @@ button{font-size:.98rem;font-weight:900;transition:all .2s ease}
 .answer-explanation p{font-size:1rem;line-height:1.85;font-weight:550}
 .result-actions button{font-weight:950}
 @media(max-width:600px){body{font-size:16px}.qbody{padding:19px}.qtext{font-size:1.12rem}.result-hero>strong{font-size:2.45rem}}
+
+/* Clear, distinct test navigation actions */
+.test-action-buttons{display:grid;grid-template-columns:1fr 1.35fr 1fr;gap:12px;padding:18px 20px;background:#fbfaff}
+.test-action-buttons button{min-height:50px;padding:13px 16px;border:2px solid transparent;border-radius:12px;font-size:.96rem;font-weight:900;letter-spacing:.005em;box-shadow:0 4px 12px #20203712;transition:all .2s ease}
+.test-action-buttons button:hover{transform:translateY(-2px);box-shadow:0 8px 18px #2020371b}
+.test-action-buttons .clear-response-button{background:#fff1f0;color:#a83232;border-color:#edb2ae}
+.test-action-buttons .clear-response-button:hover{background:#ffe5e2;border-color:#d97770}
+.test-action-buttons .mark-review-button{background:#f1e8ff;color:#6333a4;border-color:#d4b7f7}
+.test-action-buttons .mark-review-button:hover{background:#e8d9ff;border-color:#b98be9}
+.test-action-buttons .save-next-button{background:#5b4ce2;color:#fff;border-color:#4d3bcf}
+.test-action-buttons .save-next-button:hover{background:#4636c6;border-color:#392aa9}
+@media(max-width:780px){.test-action-buttons{grid-template-columns:1fr;gap:9px}.test-action-buttons button{width:100%;min-height:48px}}
 </style></head>
 <body>
 <header class="top"><a class="brand" href="./index.html">SCOREFREE</a><a class="muted" href="./index.html">← Main site</a></header>
@@ -123,7 +135,7 @@ button{font-size:.98rem;font-weight:900;transition:all .2s ease}
 </section>
 <section id="test" class="hidden">
 <div class="exambar"><div><div class="eyebrow" id="testLabel">Practice preview</div><b id="testName">Reasoning Ability</b></div><div><div class="muted" style="font-size:.78rem">TIME LEFT</div><div class="timer" id="timer">05:00</div></div><button class="secondary" onclick="askExit()">Exit preview</button></div>
-<div class="testgrid"><section class="qpanel"><div class="qhead"><b id="qcount">Question 1</b><span class="muted" id="qmarks">1 mark</span></div><div class="qbody"><div class="muted" id="qtopic">Practice question</div><div class="qtext" id="qtext"></div><div id="options"></div></div><div class="actions"><button class="secondary" onclick="clearAnswer()">Clear Response</button><button class="secondary" onclick="markReview()">Mark for Review & Next</button><button class="primary" onclick="saveNext()">Save & Next</button></div></section>
+<div class="testgrid"><section class="qpanel"><div class="qhead"><b id="qcount">Question 1</b><span class="muted" id="qmarks">1 mark</span></div><div class="qbody"><div class="muted" id="qtopic">Practice question</div><div class="qtext" id="qtext"></div><div id="options"></div></div><div class="actions test-action-buttons"><button class="clear-response-button" onclick="clearAnswer()">✕ Clear Response</button><button class="mark-review-button" onclick="markReview()">★ Mark for Review & Next</button><button class="save-next-button" onclick="saveNext()">✓ Save & Next</button></div></section>
 <aside class="palette"><b>Question Palette</b><p class="muted" style="font-size:.82rem">Select a number to jump to a question.</p><div class="palette-grid" id="palette"></div><div class="legend"><span class="l-answer">Answered</span><span class="l-review">Marked for Review</span><span class="l-unvisited">Not Visited</span><span>Not Answered (visited, no response)</span></div><hr style="border:0;border-top:1px solid var(--line);margin:18px 0"><div class="stats"><div class="stat">Answered: <b id="answeredN">0</b></div><div class="stat">Review: <b id="reviewN">0</b></div></div><button class="primary" style="width:100%;margin-top:16px" onclick="submitAsk()">Submit Test</button></aside></div>
 </section>
 <section id="results" class="hidden">
@@ -165,7 +177,7 @@ function openDemo(e,s){exam=e;subject=s;idx=0;answers={};reviews={};visited={};s
 function startClock(){clearInterval(clockId);paintClock();clockId=setInterval(()=>{secs--;paintClock();if(secs<=0){clearInterval(clockId);finish()}},1000)}
 function paintClock(){document.getElementById('timer').textContent=String(Math.floor(Math.max(0,secs)/60)).padStart(2,'0')+':'+String(Math.max(0,secs)%60).padStart(2,'0')}
 function qs(){return demos.filter(q=>subject==='reasoning'?q.topic==='Reasoning Ability':subject==='quant'?q.topic==='Quantitative Aptitude':subject==='awareness'?q.topic==='General / Financial Awareness':q.topic==='English Language')}
-function renderQ(){const list=qs();if(idx>=list.length)idx=list.length-1;visited[idx]=true;const q=list[idx];document.getElementById('qcount').textContent='Question '+(idx+1)+' of '+list.length;document.getElementById('qmarks').textContent='Exam-style weighted marks · preview';document.getElementById('qtopic').textContent=q.topic;document.getElementById('qtext').textContent=q.q;document.getElementById('options').innerHTML=q.opts.map((o,i)=>'<label class="option"><input type="radio" name="option" value="'+i+'" '+(answers[idx]===i?'checked':'')+' onchange="chooseAnswer('+i+')"><span><b>'+String.fromCharCode(65+i)+'.</b> '+o+'</span></label>').join('');drawPalette()}
+function renderQ(){const list=qs();if(idx>=list.length)idx=list.length-1;visited[idx]=true;const q=list[idx];document.getElementById('qcount').textContent='Question '+(idx+1)+' — '+({reasoning:'Reasoning & Computer Aptitude',quant:'Quantitative Aptitude',english:'English Language',awareness:'General / Financial Awareness'})[subject];document.getElementById('qmarks').textContent='Exam-style weighted marks · preview';document.getElementById('qtopic').textContent=q.topic;document.getElementById('qtext').textContent=q.q;document.getElementById('options').innerHTML=q.opts.map((o,i)=>'<label class="option"><input type="radio" name="option" value="'+i+'" '+(answers[idx]===i?'checked':'')+' onchange="chooseAnswer('+i+')"><span><b>'+String.fromCharCode(65+i)+'.</b> '+o+'</span></label>').join('');drawPalette()}
 function chooseAnswer(i){answers[idx]=i;drawPalette()}
 function drawPalette(){const list=qs();document.getElementById('palette').innerHTML=list.map((q,i)=>{const status=answers[i]!==undefined?(reviews[i]?'both':'answered'):(reviews[i]?'review':(visited[i]?'notanswered':'notvisited'));return '<button class="qnum '+status+' '+(i===idx?'current':'')+'" onclick="jump('+i+')">'+(i+1)+'</button>'}).join('');document.getElementById('answeredN').textContent=Object.keys(answers).length;document.getElementById('reviewN').textContent=Object.keys(reviews).filter(k=>reviews[k]).length}
 function jump(i){idx=i;renderQ()}
@@ -175,6 +187,7 @@ function saveNext(){delete reviews[idx];nextQ()}
 function nextQ(){if(idx<qs().length-1)idx++;renderQ()}
 function askExit(){if(confirm('Exit this preview? Your preview progress will be lost.'))backHome()}
 function submitAsk(){const a=Object.keys(answers).length;if(confirm('Submit this preview now? You answered '+a+' of '+qs().length+' questions.'))finish()}
+function formatMarks(value){return Number(value.toFixed(4)).toString();}
 function sectionMeta(){return exam==='ibps'?({reasoning:{questions:40,marks:60,minutes:35},quant:{questions:40,marks:50,minutes:35},english:{questions:40,marks:40,minutes:35},awareness:{questions:40,marks:50,minutes:20}})[subject]:({reasoning:{questions:50,marks:60,minutes:45},quant:{questions:50,marks:50,minutes:45},english:{questions:40,marks:40,minutes:35},awareness:{questions:50,marks:50,minutes:35}})[subject]}
 function finish(){
  if(submitted)return;
@@ -240,7 +253,7 @@ document.addEventListener('touchend',function(ev){
  if(Math.abs(dx)>65&&Math.abs(dx)>Math.abs(dy)*1.25){if(dx<0)solutionNext();else solutionPrev();}
 },{passive:true});
 
-function backHome(){clearInterval(clockId);document.getElementById('test').classList.add('hidden');document.getElementById('results').classList.add('hidden');document.getElementById('home').classList.remove('hidden')}
+function backHome(){clearInterval(clockId);const practiceTab=exam==='ibps'?'ibps-clerk':'sbi-clerk';const target='./index.html?practice='+practiceTab;if(window.opener&&!window.opener.closed){window.opener.location.href=target;window.close();return;}window.location.href=target;}
 const launchParams = new URLSearchParams(location.search);
 let sectionalTestNumber = Math.max(1, Math.min(10, Number(launchParams.get('test')) || 1));
 const originalOpenDemo = openDemo;
