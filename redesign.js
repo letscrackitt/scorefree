@@ -1,6 +1,6 @@
 
 (function(){
-  window.SF_HOME_TAB = window.SF_HOME_TAB || (new URLSearchParams(location.search).get('section') === 'descriptive' ? 'descriptive' : 'ibps-clerk');
+  window.SF_HOME_TAB = window.SF_HOME_TAB || (new URLSearchParams(location.search).get('section') === 'descriptive' ? 'descriptive' : 'none');
   window.homeView = function(){
     var tab = window.SF_HOME_TAB || 'ibps-clerk';
     var descriptive = tab === 'descriptive';
@@ -13,6 +13,8 @@
     if(descriptive){
       content = '<div class="section-title"><div><p class="eyebrow">Descriptive practice</p><h2>Choose your PO exam</h2><p class="muted">Your existing descriptive sections and test diversification remain unchanged.</p></div><button class="ghost" onclick="patterns()">View exam pattern →</button></div>'+
       '<div class="grid"><article class="card"><span class="badge">IBPS PO / MT-XVI</span><h2>Essay + Comprehension</h2><p class="muted">Two descriptive sections with 50 practice tests in each.</p><button class="primary" onclick="choose(\'ibps\')">Open IBPS PO →</button></article><article class="card"><span class="badge coral">SBI PO 2026</span><h2>Communication Skills</h2><p class="muted">Email, situation analysis, report, précis and full descriptive practice.</p><button class="primary" onclick="choose(\'sbi\')">Open SBI PO →</button></article></div><div class="notice"><b>Practice integrity:</b> reported questions are labelled as reported; original prompts are labelled as practice.</div>';
+    } else if(tab==='none'){
+      content = '<div class="section-title"><div><p class="eyebrow">Choose your practice</p><h2>Where would you like to start?</h2><p class="muted">Select an exam above to see its subjects and sectional tests.</p></div></div><div class="welcome-choice"><div class="welcome-choice-icon">✦</div><h3>Your next practice session starts here</h3><p class="muted">Choose <b>IBPS Clerk Mains</b>, <b>SBI Clerk Mains</b>, or <b>Descriptive Test</b> above to get started.</p></div>';
     } else {
       content = '<div class="section-title"><div><p class="eyebrow">'+title+'</p><h2>Sectional Tests</h2><p class="muted">Choose a subject to see Test 1 through Test 10.</p></div></div><div class="subject-columns">'+
       (exam==='ibps' ? subjectCard('ibps','reasoning','Reasoning Ability','35 min')+subjectCard('ibps','quant','Quantitative Aptitude','30 min')+subjectCard('ibps','english','English Language','35 min') : subjectCard('sbi','reasoning','Reasoning Ability','45 min · practice adaptation')+subjectCard('sbi','quant','Quantitative Aptitude','45 min')+subjectCard('sbi','english','English Language','35 min'))+
