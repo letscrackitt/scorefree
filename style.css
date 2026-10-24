@@ -86,3 +86,10 @@ footer{margin-top:18px;border-top-color:#ddd4e3}footer a{text-decoration:none}fo
 .test-summary span{padding:10px 13px;border-radius:10px;background:rgba(255,253,252,.9);border:1px solid var(--line);font-size:.84rem}
 @media(max-width:950px){.section-test-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:600px){.section-test-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.section-test-card{padding:13px;min-height:140px}.test-metrics{font-size:.75rem}}
+
+
+/* Neutral landing state: no exam is preselected on first visit */
+.welcome-choice{min-height:190px;padding:34px 24px;margin-top:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:rgba(255,253,252,.76);border:1px solid var(--line);border-radius:22px;box-shadow:0 12px 34px rgba(39,31,73,.06)}
+.welcome-choice-icon{width:46px;height:46px;display:grid;place-items:center;margin-bottom:12px;border-radius:15px;background:linear-gradient(135deg,#7868d8,#ef7767);color:#fff;font-size:1.35rem}
+.welcome-choice h3{margin:0 0 8px;color:var(--ink);font-size:1.2rem}
+.welcome-choice p{margin:0;max-width:560px}
