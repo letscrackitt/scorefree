@@ -174,6 +174,24 @@ body.focus-mode{background:#f2f5fb}
  .focus-mode .test-action-buttons{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;padding:10px}
  .focus-mode .test-action-buttons button{min-width:0;padding:10px 5px;font-size:.82rem;line-height:1.3;min-height:48px}
 }
+
+/* Keep action buttons at the true end of the question card, not floating beside long questions. */
+.focus-mode .test-action-buttons{
+  position:static;
+  bottom:auto;
+  z-index:auto;
+  margin:0;
+  border-radius:0 0 14px 14px;
+  box-shadow:none;
+  backdrop-filter:none;
+}
+.focus-mode .qpanel{overflow:hidden}
+.focus-mode .qbody{min-height:0}
+@media(max-width:780px){
+  .focus-mode .test-action-buttons{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;padding:10px}
+  .focus-mode .test-action-buttons button{min-width:0;padding:10px 5px;font-size:.82rem;line-height:1.3;min-height:48px}
+}
+
 </style></head>
 <body>
 <header class="top"><a class="brand" href="./index.html">SCOREFREE</a><nav style="display:flex;gap:16px;flex-wrap:wrap"><a class="muted" href="./resources.html">Free PYQ Library ↗</a><a class="muted" href="./index.html">← Main site</a></nav></header>
