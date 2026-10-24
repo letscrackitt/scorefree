@@ -32,7 +32,23 @@
 <div class="testgrid"><section class="qpanel"><div class="qhead"><b id="qcount">Question 1</b><span class="muted" id="qmarks">1 mark</span></div><div class="qbody"><div class="muted" id="qtopic">Practice question</div><div class="qtext" id="qtext"></div><div id="options"></div></div><div class="actions"><button class="secondary" onclick="clearAnswer()">Clear Response</button><button class="secondary" onclick="markReview()">Mark for Review & Next</button><button class="primary" onclick="saveNext()">Save & Next</button></div></section>
 <aside class="palette"><b>Question Palette</b><p class="muted" style="font-size:.82rem">Select a number to jump to a question.</p><div class="palette-grid" id="palette"></div><div class="legend"><span class="l-answer">Answered</span><span class="l-review">Marked for Review</span><span class="l-unvisited">Not Visited</span><span>Not Answered (visited, no response)</span></div><hr style="border:0;border-top:1px solid var(--line);margin:18px 0"><div class="stats"><div class="stat">Answered: <b id="answeredN">0</b></div><div class="stat">Review: <b id="reviewN">0</b></div></div><button class="primary" style="width:100%;margin-top:16px" onclick="submitAsk()">Submit Test</button></aside></div>
 </section>
-<section id="results" class="hidden"><p class="eyebrow">Preview submitted</p><h1>Your practice review</h1><p class="muted">This is a short interface preview, not a full-length sectional test. Scoring demonstrates the exam-style rule: marks assigned per question for correct answers, a one-quarter-mark penalty for wrong answers, and zero for unanswered questions.</p><div class="stats" id="resultStats"></div><h2 style="margin-top:28px">Answer key & explanations</h2><div id="solutions"></div><button class="primary" onclick="backHome()">Back to practice menu</button></section>
+<section id="results" class="hidden">
+  <p class="eyebrow">Test submitted · Performance summary</p><h1>Your result</h1>
+  <p class="muted">Review your performance, then open solutions to move through questions one by one. Percentile requires a larger pool of test attempts and is not available for this preview.</p>
+  <div class="result-dashboard" id="resultStats"></div>
+  <div class="result-actions"><button class="primary" onclick="openSolutions()">View solutions <span aria-hidden="true">→</span></button><button class="secondary" onclick="retryTest()">Reattempt test</button><button class="secondary" onclick="backHome()">Practice menu</button></div>
+  <div id="solutionReview" class="hidden">
+    <div class="solution-toolbar"><div><p class="eyebrow">Answer review</p><h2>Solutions & explanations</h2><p class="muted">Use Previous / Next or select a question number. Green means correct; red means incorrect.</p></div><button class="secondary" onclick="hideSolutions()">← Back to result</button></div>
+    <div class="testgrid solution-grid">
+      <section class="qpanel">
+        <div class="qhead"><b id="solQcount">Question 1</b><span id="solStatus" class="solution-status"></span></div>
+        <div class="qbody"><div class="muted" id="solTopic"></div><div class="qtext" id="solQtext"></div><div id="solOptions"></div><div class="answer-explanation" id="solExplanation"></div></div>
+        <div class="actions"><button class="secondary" onclick="solutionPrev()">← Previous</button><button class="primary" onclick="solutionNext()">Next question →</button></div>
+      </section>
+      <aside class="palette"><b>Question navigator</b><p class="muted" style="font-size:.82rem">Choose any question to inspect its answer and explanation.</p><div class="palette-grid" id="solutionPalette"></div><div class="legend solution-legend"><span class="l-correct">Answered correctly</span><span class="l-wrong">Answered incorrectly</span><span class="l-skip">Unanswered</span></div></aside>
+    </div>
+  </div>
+</section>
 </main><footer>Unofficial practice resource. Not affiliated with IBPS or SBI.</footer>
 <script>
 const demos=[
@@ -66,7 +82,60 @@ function nextQ(){if(idx<qs().length-1)idx++;renderQ()}
 function askExit(){if(confirm('Exit this preview? Your preview progress will be lost.'))backHome()}
 function submitAsk(){const a=Object.keys(answers).length;if(confirm('Submit this preview now? You answered '+a+' of '+qs().length+' questions.'))finish()}
 function sectionMeta(){return exam==='ibps'?({reasoning:{questions:40,marks:60,minutes:35},quant:{questions:40,marks:50,minutes:35},english:{questions:40,marks:40,minutes:35},awareness:{questions:40,marks:50,minutes:20}})[subject]:({reasoning:{questions:50,marks:60,minutes:45},quant:{questions:50,marks:50,minutes:45},english:{questions:40,marks:40,minutes:35},awareness:{questions:50,marks:50,minutes:35}})[subject]}
-function finish(){if(submitted)return;submitted=true;clearInterval(clockId);document.getElementById('test').classList.add('hidden');document.getElementById('results').classList.remove('hidden');const list=qs();const meta=sectionMeta();const perQuestion=meta.marks/meta.questions;let score=0,correct=0,wrong=0;list.forEach((q,i)=>{if(answers[i]===q.ans){score+=perQuestion;correct++}else if(answers[i]!==undefined){score-=perQuestion/4;wrong++}});score=Math.round(score*100)/100;const previewMax=Math.round(perQuestion*list.length*100)/100;document.querySelector('#results .eyebrow').textContent='Sectional Test '+sectionalTestNumber+' · Preview submitted';document.getElementById('resultStats').innerHTML='<div class="stat">Preview score: <b>'+score+' / '+previewMax+'</b></div><div class="stat">Correct: <b>'+correct+'</b></div><div class="stat">Wrong: <b>'+wrong+'</b></div><div class="stat">Unanswered: <b>'+(list.length-Object.keys(answers).length)+'</b></div><div class="stat">Marks per correct: <b>'+perQuestion.toFixed(2)+'</b></div><div class="stat">Penalty per wrong: <b>'+(perQuestion/4).toFixed(2)+'</b></div>';document.getElementById('solutions').innerHTML=list.map((q,i)=>'<article class="result-row"><b>Q'+(i+1)+'. '+q.q+'</b><p class="'+(answers[i]===q.ans?'correct':'wrong')+'">'+(answers[i]===q.ans?'Correct':'Incorrect / not answered')+'</p><p>Your answer: '+(answers[i]===undefined?'Not answered':String.fromCharCode(65+answers[i])+'. '+q.opts[answers[i]])+'</p><p><b>Correct answer:</b> '+String.fromCharCode(65+q.ans)+'. '+q.opts[q.ans]+'</p><p class="muted">'+q.exp+'</p></article>').join('')}
+function finish(){
+ if(submitted)return;
+ submitted=true;clearInterval(clockId);
+ document.getElementById('test').classList.add('hidden');
+ document.getElementById('results').classList.remove('hidden');
+ document.getElementById('solutionReview').classList.add('hidden');
+ const list=qs(),meta=sectionMeta(),perQuestion=meta.marks/meta.questions;
+ let score=0,correct=0,wrong=0,unanswered=0;
+ list.forEach((q,i)=>{if(answers[i]===q.ans){score+=perQuestion;correct++}else if(answers[i]!==undefined){score-=perQuestion/4;wrong++}else unanswered++});
+ score=Math.round(score*100)/100;
+ const previewMax=Math.round(perQuestion*list.length*100)/100;
+ const accuracy=Object.keys(answers).length?Math.round(correct/Object.keys(answers).length*100):0;
+ const pct=previewMax?Math.max(0,Math.round(score/previewMax*100)):0;
+ document.querySelector('#results .eyebrow').textContent='SECTIONAL TEST '+sectionalTestNumber+' · '+(exam==='ibps'?'IBPS':'SBI')+' CLERK MAINS';
+ document.getElementById('resultStats').innerHTML=
+  '<div class="result-hero"><span>YOUR PREVIEW SCORE</span><strong>'+score.toFixed(2)+' <small>/ '+previewMax.toFixed(2)+'</small></strong><div class="score-track"><i style="width:'+pct+'%"></i></div><span>'+pct+'% of preview marks</span></div>'+
+  '<div class="result-metric metric-green"><span class="metric-icon">✓</span><span>Correct<strong>'+correct+'</strong></span></div>'+
+  '<div class="result-metric metric-red"><span class="metric-icon">✕</span><span>Incorrect<strong>'+wrong+'</strong></span></div>'+
+  '<div class="result-metric metric-grey"><span class="metric-icon">—</span><span>Unanswered<strong>'+unanswered+'</strong></span></div>'+
+  '<div class="result-metric metric-purple"><span class="metric-icon">%</span><span>Accuracy<strong>'+accuracy+'%</strong></span></div>'+
+  '<div class="result-metric metric-muted"><span class="metric-icon">↗</span><span>Percentile<strong>—</strong><small>Needs more attempts</small></span></div>'+
+  '<p class="result-footnote">Preview only: this score is calculated from the sample questions shown, not the full '+meta.questions+'-question section. Percentile is not estimated or fabricated.</p>';
+ renderSolutionQuestion();
+}
+let solutionIdx=0;
+function openSolutions(){solutionIdx=0;document.getElementById('solutionReview').classList.remove('hidden');renderSolutionQuestion();document.getElementById('solutionReview').scrollIntoView({behavior:'smooth',block:'start'});}
+function hideSolutions(){document.getElementById('solutionReview').classList.add('hidden');window.scrollTo({top:0,behavior:'smooth'});}
+function renderSolutionQuestion(){
+ const list=qs();if(!list.length)return;solutionIdx=Math.max(0,Math.min(solutionIdx,list.length-1));
+ const q=list[solutionIdx],user=answers[solutionIdx],isCorrect=user===q.ans,isSkipped=user===undefined;
+ document.getElementById('solQcount').textContent='Question '+(solutionIdx+1)+' of '+list.length;
+ const status=document.getElementById('solStatus');status.textContent=isSkipped?'Unanswered':isCorrect?'Correct answer':'Incorrect answer';status.className='solution-status '+(isSkipped?'status-skip':isCorrect?'status-correct':'status-wrong');
+ document.getElementById('solTopic').textContent=q.topic;
+ document.getElementById('solQtext').textContent=q.q;
+ document.getElementById('solOptions').innerHTML=q.opts.map((o,i)=>{
+  const correctOption=i===q.ans,chosen=user===i;
+  const cls=correctOption?'solution-option option-correct':chosen?'solution-option option-wrong':'solution-option';
+  const label=correctOption?'<b class="option-verdict">Correct answer</b>':chosen?'<b class="option-verdict">Your answer</b>':'';
+  return '<div class="'+cls+'"><span class="solution-letter">'+String.fromCharCode(65+i)+'</span><span class="solution-option-text">'+o+label+'</span>'+(correctOption?'<span class="option-mark">✓</span>':chosen?'<span class="option-mark">✕</span>':'')+'</div>';
+ }).join('');
+ document.getElementById('solExplanation').innerHTML='<h3>Explanation</h3><p>'+q.exp+'</p>';
+ document.getElementById('solutionPalette').innerHTML=list.map((item,i)=>{
+  const u=answers[i],state=u===undefined?'q-skip':u===item.ans?'q-correct':'q-wrong';
+  return '<button class="qnum '+state+' '+(i===solutionIdx?'current':'')+'" aria-label="Review question '+(i+1)+'" onclick="solutionJump('+i+')">'+(i+1)+'</button>';
+ }).join('');
+ const prev=document.querySelector('#solutionReview .actions button:first-child');
+ const next=document.querySelector('#solutionReview .actions button:last-child');
+ prev.disabled=solutionIdx===0;next.disabled=solutionIdx===list.length-1;
+}
+function solutionJump(i){solutionIdx=i;renderSolutionQuestion();}
+function solutionPrev(){if(solutionIdx>0){solutionIdx--;renderSolutionQuestion();}}
+function solutionNext(){if(solutionIdx<qs().length-1){solutionIdx++;renderSolutionQuestion();}}
+function retryTest(){openDemo(exam,subject);}
+
 function backHome(){clearInterval(clockId);document.getElementById('test').classList.add('hidden');document.getElementById('results').classList.add('hidden');document.getElementById('home').classList.remove('hidden')}
 const launchParams = new URLSearchParams(location.search);
 let sectionalTestNumber = Math.max(1, Math.min(10, Number(launchParams.get('test')) || 1));
