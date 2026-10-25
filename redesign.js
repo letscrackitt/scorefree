@@ -8,11 +8,7 @@
     var title = exam === 'ibps' ? 'IBPS Clerk Mains' : 'SBI Clerk Mains';
     function subjectCard(ex, key, name, detail) {
       var meta=SF_SECTION_META[ex][key];
-      var tests='';
-      for(var t=1;t<=10;t++){
-        tests+='<button class="inline-test-button" onclick="showTestInstructions(\''+ex+'\',\''+key+'\','+t+')" aria-label="Open '+name+' Test '+t+' instructions">'+t+'</button>';
-      }
-      return '<article class="section-card subject-flow-card"><div class="section-card-top"><span class="badge">'+(ex==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains')+'</span><span class="small">'+detail+'</span></div><h3>'+name+'</h3><p class="muted">Choose a sectional test</p><div class="inline-tests" aria-label="'+name+' tests">'+tests+'</div><div class="subject-flow-meta">'+meta.questions+' questions <span>·</span> '+meta.marks+' marks <span>·</span> '+meta.minutes+' min</div></article>';
+      return '<article class="section-card subject-flow-card"><div class="section-card-top"><span class="badge">'+(ex==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains')+'</span><span class="small">'+detail+'</span></div><h3>'+name+'</h3><p class="muted">Open this subject to choose a test</p><div class="subject-flow-meta">'+meta.questions+' questions <span>·</span> '+meta.marks+' marks <span>·</span> '+meta.minutes+' min</div><button class="primary" style="margin-top:16px" onclick="showSubjectTests(\''+ex+'\',\''+key+'\')">Choose a sectional test →</button></article>';
     }
     var content;
     if(descriptive){
