@@ -60,26 +60,36 @@
         '<div><span>Question format</span><strong>MCQ</strong></div>' +
       '</div>' +
       '<div class="instructions-columns">' +
-        '<section class="instructions-panel"><h2>Test guidelines</h2><ul>' +
-          '<li>Choose one option for each multiple-choice question.</li>' +
-          '<li>Use the question palette to navigate between questions.</li>' +
-          '<li>You can change an answer before submitting.</li>' +
-          '<li>Unanswered questions receive zero marks.</li>' +
+        '<section class="instructions-panel"><h2>General instructions</h2><ul>' +
+          '<li>This is a timed, objective practice test. The timer starts when the test opens.</li>' +
+          '<li>Each question has one best answer. Select an option to record your response.</li>' +
+          '<li>Use <b>Save &amp; Next</b> to save your answer and move forward.</li>' +
+          '<li>Use <b>Mark for Review</b> if you want to revisit a question later.</li>' +
+          '<li>The question palette shows visited, answered and review-marked questions.</li>' +
+          '<li>You may move between questions and change answers before submitting.</li>' +
+          '<li>Submit when finished. If the timer reaches zero, the test is submitted automatically.</li>' +
         '</ul></section>' +
         '<section class="instructions-panel scoring-rules"><h2>Marking scheme</h2>' +
-          '<div class="marking-row"><span><i class="mark-dot correct-dot"></i>Marks awarded for a correct answer</span><b>+'+(meta.marks/meta.questions).toFixed(2)+' marks</b></div>' +
-          '<div class="marking-row"><span><i class="mark-dot wrong-dot"></i>Marks deducted for a wrong answer</span><b>−'+Number((meta.marks/meta.questions/4).toFixed(4)).toString()+' marks</b></div>' +
+          '<div class="marking-row"><span><i class="mark-dot correct-dot"></i>Correct answer</span><b>+'+(meta.marks/meta.questions).toFixed(2)+' marks</b></div>' +
+          '<div class="marking-row"><span><i class="mark-dot wrong-dot"></i>Wrong answer</span><b>−'+Number((meta.marks/meta.questions/4).toFixed(4)).toString()+' marks</b></div>' +
           '<div class="marking-row"><span><i class="mark-dot blank-dot"></i>Unanswered</span><b>0 marks</b></div>' +
-          '<p class="small">A minus (−) means these marks are subtracted from your score, not awarded. The penalty is one-quarter of the marks for that question. Unanswered questions: 0 marks.</p>' +
+          '<p class="small">A wrong answer deducts one-quarter of the marks assigned to that question. Unanswered questions receive zero. SCOREFREE scores are for practice, not official predictions.</p>' +
         '</section>' +
       '</div>' +
-      '<div class="preview-disclosure"><b>Preview mode:</b> The current build contains sample questions, not the full '+meta.questions+'-question bank. Your score is for practice only.</div>' +
-      '<div class="instructions-footer"><div><b>Ready when you are?</b><span>The test opens in a separate window.</span></div>' +
-      '<button class="primary start-test-button" onclick="openClerkPreview(\''+exam+'\',\''+subject+'\','+test+')">Start Test '+test+' <span aria-hidden="true">→</span></button></div>' +
+      '<section class="instructions-panel instruction-legend"><h2>Question palette guide</h2><div class="instruction-status-grid"><span><i class="palette-key key-unvisited"></i>Not visited</span><span><i class="palette-key key-unanswered"></i>Visited, not answered</span><span><i class="palette-key key-answered"></i>Answered</span><span><i class="palette-key key-review"></i>Marked for review</span><span><i class="palette-key key-both"></i>Answered + review</span></div></section>' +
+      '<div class="preview-disclosure"><b>Practice-bank notice:</b> This build currently contains a limited set of sample questions, not the full '+meta.questions+'-question bank. The timer and exam-style navigation work, but this is not a full-length mock test yet.</div>' +
+      '<label class="instructions-ack"><input id="instructionsAcknowledged" type="checkbox" onchange="document.getElementById(\'startClerkTestButton\').disabled=!this.checked"><span>I have read and understood the instructions. I am ready to begin this practice test.</span></label>' +
+      '<div class="instructions-footer"><div><b>Ready when you are?</b><span>Test '+test+' opens in a separate window after you acknowledge the instructions.</span></div>' +
+      '<button id="startClerkTestButton" class="primary start-test-button" disabled onclick="openClerkPreview(\''+exam+'\',\''+subject+'\','+test+')">Start Test '+test+' <span aria-hidden="true">→</span></button></div>' +
       '</section>';
     window.scrollTo(0,0);
   };
-  window.openClerkPreview = function(exam,subject,test){var url='./clerk-mains.html?exam='+encodeURIComponent(exam)+'&subject='+encodeURIComponent(subject)+'&test='+(test||1);var w=window.open(url,'_blank','popup=yes,width=1440,height=900,resizable=yes,scrollbars=yes');if(!w){alert('Your browser blocked the test window. Allow pop-ups for SCOREFREE, then select the test again.');}};
+  window.openClerkPreview = function(exam,subject,test){
+    var url='./clerk-mains.html?exam='+encodeURIComponent(exam)+'&subject='+encodeURIComponent(subject)+'&test='+(test||1)+'&autostart=1';
+    var w=window.open(url,'scorefree-'+exam+'-'+subject+'-'+(test||1),'popup=yes,width=1440,height=900,resizable=yes,scrollbars=yes');
+    if(!w){alert('Your browser blocked the test window. Allow pop-ups for SCOREFREE, then select Start Test again.');return;}
+    try{w.focus()}catch(e){}
+  };
   window.readHistory = function(){try{return JSON.parse(localStorage.getItem('sf-history')||'[]')}catch(e){return []}};
   window.progressPanel = function(){
     var history=readHistory();
