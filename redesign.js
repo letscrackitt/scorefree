@@ -8,7 +8,11 @@
     var title = exam === 'ibps' ? 'IBPS Clerk Mains' : 'SBI Clerk Mains';
     function subjectCard(ex, key, name, detail) {
       var meta=SF_SECTION_META[ex][key];
-      return '<article class="section-card subject-flow-card"><div class="section-card-top"><span class="badge">'+(ex==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains')+'</span><span class="small">'+detail+'</span></div><h3>'+name+'</h3><p class="muted">Open this subject to choose a test</p><div class="subject-flow-meta">'+meta.questions+' questions <span>·</span> '+meta.marks+' marks <span>·</span> '+meta.minutes+' min</div><button class="primary" style="margin-top:16px" onclick="showSubjectTests(\''+ex+'\',\''+key+'\')">Choose a sectional test →</button></article>';
+      var tests='';
+      for(var t=1;t<=10;t++){
+        tests+='<button class="inline-test-button" onclick="showTestInstructions(\''+ex+'\',\''+key+'\','+t+')" aria-label="Open '+name+' Test '+t+' instructions">'+t+'</button>';
+      }
+      return '<article class="section-card subject-flow-card"><div class="section-card-top"><span class="badge">'+(ex==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains')+'</span><span class="small">'+detail+'</span></div><h3>'+name+'</h3><p class="muted">Choose a sectional test</p><div class="inline-tests" aria-label="'+name+' tests">'+tests+'</div><div class="subject-flow-meta">'+meta.questions+' questions <span>·</span> '+meta.marks+' marks <span>·</span> '+meta.minutes+' min</div></article>';
     }
     var content;
     if(descriptive){
@@ -39,7 +43,7 @@
     var meta=SF_SECTION_META[exam][subject], name=SF_SUBJECT_NAMES[subject], examName=exam==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains';
     var cards='';
     for(var i=1;i<=10;i++){
-      cards+='<a class="section-test-card" href="clerk-mains.html?exam='+encodeURIComponent(exam)+'&amp;subject='+encodeURIComponent(subject)+'&amp;test='+i+'&amp;build=20261025g"><span class="test-number">Test '+i+'</span><span class="test-metrics">'+meta.questions+' questions · '+meta.marks+' marks</span><span class="test-time">'+meta.minutes+' minutes</span><span class="test-open">Open instructions →</span></a>';
+      cards+='<button class="section-test-card" onclick="showTestInstructions(\''+exam+'\',\''+subject+'\','+i+')"><span class="test-number">Test '+i+'</span><span class="test-metrics">'+meta.questions+' questions · '+meta.marks+' marks</span><span class="test-time">'+meta.minutes+' minutes</span><span class="test-open">View instructions →</span></button>';
     }
     document.getElementById('app').innerHTML='<button class="ghost" onclick="showHomeTab(\''+(exam==='ibps'?'ibps-clerk':'sbi-clerk')+'\')">← Back to subjects</button><section class="test-list-heading"><p class="eyebrow">'+examName+'</p><h2>'+name+' — Sectional Tests</h2><p class="muted">Choose a test below. Each card shows the published section format for reference.</p><div class="test-summary"><span><b>'+meta.questions+'</b> questions</span><span><b>'+meta.marks+'</b> maximum marks</span><span><b>'+meta.minutes+' min</b> time limit</span></div>'+(meta.note?'<p class="small">'+meta.note+'</p>':'')+'</section><div class="section-test-grid">'+cards+'</div><div class="notice" style="margin-top:18px"><b>Important:</b> the links currently open a short interface preview, not a full-length test. The complete question bank and full-length timer are not yet available. Preview results are not official exam predictions.</div>';
     window.scrollTo(0,0);
@@ -60,36 +64,26 @@
         '<div><span>Question format</span><strong>MCQ</strong></div>' +
       '</div>' +
       '<div class="instructions-columns">' +
-        '<section class="instructions-panel"><h2>General instructions</h2><ul>' +
-          '<li>This is a timed, objective practice test. The timer starts when the test opens.</li>' +
-          '<li>Each question has one best answer. Select an option to record your response.</li>' +
-          '<li>Use <b>Save &amp; Next</b> to save your answer and move forward.</li>' +
-          '<li>Use <b>Mark for Review</b> if you want to revisit a question later.</li>' +
-          '<li>The question palette shows visited, answered and review-marked questions.</li>' +
-          '<li>You may move between questions and change answers before submitting.</li>' +
-          '<li>Submit when finished. If the timer reaches zero, the test is submitted automatically.</li>' +
+        '<section class="instructions-panel"><h2>Test guidelines</h2><ul>' +
+          '<li>Choose one option for each multiple-choice question.</li>' +
+          '<li>Use the question palette to navigate between questions.</li>' +
+          '<li>You can change an answer before submitting.</li>' +
+          '<li>Unanswered questions receive zero marks.</li>' +
         '</ul></section>' +
         '<section class="instructions-panel scoring-rules"><h2>Marking scheme</h2>' +
-          '<div class="marking-row"><span><i class="mark-dot correct-dot"></i>Correct answer</span><b>+'+(meta.marks/meta.questions).toFixed(2)+' marks</b></div>' +
-          '<div class="marking-row"><span><i class="mark-dot wrong-dot"></i>Wrong answer</span><b>−'+Number((meta.marks/meta.questions/4).toFixed(4)).toString()+' marks</b></div>' +
+          '<div class="marking-row"><span><i class="mark-dot correct-dot"></i>Marks awarded for a correct answer</span><b>+'+(meta.marks/meta.questions).toFixed(2)+' marks</b></div>' +
+          '<div class="marking-row"><span><i class="mark-dot wrong-dot"></i>Marks deducted for a wrong answer</span><b>−'+Number((meta.marks/meta.questions/4).toFixed(4)).toString()+' marks</b></div>' +
           '<div class="marking-row"><span><i class="mark-dot blank-dot"></i>Unanswered</span><b>0 marks</b></div>' +
-          '<p class="small">A wrong answer deducts one-quarter of the marks assigned to that question. Unanswered questions receive zero. SCOREFREE scores are for practice, not official predictions.</p>' +
+          '<p class="small">A minus (−) means these marks are subtracted from your score, not awarded. The penalty is one-quarter of the marks for that question. Unanswered questions: 0 marks.</p>' +
         '</section>' +
       '</div>' +
-      '<section class="instructions-panel instruction-legend"><h2>Question palette guide</h2><div class="instruction-status-grid"><span><i class="palette-key key-unvisited"></i>Not visited</span><span><i class="palette-key key-unanswered"></i>Visited, not answered</span><span><i class="palette-key key-answered"></i>Answered</span><span><i class="palette-key key-review"></i>Marked for review</span><span><i class="palette-key key-both"></i>Answered + review</span></div></section>' +
-      '<div class="preview-disclosure"><b>Practice-bank notice:</b> This build currently contains a limited set of sample questions, not the full '+meta.questions+'-question bank. The timer and exam-style navigation work, but this is not a full-length mock test yet.</div>' +
-      '<label class="instructions-ack"><input id="instructionsAcknowledged" type="checkbox" onchange="document.getElementById(\'startClerkTestButton\').disabled=!this.checked"><span>I have read and understood the instructions. I am ready to begin this practice test.</span></label>' +
-      '<div class="instructions-footer"><div><b>Ready when you are?</b><span>Test '+test+' opens in a separate window after you acknowledge the instructions.</span></div>' +
-      '<button id="startClerkTestButton" class="primary start-test-button" disabled onclick="openClerkPreview(\''+exam+'\',\''+subject+'\','+test+')">Start Test '+test+' <span aria-hidden="true">→</span></button></div>' +
+      '<div class="preview-disclosure"><b>Preview mode:</b> The current build contains sample questions, not the full '+meta.questions+'-question bank. Your score is for practice only.</div>' +
+      '<div class="instructions-footer"><div><b>Ready when you are?</b><span>The test opens in a separate window.</span></div>' +
+      '<button class="primary start-test-button" onclick="openClerkPreview(\''+exam+'\',\''+subject+'\','+test+')">Start Test '+test+' <span aria-hidden="true">→</span></button></div>' +
       '</section>';
     window.scrollTo(0,0);
   };
-  window.openClerkPreview = function(exam,subject,test){
-    var url='clerk-mains.html?exam='+encodeURIComponent(exam)+'&subject='+encodeURIComponent(subject)+'&test='+(test||1)+'&build=20261025g';
-    // Navigate in the current tab: avoids popup blockers and keeps instructions,
-    // test questions, results, solutions and reattempt in one continuous window.
-    window.location.href=url;
-  };
+  window.openClerkPreview = function(exam,subject,test){var url='./clerk-mains.html?exam='+encodeURIComponent(exam)+'&subject='+encodeURIComponent(subject)+'&test='+(test||1);var w=window.open(url,'_blank','popup=yes,width=1440,height=900,resizable=yes,scrollbars=yes');if(!w){alert('Your browser blocked the test window. Allow pop-ups for SCOREFREE, then select the test again.');}};
   window.readHistory = function(){try{return JSON.parse(localStorage.getItem('sf-history')||'[]')}catch(e){return []}};
   window.progressPanel = function(){
     var history=readHistory();
