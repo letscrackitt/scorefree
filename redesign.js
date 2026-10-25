@@ -39,7 +39,7 @@
     var meta=SF_SECTION_META[exam][subject], name=SF_SUBJECT_NAMES[subject], examName=exam==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains';
     var cards='';
     for(var i=1;i<=10;i++){
-      cards+='<a class="section-test-card" href="clerk-mains.html?exam='+encodeURIComponent(exam)+'&amp;subject='+encodeURIComponent(subject)+'&amp;test='+i+'"><span class="test-number">Test '+i+'</span><span class="test-metrics">'+meta.questions+' questions · '+meta.marks+' marks</span><span class="test-time">'+meta.minutes+' minutes</span><span class="test-open">Open instructions →</span></a>';
+      cards+='<a class="section-test-card" href="clerk-mains.html?exam='+encodeURIComponent(exam)+'&amp;subject='+encodeURIComponent(subject)+'&amp;test='+i+'&amp;build=20261025g"><span class="test-number">Test '+i+'</span><span class="test-metrics">'+meta.questions+' questions · '+meta.marks+' marks</span><span class="test-time">'+meta.minutes+' minutes</span><span class="test-open">Open instructions →</span></a>';
     }
     document.getElementById('app').innerHTML='<button class="ghost" onclick="showHomeTab(\''+(exam==='ibps'?'ibps-clerk':'sbi-clerk')+'\')">← Back to subjects</button><section class="test-list-heading"><p class="eyebrow">'+examName+'</p><h2>'+name+' — Sectional Tests</h2><p class="muted">Choose a test below. Each card shows the published section format for reference.</p><div class="test-summary"><span><b>'+meta.questions+'</b> questions</span><span><b>'+meta.marks+'</b> maximum marks</span><span><b>'+meta.minutes+' min</b> time limit</span></div>'+(meta.note?'<p class="small">'+meta.note+'</p>':'')+'</section><div class="section-test-grid">'+cards+'</div><div class="notice" style="margin-top:18px"><b>Important:</b> the links currently open a short interface preview, not a full-length test. The complete question bank and full-length timer are not yet available. Preview results are not official exam predictions.</div>';
     window.scrollTo(0,0);
@@ -85,7 +85,7 @@
     window.scrollTo(0,0);
   };
   window.openClerkPreview = function(exam,subject,test){
-    var url='clerk-mains.html?exam='+encodeURIComponent(exam)+'&subject='+encodeURIComponent(subject)+'&test='+(test||1);
+    var url='clerk-mains.html?exam='+encodeURIComponent(exam)+'&subject='+encodeURIComponent(subject)+'&test='+(test||1)+'&build=20261025g';
     // Navigate in the current tab: avoids popup blockers and keeps instructions,
     // test questions, results, solutions and reattempt in one continuous window.
     window.location.href=url;
