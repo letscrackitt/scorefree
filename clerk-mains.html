@@ -201,13 +201,13 @@ body.focus-mode{background:#f2f5fb}
 <div class="intro"><p class="eyebrow">Objective practice · Clerk Mains</p><h1>Practice like exam day.</h1><p class="muted">A one-question-at-a-time interface with a live timer, question palette, review flags and post-submission solutions. This page is the interface foundation; full-length verified question banks are being added separately.</p></div>
 <div class="notice"><b>Official-pattern sectional practice:</b> IBPS Clerk Mains (2025 notification shown) and SBI Clerk Mains (2026 notification shown) use different section counts and timings. Each section runs on its own timer. Wrong answers carry a one-quarter-mark penalty. The current bank is a short practice preview and will not be presented as a full-length mock until the official question count is populated.</div>
 <div class="grid">
-<article class="card"><span class="pill">IBPS Clerk Mains</span><h2>Reasoning Ability</h2><p class="muted">40 questions · 60 marks · 35 minutes</p><button class="primary" onclick="openDemo('ibps','reasoning')">Start sectional practice</button></article>
-<article class="card"><span class="pill">IBPS Clerk Mains</span><h2>Quantitative Aptitude</h2><p class="muted">35 questions · 50 marks · 30 minutes</p><button class="primary" onclick="openDemo('ibps','quant')">Start sectional practice</button></article>
-<article class="card"><span class="pill">IBPS Clerk Mains</span><h2>English Language</h2><p class="muted">40 questions · 40 marks · 35 minutes</p><button class="primary" onclick="openDemo('ibps','english')">Start sectional practice</button></article>
-<article class="card"><span class="pill">IBPS Clerk Mains</span><h2>General / Financial Awareness</h2><p class="muted">40 questions · 50 marks · 20 minutes</p><button class="primary" onclick="openDemo('ibps','awareness')">Start sectional practice</button></article>
-<article class="card"><span class="pill">SBI Clerk Mains</span><h2>Reasoning &amp; Computer Aptitude</h2><p class="muted">50 questions · 60 marks · 45 minutes</p><button class="primary" onclick="openDemo('sbi','reasoning')">Start sectional practice</button></article>
-<article class="card"><span class="pill">SBI Clerk Mains</span><h2>Quantitative Aptitude</h2><p class="muted">50 questions · 50 marks · 45 minutes</p><button class="primary" onclick="openDemo('sbi','quant')">Start sectional practice</button></article>
-<article class="card"><span class="pill">SBI Clerk Mains</span><h2>English Language</h2><p class="muted">40 questions · 40 marks · 35 minutes</p><button class="primary" onclick="openDemo('sbi','english')">Start sectional practice</button></article><article class="card"><span class="pill">SBI Clerk Mains</span><h2>General / Financial Awareness</h2><p class="muted">50 questions · 50 marks · 35 minutes</p><button class="primary" onclick="openDemo('sbi','awareness')">Start sectional practice</button></article>
+<article class="card"><span class="pill">IBPS Clerk Mains</span><h2>Reasoning Ability</h2><p class="muted">40 questions · 60 marks · 35 minutes</p><button class="primary" onclick="openPreview('ibps','reasoning')">Start sectional practice</button></article>
+<article class="card"><span class="pill">IBPS Clerk Mains</span><h2>Quantitative Aptitude</h2><p class="muted">35 questions · 50 marks · 30 minutes</p><button class="primary" onclick="openPreview('ibps','quant')">Start sectional practice</button></article>
+<article class="card"><span class="pill">IBPS Clerk Mains</span><h2>English Language</h2><p class="muted">40 questions · 40 marks · 35 minutes</p><button class="primary" onclick="openPreview('ibps','english')">Start sectional practice</button></article>
+<article class="card"><span class="pill">IBPS Clerk Mains</span><h2>General / Financial Awareness</h2><p class="muted">40 questions · 50 marks · 20 minutes</p><button class="primary" onclick="openPreview('ibps','awareness')">Start sectional practice</button></article>
+<article class="card"><span class="pill">SBI Clerk Mains</span><h2>Reasoning &amp; Computer Aptitude</h2><p class="muted">50 questions · 60 marks · 45 minutes</p><button class="primary" onclick="openPreview('sbi','reasoning')">Start sectional practice</button></article>
+<article class="card"><span class="pill">SBI Clerk Mains</span><h2>Quantitative Aptitude</h2><p class="muted">50 questions · 50 marks · 45 minutes</p><button class="primary" onclick="openPreview('sbi','quant')">Start sectional practice</button></article>
+<article class="card"><span class="pill">SBI Clerk Mains</span><h2>English Language</h2><p class="muted">40 questions · 40 marks · 35 minutes</p><button class="primary" onclick="openPreview('sbi','english')">Start sectional practice</button></article><article class="card"><span class="pill">SBI Clerk Mains</span><h2>General / Financial Awareness</h2><p class="muted">50 questions · 50 marks · 35 minutes</p><button class="primary" onclick="openPreview('sbi','awareness')">Start sectional practice</button></article>
 </div>
 
 <p class="muted">Pattern source: the official IBPS CRP-CSA-XV detailed notification and SBI Junior Associates 2026 detailed advertisement and SBI Junior Associates 2026 detailed advertisement. These are sectional practice previews using the official section timing and scoring weight; the question bank is not yet complete to the full official question count. Newly written practice is not labelled as previous-year material.</p>
@@ -464,26 +464,31 @@ function backHome(){clearInterval(clockId);const practiceTab=exam==='ibps'?'ibps
 const launchParams = new URLSearchParams(location.search);
 let sectionalTestNumber = Math.max(1, Math.min(10, Number(launchParams.get('test')) || 1));
 const originalOpenDemo = openDemo;
-openDemo = function(e,s){
-  if(!launchParams.get('preview')){
-    const url = new URL(location.href);
-    url.searchParams.set('exam',e);
-    url.searchParams.set('subject',s);
-    url.searchParams.set('test','1');
-    url.searchParams.set('preview','1');
-    const popup = window.open(url.toString(),'scorefreeTestPreview','popup,width=1180,height=850,resizable=yes,scrollbars=yes');
-    if(!popup){alert('Please allow pop-ups for ScoreFree to open the test preview in a separate window.');}
-    return;
-  }
+function setPreviewLabels(e,s){
+  const names={reasoning:'Reasoning Ability & Computer Aptitude',quant:'Quantitative Aptitude',english:'General English',awareness:'General / Financial Awareness'};
+  document.getElementById('testLabel').textContent=(e==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains')+' · '+names[s]+' · Sectional Test '+sectionalTestNumber+' preview';
+  document.getElementById('testName').textContent='Sectional Test '+sectionalTestNumber+' — '+names[s];
+}
+function openPreview(e,s){
+  const url=new URL(location.href);
+  url.search='';
+  url.searchParams.set('exam',e);
+  url.searchParams.set('subject',s);
+  url.searchParams.set('test','1');
+  url.searchParams.set('preview','1');
+  const popup=window.open(url.href,'scorefreeTestPreview','width=1180,height=850,resizable=yes,scrollbars=yes');
+  if(!popup){alert('ScoreFree could not open the preview window. Please allow pop-ups for this site, then click Start sectional practice again.');}
+}
+function showPreview(e,s){
   originalOpenDemo(e,s);
-  document.getElementById('testLabel').textContent=(e==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains')+' · '+({reasoning:'Reasoning & Computer Aptitude',quant:'Quantitative Aptitude',english:'General English',awareness:'General / Financial Awareness'})[s]+' · Sectional Test '+sectionalTestNumber+' preview';
-  document.getElementById('testName').textContent='Sectional Test '+sectionalTestNumber+' — '+({reasoning:'Reasoning & Computer Aptitude',quant:'Quantitative Aptitude',english:'General English',awareness:'General / Financial Awareness'})[s];
-};
+  setPreviewLabels(e,s);
+}
 function startSelectedTest(){
   const e=launchParams.get('exam'),s=launchParams.get('subject');
   document.getElementById('launchScreen').classList.add('hidden');
   document.body.classList.add('focus-mode');
-  openDemo(e,s);
+  originalOpenDemo(e,s);
+  setPreviewLabels(e,s);
 }
 function beginFullscreenTest(){
   const target=document.documentElement;
@@ -496,7 +501,7 @@ if(launchParams.get('exam') && launchParams.get('subject')){
   document.getElementById('home').classList.add('hidden');
   if(launchParams.get('preview')){
     document.getElementById('launchScreen').classList.add('hidden');
-    openDemo(launchParams.get('exam'),launchParams.get('subject'));
+    showPreview(launchParams.get('exam'),launchParams.get('subject'));
   }else{
     document.getElementById('launchScreen').classList.remove('hidden');
     document.getElementById('launchTitle').textContent='Sectional Test '+sectionalTestNumber+' is ready';
