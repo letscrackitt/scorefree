@@ -78,12 +78,12 @@
         '</section>' +
       '</div>' +
       '<div class="preview-disclosure"><b>Preview mode:</b> The current build contains sample questions, not the full '+meta.questions+'-question bank. Your score is for practice only.</div>' +
-      '<div class="instructions-footer"><div><b>Ready when you are?</b><span>The test opens in a separate window.</span></div>' +
+      '<div class="instructions-footer"><div><b>Ready when you are?</b><span>The sample test opens here in the ScoreFree test interface.</span></div>' +
       '<button class="primary start-test-button" onclick="openClerkPreview(\''+exam+'\',\''+subject+'\','+test+')">Start Test '+test+' <span aria-hidden="true">→</span></button></div>' +
       '</section>';
     window.scrollTo(0,0);
   };
-  window.openClerkPreview = function(exam,subject,test){var url='./clerk-mains.html?exam='+encodeURIComponent(exam)+'&subject='+encodeURIComponent(subject)+'&test='+(test||1);var w=window.open(url,'_blank','popup=yes,width=1440,height=900,resizable=yes,scrollbars=yes');if(!w){alert('Your browser blocked the test window. Allow pop-ups for SCOREFREE, then select the test again.');}};
+  window.openClerkPreview = function(exam,subject,test){var url='./clerk-mains.html?exam='+encodeURIComponent(exam)+'&subject='+encodeURIComponent(subject)+'&test='+(test||1)+'&preview=1';window.location.href=url;};
   window.readHistory = function(){try{return JSON.parse(localStorage.getItem('sf-history')||'[]')}catch(e){return []}};
   window.progressPanel = function(){
     var history=readHistory();
