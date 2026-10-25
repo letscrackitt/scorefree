@@ -86,9 +86,9 @@
   };
   window.openClerkPreview = function(exam,subject,test){
     var url='./clerk-mains.html?exam='+encodeURIComponent(exam)+'&subject='+encodeURIComponent(subject)+'&test='+(test||1);
-    var w=window.open(url,'scorefree-'+exam+'-'+subject+'-'+(test||1),'popup=yes,width=1440,height=900,resizable=yes,scrollbars=yes');
-    if(!w){alert('Your browser blocked the test window. Allow pop-ups for SCOREFREE, then select Start Test again.');return;}
-    try{w.focus()}catch(e){}
+    // Navigate in the current tab: avoids popup blockers and keeps instructions,
+    // test questions, results, solutions and reattempt in one continuous window.
+    window.location.href=url;
   };
   window.readHistory = function(){try{return JSON.parse(localStorage.getItem('sf-history')||'[]')}catch(e){return []}};
   window.progressPanel = function(){
