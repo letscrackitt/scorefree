@@ -465,6 +465,16 @@ const launchParams = new URLSearchParams(location.search);
 let sectionalTestNumber = Math.max(1, Math.min(10, Number(launchParams.get('test')) || 1));
 const originalOpenDemo = openDemo;
 openDemo = function(e,s){
+  if(!launchParams.get('preview')){
+    const url = new URL(location.href);
+    url.searchParams.set('exam',e);
+    url.searchParams.set('subject',s);
+    url.searchParams.set('test','1');
+    url.searchParams.set('preview','1');
+    const popup = window.open(url.toString(),'scorefreeTestPreview','popup,width=1180,height=850,resizable=yes,scrollbars=yes');
+    if(!popup){alert('Please allow pop-ups for ScoreFree to open the test preview in a separate window.');}
+    return;
+  }
   originalOpenDemo(e,s);
   document.getElementById('testLabel').textContent=(e==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains')+' · '+({reasoning:'Reasoning & Computer Aptitude',quant:'Quantitative Aptitude',english:'General English',awareness:'General / Financial Awareness'})[s]+' · Sectional Test '+sectionalTestNumber+' preview';
   document.getElementById('testName').textContent='Sectional Test '+sectionalTestNumber+' — '+({reasoning:'Reasoning & Computer Aptitude',quant:'Quantitative Aptitude',english:'General English',awareness:'General / Financial Awareness'})[s];
@@ -484,7 +494,12 @@ function beginFullscreenTest(){
 function beginNormalTest(){startSelectedTest();}
 if(launchParams.get('exam') && launchParams.get('subject')){
   document.getElementById('home').classList.add('hidden');
-  document.getElementById('launchScreen').classList.remove('hidden');
-  document.getElementById('launchTitle').textContent='Sectional Test '+sectionalTestNumber+' is ready';
+  if(launchParams.get('preview')){
+    document.getElementById('launchScreen').classList.add('hidden');
+    openDemo(launchParams.get('exam'),launchParams.get('subject'));
+  }else{
+    document.getElementById('launchScreen').classList.remove('hidden');
+    document.getElementById('launchTitle').textContent='Sectional Test '+sectionalTestNumber+' is ready';
+  }
 }
 </script></body></html>
