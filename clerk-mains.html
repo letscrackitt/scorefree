@@ -196,7 +196,7 @@ body.focus-mode{background:#f2f5fb}
 </style></head>
 <body>
 <header class="top"><a class="brand" href="./index.html">SCOREFREE</a><nav style="display:flex;gap:16px;flex-wrap:wrap"><a class="muted" href="./index.html">← Main site</a></nav></header>
-<div id="launchScreen" class="launch-screen hidden"><section class="launch-card"><p class="eyebrow">SCOREFREE · Distraction-free test</p><h1 id="launchTitle">Ready to begin?</h1><p class="muted">The test will open in this separate window. Start fullscreen for a focused exam-style experience. SCOREFREE will not show in-test promotional pop-ups or site notifications.</p><div class="launch-actions"><button class="primary" onclick="beginFullscreenTest()">Start test in fullscreen</button><button class="secondary" onclick="beginNormalTest()">Start without fullscreen</button></div><p class="muted" style="font-size:.82rem;margin-top:18px">Browser or device notifications may still appear; use Do Not Disturb / Focus mode to block those before starting.</p></section></div><main class="wrap">
+<div id="launchScreen" class="launch-screen hidden"><section class="launch-card launch-instructions-card"><div class="launch-brand"><span class="launch-brand-mark">S</span><span><b>SCOREFREE</b><small>Practice environment</small></span></div><p class="eyebrow" id="launchEyebrow">CLERK MAINS · SECTIONAL PRACTICE</p><h1 id="launchTitle">General Instructions</h1><div class="launch-metrics" id="launchMetrics"></div><div class="launch-instruction-content"><section><h2>General instructions</h2><ul><li>The timer starts when you select <b>Start Test</b>.</li><li>Select one answer for each multiple-choice question.</li><li>Use <b>Save &amp; Next</b> to record your answer and continue.</li><li>Use <b>Mark for Review &amp; Next</b> to revisit a question later.</li><li>The question palette shows answered, unanswered and review-marked questions.</li><li>You may change answers before submitting. At zero, the test submits automatically.</li></ul></section><section class="launch-marking"><h2>Marking scheme</h2><div><span>Correct answer</span><b id="launchCorrect">Positive marks</b></div><div><span>Wrong answer</span><b id="launchWrong">Negative marking</b></div><div><span>Unanswered</span><b>0 marks</b></div></section><p class="launch-notice"><b>Practice preview:</b> The question bank is currently limited and is not a full-length official mock. Results are for practice only.</p></div><label class="launch-ack"><input id="launchAcknowledged" type="checkbox" onchange="document.getElementById('launchStartButton').disabled=!this.checked"><span>I have read and understood the general instructions.</span></label><div class="launch-sticky-footer"><span>Ready to begin?</span><button id="launchStartButton" class="primary" disabled onclick="beginFullscreenTest()">Start Test →</button></div></section></div><main class="wrap">
 <section id="home">
 <div class="intro"><p class="eyebrow">Objective practice · Clerk Mains</p><h1>Practice like exam day.</h1><p class="muted">A one-question-at-a-time interface with a live timer, question palette, review flags and post-submission solutions. This page is the interface foundation; full-length verified question banks are being added separately.</p></div>
 <div class="notice"><b>Official-pattern sectional practice:</b> IBPS Clerk Mains (2025 notification shown) and SBI Clerk Mains (2026 notification shown) use different section counts and timings. Each section runs on its own timer. Wrong answers carry a one-quarter-mark penalty. The current bank is a short practice preview and will not be presented as a full-length mock until the official question count is populated.</div>
@@ -473,8 +473,8 @@ let urlTestStarted = false;
 function startSelectedTest(){
   if(urlTestStarted) return;
   urlTestStarted = true;
-  let e=(launchParams.get('exam')||'').toLowerCase();
-  let s=(launchParams.get('subject')||'').toLowerCase();
+  let e=launchExam || (launchParams.get('exam')||'').toLowerCase();
+  let s=launchSubject || (launchParams.get('subject')||'').toLowerCase();
   if(['ibps-clerk','ibps-clerk-mains'].includes(e)) e='ibps';
   if(['sbi-clerk','sbi-clerk-mains'].includes(e)) e='sbi';
   const aliases={'reasoning-ability':'reasoning','reasoning-computer':'reasoning','quantitative-aptitude':'quant','general-english':'english','english-language':'english','general-financial-awareness':'awareness','financial-awareness':'awareness'};
@@ -498,14 +498,29 @@ function startSelectedTest(){
 }
 function beginFullscreenTest(){
   const target=document.documentElement;
-  if(target.requestFullscreen){
-    target.requestFullscreen().then(startSelectedTest).catch(function(){startSelectedTest();});
-  }else{startSelectedTest();}
+  const start=function(){document.getElementById('launchScreen').classList.add('hidden');startSelectedTest();};
+  if(target.requestFullscreen){target.requestFullscreen().then(start).catch(start);}else{start();}
 }
 function beginNormalTest(){startSelectedTest();}
-/* Direct test links should launch the questions immediately instead of stopping at a second landing screen. */
-if(launchParams.get('exam') && launchParams.get('subject')){
-  startSelectedTest();
+/* A selected test opens instructions first; start only after acknowledgement. */
+let launchExam='ibps',launchSubject='reasoning';
+function showLaunchInstructions(){
+  const rawExam=(launchParams.get('exam')||'').toLowerCase();
+  let rawSubject=(launchParams.get('subject')||'').toLowerCase();
+  launchExam=(rawExam==='sbi-clerk'||rawExam==='sbi-clerk-mains')?'sbi':(['ibps-clerk','ibps-clerk-mains'].includes(rawExam)?'ibps':rawExam);
+  const aliases={'reasoning-ability':'reasoning','reasoning-computer':'reasoning','quantitative-aptitude':'quant','general-english':'english','english-language':'english','general-financial-awareness':'awareness','financial-awareness':'awareness'};
+  launchSubject=aliases[rawSubject]||rawSubject;
+  if(!['ibps','sbi'].includes(launchExam)||!['reasoning','quant','english','awareness'].includes(launchSubject))return;
+  const meta=sectionMetaFor(launchExam,launchSubject);
+  const names={reasoning:launchExam==='sbi'?'Reasoning Ability & Computer Aptitude':'Reasoning Ability',quant:'Quantitative Aptitude',english:'General English',awareness:'General / Financial Awareness'};
+  const n=Math.max(1,Math.min(10,Number(launchParams.get('test'))||1));
+  document.getElementById('launchEyebrow').textContent=(launchExam==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains')+' · '+names[launchSubject]+' · Test '+n;
+  document.getElementById('launchMetrics').innerHTML='<div><span>Questions in full test</span><b>'+meta.questions+'</b></div><div><span>Maximum marks</span><b>'+meta.marks+'</b></div><div><span>Time limit</span><b>'+meta.minutes+' min</b></div>';
+  document.getElementById('launchCorrect').textContent='+'+(meta.marks/meta.questions).toFixed(2)+' marks';
+  document.getElementById('launchWrong').textContent='−'+Number((meta.marks/meta.questions/4).toFixed(4)).toString()+' marks';
+  document.getElementById('home').classList.add('hidden');
+  document.getElementById('launchScreen').classList.remove('hidden');
 }
+showLaunchInstructions();
 </script>
 </body></html>
