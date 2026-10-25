@@ -85,7 +85,7 @@
     window.scrollTo(0,0);
   };
   window.openClerkPreview = function(exam,subject,test){
-    var url='./clerk-mains.html?exam='+encodeURIComponent(exam)+'&subject='+encodeURIComponent(subject)+'&test='+(test||1);
+    var url='/scorefree/clerk-mains.html?exam='+encodeURIComponent(exam)+'&subject='+encodeURIComponent(subject)+'&test='+(test||1);
     // Navigate in the current tab: avoids popup blockers and keeps instructions,
     // test questions, results, solutions and reattempt in one continuous window.
     window.location.href=url;
