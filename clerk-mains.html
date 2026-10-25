@@ -395,7 +395,8 @@ function nextQ(){if(idx<qs().length-1)idx++;renderQ()}
 function askExit(){if(confirm('Exit this preview? Your preview progress will be lost.'))backHome()}
 function submitAsk(){const a=Object.keys(answers).length;if(confirm('Submit this preview now? You answered '+a+' of '+qs().length+' questions.'))finish()}
 function formatMarks(value){return Number(value.toFixed(4)).toString();}
-function sectionMetaFor(e,s){return e==='ibps'?({reasoning:{questions:40,marks:60,minutes:35},quant:{questions:35,marks:50,minutes:30},english:{questions:40,marks:40,minutes:35},awareness:{questions:40,marks:50,minutes:20}})[s]:({reasoning:{questions:50,marks:60,minutes:45},quant:{questions:50,marks:50,minutes:45},english:{questions:40,marks:40,minutes:35},awareness:{questions:50,marks:50,minutes:35}})[s]}\nfunction sectionMeta(){return sectionMetaFor(exam,subject)}
+function sectionMetaFor(e,s){return e==='ibps'?({reasoning:{questions:40,marks:60,minutes:35},quant:{questions:35,marks:50,minutes:30},english:{questions:40,marks:40,minutes:35},awareness:{questions:40,marks:50,minutes:20}})[s]:({reasoning:{questions:50,marks:60,minutes:45},quant:{questions:50,marks:50,minutes:45},english:{questions:40,marks:40,minutes:35},awareness:{questions:50,marks:50,minutes:35}})[s]}
+function sectionMeta(){return sectionMetaFor(exam,subject)}
 function finish(){
  if(submitted)return;
  submitted=true;clearInterval(clockId);
