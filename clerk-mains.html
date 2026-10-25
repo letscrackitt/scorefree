@@ -523,4 +523,19 @@ function showLaunchInstructions(){
 }
 showLaunchInstructions();
 </script>
+<script>
+/* Defensive route activation: keep query-selected sectional tests on the instructions screen. */
+(function(){
+  var p=new URLSearchParams(window.location.search);
+  if(!p.has('exam')||!p.has('subject')) return;
+  var exam=(p.get('exam')||'').toLowerCase();
+  var subject=(p.get('subject')||'').toLowerCase();
+  var aliases={'ibps-clerk':'ibps','ibps-clerk-mains':'ibps','sbi-clerk':'sbi','sbi-clerk-mains':'sbi','reasoning-ability':'reasoning','reasoning-computer':'reasoning','quantitative-aptitude':'quant','general-english':'english','english-language':'english','general-financial-awareness':'awareness','financial-awareness':'awareness'};
+  exam=aliases[exam]||exam; subject=aliases[subject]||subject;
+  if(['ibps','sbi'].indexOf(exam)<0||['reasoning','quant','english','awareness'].indexOf(subject)<0) return;
+  try { if(typeof showLaunchInstructions==='function') showLaunchInstructions(); } catch(err){ console.error('Instructions routing retry:',err); }
+  var launch=document.getElementById('launchScreen'), home=document.getElementById('home');
+  if(launch&&home&&!launch.classList.contains('hidden')) home.classList.add('hidden');
+})();
+</script>
 </body></html>
