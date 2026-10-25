@@ -469,7 +469,10 @@ openDemo = function(e,s){
   document.getElementById('testLabel').textContent=(e==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains')+' · '+({reasoning:'Reasoning & Computer Aptitude',quant:'Quantitative Aptitude',english:'General English',awareness:'General / Financial Awareness'})[s]+' · Sectional Test '+sectionalTestNumber+' practice';
   document.getElementById('testName').textContent='Sectional Test '+sectionalTestNumber+' — '+({reasoning:'Reasoning & Computer Aptitude',quant:'Quantitative Aptitude',english:'General English',awareness:'General / Financial Awareness'})[s];
 };
+let urlTestStarted = false;
 function startSelectedTest(){
+  if(urlTestStarted) return;
+  urlTestStarted = true;
   let e=(launchParams.get('exam')||'').toLowerCase();
   let s=(launchParams.get('subject')||'').toLowerCase();
   if(['ibps-clerk','ibps-clerk-mains'].includes(e)) e='ibps';
@@ -505,39 +508,4 @@ if(launchParams.get('exam') && launchParams.get('subject')){
   startSelectedTest();
 }
 </script>
-<script>
-/* Independent URL-launch fallback: run after the main document script has loaded. */
-(function(){
-  function launchFromUrl(){
-    var p=new URLSearchParams(window.location.search);
-    var exam=(p.get('exam')||'').toLowerCase();
-    var subject=(p.get('subject')||'').toLowerCase();
-    if(!exam||!subject)return;
-    if(exam==='ibps-clerk'||exam==='ibps-clerk-mains')exam='ibps';
-    if(exam==='sbi-clerk'||exam==='sbi-clerk-mains')exam='sbi';
-    var aliases={'reasoning-ability':'reasoning','reasoning-computer':'reasoning','quantitative-aptitude':'quant','general-english':'english','english-language':'english','general-financial-awareness':'awareness','financial-awareness':'awareness'};
-    subject=aliases[subject]||subject;
-    if(typeof window.openDemo!=='function'){
-      console.error('SCOREFREE launch failed: openDemo is unavailable. Check for an earlier JavaScript error.');
-      return;
-    }
-    try{
-      var home=document.getElementById('home');
-      var launch=document.getElementById('launchScreen');
-      if(launch)launch.classList.add('hidden');
-      if(home)home.classList.add('hidden');
-      document.body.classList.add('focus-mode');
-      window.openDemo(exam,subject);
-      var testName=document.getElementById('testName');
-      var label=document.getElementById('testLabel');
-      var n=Math.max(1,Math.min(10,Number(p.get('test'))||1));
-      if(testName)testName.textContent='Sectional Test '+n+' — '+({'reasoning':'Reasoning & Computer Aptitude','quant':'Quantitative Aptitude','english':'General English','awareness':'General / Financial Awareness'}[subject]||subject);
-      if(label)label.textContent=(exam==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains')+' · '+({'reasoning':'Reasoning & Computer Aptitude','quant':'Quantitative Aptitude','english':'General English','awareness':'General / Financial Awareness'}[subject]||subject)+' · Sectional Test '+n+' practice';
-    }catch(err){
-      console.error('SCOREFREE URL launch fallback failed:',err);
-    }
-  }
-  if(document.readyState==='complete')setTimeout(launchFromUrl,0);
-  else window.addEventListener('load',function(){setTimeout(launchFromUrl,0);},{once:true});
-})();
-</script></body></html>
+</body></html>
