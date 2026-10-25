@@ -488,7 +488,7 @@ function startSelectedTest(){
   document.getElementById('launchScreen').classList.add('hidden');
   document.getElementById('home').classList.add('hidden');
   document.body.classList.add('focus-mode');
-  try { openDemo(e,s); }
+  try { originalOpenDemo(e,s); }
   catch(err) {
     document.body.classList.remove('focus-mode');
     document.getElementById('test').classList.add('hidden');
@@ -505,6 +505,18 @@ function beginFullscreenTest(){
 function beginNormalTest(){startSelectedTest();}
 /* A selected test opens instructions first; start only after acknowledgement. */
 let launchExam='ibps',launchSubject='reasoning';
+/* Subject/test cards open a dedicated practice window. That window shows instructions first. */
+const originalCardLauncher = openDemo;
+openDemo = function(e,s){
+  const n=Math.max(1,Math.min(10,Number(launchParams.get('test'))||1));
+  const target=new URL(window.location.href);
+  target.search='';
+  target.searchParams.set('exam',e);
+  target.searchParams.set('subject',s);
+  target.searchParams.set('test',String(n));
+  const win=window.open(target.toString(),'scorefreePractice','popup,width=1180,height=850,resizable=yes,scrollbars=yes');
+  if(!win){ alert('Your browser blocked the practice window. Allow pop-ups for ScoreFree and click Start Test again.'); }
+};
 function showLaunchInstructions(){
   const rawExam=(launchParams.get('exam')||'').toLowerCase();
   let rawSubject=(launchParams.get('subject')||'').toLowerCase();
