@@ -193,33 +193,6 @@ body.focus-mode{background:#f2f5fb}
 }
 
 .set-instructions{margin:0 0 22px;padding:18px 20px;border:1px solid #cfc7f6;border-left:5px solid #5b4ce2;border-radius:12px;background:#f8f6ff;color:#302a4c}.set-instructions strong{display:block;font-size:1.03rem;font-weight:950;margin-bottom:7px}.set-instructions p{margin:0;line-height:1.75;font-size:.98rem;font-weight:550;white-space:normal}
-
-/* Restored structured instruction layout: readable sections, not a continuous block of text. */
-.launch-screen{overflow-y:auto;align-items:flex-start;padding:28px 18px}
-.launch-instructions-card{width:min(920px,100%);margin:auto;text-align:left;padding:30px 34px}
-.launch-instructions-card .launch-brand{display:flex;align-items:center;justify-content:flex-start;gap:12px;margin-bottom:22px}
-.launch-brand-mark{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:var(--purple);color:#fff;font-weight:950;font-size:1.2rem}
-.launch-brand small{display:block;color:var(--muted);font-size:.78rem;margin-top:2px}
-.launch-instructions-card #launchEyebrow{margin:0 0 8px}
-.launch-instructions-card h1{font-size:clamp(1.8rem,3vw,2.5rem);margin:0 0 20px}
-.launch-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 24px}
-.launch-metrics>div{display:flex;flex-direction:column;gap:5px;padding:15px 16px;border:1px solid var(--line);border-radius:13px;background:#fafaff}
-.launch-metrics span,.launch-marking span{font-size:.82rem;color:var(--muted);font-weight:650}
-.launch-metrics b{font-size:1.35rem;line-height:1.2}
-.launch-instruction-content{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(230px,.85fr);gap:16px;align-items:start}
-.launch-instruction-content>section{padding:18px 20px;border:1px solid var(--line);border-radius:14px;background:#fff}
-.launch-instruction-content h2{font-size:1rem;margin:0 0 12px}
-.launch-instruction-content ul{margin:0;padding-left:20px;display:grid;gap:9px;line-height:1.5}
-.launch-marking>div{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
-.launch-marking>div:first-of-type{border-top:0}
-.launch-marking b{text-align:right}
-.launch-notice{grid-column:1/-1;margin:0;padding:13px 15px;border:1px solid #e7d6a9;background:#fff9e9;border-radius:12px;color:#66501c;line-height:1.55}
-.launch-ack{display:flex;align-items:flex-start;gap:10px;margin:20px 0;padding:14px 16px;background:#f8f7ff;border:1px solid #dedaf5;border-radius:12px;line-height:1.45}
-.launch-ack input{margin-top:4px;accent-color:var(--purple);flex:none}
-.launch-sticky-footer{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-top:16px;border-top:1px solid var(--line);font-weight:800}
-.launch-sticky-footer button{min-width:150px}
-@media(max-width:680px){.launch-screen{padding:12px}.launch-instructions-card{padding:22px 18px}.launch-metrics{grid-template-columns:1fr;gap:8px}.launch-metrics>div{padding:11px 13px}.launch-instruction-content{grid-template-columns:1fr}.launch-notice{grid-column:auto}.launch-sticky-footer{align-items:stretch;flex-direction:column}.launch-sticky-footer button{width:100%}}
-
 </style></head>
 <body>
 <header class="top"><a class="brand" href="./index.html">SCOREFREE</a><nav style="display:flex;gap:16px;flex-wrap:wrap"><a class="muted" href="./index.html">← Main site</a></nav></header>
@@ -550,32 +523,5 @@ function showLaunchInstructions(){
   document.getElementById('launchScreen').classList.remove('hidden');
 }
 showLaunchInstructions();
-</script>
-<script>
-/* Standalone route fallback: show instructions even if an earlier practice script fails. */
-(function(){
-  var p=new URLSearchParams(window.location.search);
-  var exam=(p.get('exam')||'').toLowerCase();
-  var subject=(p.get('subject')||'').toLowerCase();
-  var test=Math.max(1,Math.min(10,Number(p.get('test'))||1));
-  var ea={'ibps-clerk':'ibps','ibps-clerk-mains':'ibps','sbi-clerk':'sbi','sbi-clerk-mains':'sbi'};
-  var sa={'reasoning-ability':'reasoning','reasoning-computer':'reasoning','quantitative-aptitude':'quant','general-english':'english','english-language':'english','general-financial-awareness':'awareness','financial-awareness':'awareness'};
-  exam=ea[exam]||exam; subject=sa[subject]||subject;
-  if(['ibps','sbi'].indexOf(exam)<0||['reasoning','quant','english','awareness'].indexOf(subject)<0)return;
-  var names={reasoning:exam==='sbi'?'Reasoning Ability & Computer Aptitude':'Reasoning Ability',quant:'Quantitative Aptitude',english:'General English',awareness:'General / Financial Awareness'};
-  var meta=(exam==='ibps'?{reasoning:[40,60,35],quant:[40,50,35],english:[40,40,35],awareness:[40,50,20]}:{reasoning:[50,60,45],quant:[50,50,45],english:[40,40,35],awareness:[50,50,35]})[subject];
-  var launch=document.getElementById('launchScreen'), home=document.getElementById('home');
-  if(!launch||!home)return;
-  document.getElementById('launchEyebrow').textContent=(exam==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains')+' · '+names[subject]+' · Test '+test;
-  document.getElementById('launchMetrics').innerHTML='<div><span>Questions in full test</span><b>'+meta[0]+'</b></div><div><span>Maximum marks</span><b>'+meta[1]+'</b></div><div><span>Time limit</span><b>'+meta[2]+' min</b></div>';
-  document.getElementById('launchCorrect').textContent='+'+(meta[1]/meta[0]).toFixed(2)+' marks';
-  document.getElementById('launchWrong').textContent='−'+(meta[1]/meta[0]/4).toFixed(2)+' marks';
-  home.classList.add('hidden'); launch.classList.remove('hidden');
-  var btn=document.getElementById('launchStartButton');
-  btn.onclick=function(){
-    if(typeof beginFullscreenTest==='function'){beginFullscreenTest();}
-    else {alert('The instruction screen loaded, but the test script did not initialize. Please send this page URL so I can fix the remaining script error.');}
-  };
-})();
 </script>
 </body></html>
