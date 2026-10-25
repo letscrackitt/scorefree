@@ -357,3 +357,19 @@ th{font-size:.9rem;font-weight:950;color:#30294e}
 td{font-size:.96rem;line-height:1.6}
 .history-row{font-size:.98rem;font-weight:600}
 @media(max-width:600px){body{font-size:16px}.lead{font-size:1.02rem}h1{line-height:1.02}}
+
+
+/* Testbook-inspired general-instructions details (original SCOREFREE design) */
+.instruction-legend{margin:18px 0}
+.instruction-status-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.instruction-status-grid>span{display:flex;align-items:center;gap:9px;padding:10px 12px;border-radius:10px;background:#faf9ff;color:#46415e;font-size:.88rem;font-weight:750}
+.palette-key{display:inline-block;width:15px;height:15px;flex:none;border:1px solid #d4d0e0;border-radius:4px;background:#fff}
+.key-unvisited{background:#fff;border-color:#aaa}
+.key-unanswered{background:#f0f0f6}
+.key-answered{background:#d8f2e6;border-color:#9dd9bb}
+.key-review{background:#f0e4ff;border-color:#ddc7fb}
+.key-both{background:#fbe8c5;border-color:#f2d394}
+.instructions-ack{display:flex;align-items:flex-start;gap:12px;margin:18px 0;padding:17px 18px;border:1px solid #d9d3ee;border-radius:13px;background:#f7f5ff;color:#38334f;font-weight:750;line-height:1.6;cursor:pointer}
+.instructions-ack input{width:19px;height:19px;flex:none;margin-top:3px;accent-color:var(--purple)}
+.start-test-button:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+@media(max-width:650px){.instruction-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
