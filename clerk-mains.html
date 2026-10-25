@@ -525,18 +525,30 @@ function showLaunchInstructions(){
 showLaunchInstructions();
 </script>
 <script>
-/* Defensive route activation: keep query-selected sectional tests on the instructions screen. */
+/* Standalone route fallback: show instructions even if an earlier practice script fails. */
 (function(){
   var p=new URLSearchParams(window.location.search);
-  if(!p.has('exam')||!p.has('subject')) return;
   var exam=(p.get('exam')||'').toLowerCase();
   var subject=(p.get('subject')||'').toLowerCase();
-  var aliases={'ibps-clerk':'ibps','ibps-clerk-mains':'ibps','sbi-clerk':'sbi','sbi-clerk-mains':'sbi','reasoning-ability':'reasoning','reasoning-computer':'reasoning','quantitative-aptitude':'quant','general-english':'english','english-language':'english','general-financial-awareness':'awareness','financial-awareness':'awareness'};
-  exam=aliases[exam]||exam; subject=aliases[subject]||subject;
-  if(['ibps','sbi'].indexOf(exam)<0||['reasoning','quant','english','awareness'].indexOf(subject)<0) return;
-  try { if(typeof showLaunchInstructions==='function') showLaunchInstructions(); } catch(err){ console.error('Instructions routing retry:',err); }
+  var test=Math.max(1,Math.min(10,Number(p.get('test'))||1));
+  var ea={'ibps-clerk':'ibps','ibps-clerk-mains':'ibps','sbi-clerk':'sbi','sbi-clerk-mains':'sbi'};
+  var sa={'reasoning-ability':'reasoning','reasoning-computer':'reasoning','quantitative-aptitude':'quant','general-english':'english','english-language':'english','general-financial-awareness':'awareness','financial-awareness':'awareness'};
+  exam=ea[exam]||exam; subject=sa[subject]||subject;
+  if(['ibps','sbi'].indexOf(exam)<0||['reasoning','quant','english','awareness'].indexOf(subject)<0)return;
+  var names={reasoning:exam==='sbi'?'Reasoning Ability & Computer Aptitude':'Reasoning Ability',quant:'Quantitative Aptitude',english:'General English',awareness:'General / Financial Awareness'};
+  var meta=(exam==='ibps'?{reasoning:[40,60,35],quant:[40,50,35],english:[40,40,35],awareness:[40,50,20]}:{reasoning:[50,60,45],quant:[50,50,45],english:[40,40,35],awareness:[50,50,35]})[subject];
   var launch=document.getElementById('launchScreen'), home=document.getElementById('home');
-  if(launch&&home&&!launch.classList.contains('hidden')) home.classList.add('hidden');
+  if(!launch||!home)return;
+  document.getElementById('launchEyebrow').textContent=(exam==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains')+' · '+names[subject]+' · Test '+test;
+  document.getElementById('launchMetrics').innerHTML='<div><span>Questions in full test</span><b>'+meta[0]+'</b></div><div><span>Maximum marks</span><b>'+meta[1]+'</b></div><div><span>Time limit</span><b>'+meta[2]+' min</b></div>';
+  document.getElementById('launchCorrect').textContent='+'+(meta[1]/meta[0]).toFixed(2)+' marks';
+  document.getElementById('launchWrong').textContent='−'+(meta[1]/meta[0]/4).toFixed(2)+' marks';
+  home.classList.add('hidden'); launch.classList.remove('hidden');
+  var btn=document.getElementById('launchStartButton');
+  btn.onclick=function(){
+    if(typeof beginFullscreenTest==='function'){beginFullscreenTest();}
+    else {alert('The instruction screen loaded, but the test script did not initialize. Please send this page URL so I can fix the remaining script error.');}
+  };
 })();
 </script>
 </body></html>
