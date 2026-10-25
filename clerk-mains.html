@@ -466,14 +466,32 @@ let sectionalTestNumber = Math.max(1, Math.min(10, Number(launchParams.get('test
 const originalOpenDemo = openDemo;
 openDemo = function(e,s){
   originalOpenDemo(e,s);
-  document.getElementById('testLabel').textContent=(e==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains')+' · '+({reasoning:'Reasoning & Computer Aptitude',quant:'Quantitative Aptitude',english:'General English',awareness:'General / Financial Awareness'})[s]+' · Sectional Test '+sectionalTestNumber+' preview';
+  document.getElementById('testLabel').textContent=(e==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains')+' · '+({reasoning:'Reasoning & Computer Aptitude',quant:'Quantitative Aptitude',english:'General English',awareness:'General / Financial Awareness'})[s]+' · Sectional Test '+sectionalTestNumber+' practice';
   document.getElementById('testName').textContent='Sectional Test '+sectionalTestNumber+' — '+({reasoning:'Reasoning & Computer Aptitude',quant:'Quantitative Aptitude',english:'General English',awareness:'General / Financial Awareness'})[s];
 };
 function startSelectedTest(){
-  const e=launchParams.get('exam'),s=launchParams.get('subject');
+  let e=(launchParams.get('exam')||'').toLowerCase();
+  let s=(launchParams.get('subject')||'').toLowerCase();
+  if(['ibps-clerk','ibps-clerk-mains'].includes(e)) e='ibps';
+  if(['sbi-clerk','sbi-clerk-mains'].includes(e)) e='sbi';
+  const aliases={'reasoning-ability':'reasoning','reasoning-computer':'reasoning','quantitative-aptitude':'quant','general-english':'english','english-language':'english','general-financial-awareness':'awareness','financial-awareness':'awareness'};
+  s=aliases[s]||s;
+  if(!['ibps','sbi'].includes(e)||!['reasoning','quant','english','awareness'].includes(s)){
+    document.getElementById('launchScreen').classList.add('hidden');
+    document.getElementById('home').classList.remove('hidden');
+    return;
+  }
   document.getElementById('launchScreen').classList.add('hidden');
+  document.getElementById('home').classList.add('hidden');
   document.body.classList.add('focus-mode');
-  openDemo(e,s);
+  try { openDemo(e,s); }
+  catch(err) {
+    document.body.classList.remove('focus-mode');
+    document.getElementById('test').classList.add('hidden');
+    document.getElementById('home').classList.remove('hidden');
+    alert('The test could not start. Please return to the Clerk Mains page and choose a section again.');
+    console.error('SCOREFREE test start failed:',err);
+  }
 }
 function beginFullscreenTest(){
   const target=document.documentElement;
@@ -482,9 +500,8 @@ function beginFullscreenTest(){
   }else{startSelectedTest();}
 }
 function beginNormalTest(){startSelectedTest();}
+/* Direct test links should launch the questions immediately instead of stopping at a second landing screen. */
 if(launchParams.get('exam') && launchParams.get('subject')){
-  document.getElementById('home').classList.add('hidden');
-  document.getElementById('launchScreen').classList.remove('hidden');
-  document.getElementById('launchTitle').textContent='Sectional Test '+sectionalTestNumber+' is ready';
+  startSelectedTest();
 }
 </script></body></html>
