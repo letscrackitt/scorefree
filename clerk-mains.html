@@ -196,7 +196,7 @@ body.focus-mode{background:#f2f5fb}
 </style></head>
 <body>
 <header class="top"><a class="brand" href="./index.html">SCOREFREE</a><nav style="display:flex;gap:16px;flex-wrap:wrap"><a class="muted" href="./index.html">← Main site</a></nav></header>
-<div id="launchScreen" class="launch-screen hidden"><section class="launch-card"><p class="eyebrow">SCOREFREE · Distraction-free test</p><h1 id="launchTitle">Ready to begin?</h1><p class="muted">The test will open in this separate window. Start fullscreen for a focused exam-style experience. SCOREFREE will not show in-test promotional pop-ups or site notifications.</p><div class="launch-actions"><button class="primary" onclick="beginFullscreenTest()">Start test in fullscreen</button><button class="secondary" onclick="beginNormalTest()">Start without fullscreen</button></div><p class="muted" style="font-size:.82rem;margin-top:18px">Browser or device notifications may still appear; use Do Not Disturb / Focus mode to block those before starting.</p></section></div><main class="wrap">
+<div id="launchScreen" class="launch-screen hidden"><section class="launch-card"><p class="eyebrow">SCOREFREE · Distraction-free test</p><h1 id="launchTitle">Ready to begin?</h1><p class="muted">Sample questions are ready to preview in the ScoreFree test interface. Start when you are ready.</p><div class="launch-actions"><button class="primary" onclick="beginFullscreenTest()">Start test in fullscreen</button><button class="secondary" onclick="beginNormalTest()">Start without fullscreen</button></div><p class="muted" style="font-size:.82rem;margin-top:18px">Browser or device notifications may still appear; use Do Not Disturb / Focus mode to block those before starting.</p></section></div><main class="wrap">
 <section id="home">
 <div class="intro"><p class="eyebrow">Objective practice · Clerk Mains</p><h1>Practice like exam day.</h1><p class="muted">A one-question-at-a-time interface with a live timer, question palette, review flags and post-submission solutions. This page is the interface foundation; full-length verified question banks are being added separately.</p></div>
 <div class="notice"><b>Official-pattern sectional practice:</b> IBPS Clerk Mains (2025 notification shown) and SBI Clerk Mains (2026 notification shown) use different section counts and timings. Each section runs on its own timer. Wrong answers carry a one-quarter-mark penalty. The current bank is a short practice preview and will not be presented as a full-length mock until the official question count is populated.</div>
@@ -498,13 +498,11 @@ function beginFullscreenTest(){
 }
 function beginNormalTest(){startSelectedTest();}
 if(launchParams.get('exam') && launchParams.get('subject')){
+  // Open the sample questions immediately; no instruction-only stop screen.
   document.getElementById('home').classList.add('hidden');
-  if(launchParams.get('preview')){
-    document.getElementById('launchScreen').classList.add('hidden');
-    showPreview(launchParams.get('exam'),launchParams.get('subject'));
-  }else{
-    document.getElementById('launchScreen').classList.remove('hidden');
-    document.getElementById('launchTitle').textContent='Sectional Test '+sectionalTestNumber+' is ready';
-  }
+  document.getElementById('launchScreen').classList.add('hidden');
+  document.body.classList.add('focus-mode');
+  openDemo(launchParams.get('exam'),launchParams.get('subject'));
+  setPreviewLabels(launchParams.get('exam'),launchParams.get('subject'));
 }
 </script></body></html>
