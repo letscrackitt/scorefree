@@ -471,14 +471,14 @@ function setPreviewLabels(e,s){
   document.getElementById('testName').textContent='Sectional Test '+sectionalTestNumber+' — '+names[s];
 }
 function openPreview(e,s){
+  // Start the test in this tab. Never open a separate preview/popup window.
   const url=new URL(location.href);
   url.search='';
   url.searchParams.set('exam',e);
   url.searchParams.set('subject',s);
   url.searchParams.set('test','1');
   url.searchParams.set('preview','1');
-  const popup=window.open(url.href,'scorefreeTestPreview','width=1180,height=850,resizable=yes,scrollbars=yes');
-  if(!popup){alert('ScoreFree could not open the preview window. Please allow pop-ups for this site, then click Start sectional practice again.');}
+  window.location.href=url.href;
 }
 function showPreview(e,s){
   originalOpenDemo(e,s);
