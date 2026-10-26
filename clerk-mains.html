@@ -196,7 +196,7 @@ body.focus-mode{background:#f2f5fb}
 </style></head>
 <body>
 <header class="top"><a class="brand" href="./index.html">SCOREFREE</a><nav style="display:flex;gap:16px;flex-wrap:wrap"><a class="muted" href="./index.html">← Main site</a></nav></header>
-<div id="launchScreen" class="launch-screen hidden"><section class="launch-card"><p class="eyebrow">SCOREFREE · Distraction-free test</p><h1 id="launchTitle">Ready to begin?</h1><p class="muted">Sample questions are ready to preview in the ScoreFree test interface. Start when you are ready.</p><div class="launch-actions"><button class="primary" onclick="beginFullscreenTest()">Start test in fullscreen</button><button class="secondary" onclick="beginNormalTest()">Start without fullscreen</button></div><p class="muted" style="font-size:.82rem;margin-top:18px">Browser or device notifications may still appear; use Do Not Disturb / Focus mode to block those before starting.</p></section></div><main class="wrap">
+<div id="launchScreen" class="launch-screen hidden"><section class="launch-card" style="width:min(820px,100%);text-align:left"><p class="eyebrow">SCOREFREE · TEST INSTRUCTIONS</p><h1 id="launchTitle">Test instructions</h1><p id="instructionSubtitle" class="muted">Review the instructions and marking scheme before starting.</p><div class="instructions-metrics" style="margin:22px 0"><div><span>Questions available</span><strong id="instructionQuestions">—</strong></div><div><span>Maximum section marks</span><strong id="instructionMarks">—</strong></div><div><span>Time limit</span><strong id="instructionTime">—</strong></div><div><span>Format</span><strong>Multiple choice</strong></div></div><div class="instructions-columns"><section class="instructions-panel"><h2>General instructions</h2><ul><li>Choose one option for each question.</li><li>Use the question palette to move between questions.</li><li>You may change or clear an answer before submitting.</li><li>Submit when finished; the test also submits when the timer ends.</li></ul></section><section class="instructions-panel scoring-rules"><h2>Marking criteria</h2><div class="marking-row"><span><i class="mark-dot correct-dot"></i>Correct answer</span><b id="instructionCorrect">—</b></div><div class="marking-row"><span><i class="mark-dot wrong-dot"></i>Wrong answer</span><b id="instructionWrong">—</b></div><div class="marking-row"><span><i class="mark-dot blank-dot"></i>Unanswered</span><b>0 marks</b></div><p class="small">Wrong answers deduct one-quarter of the marks assigned to that question.</p></section></div><div class="preview-disclosure" id="instructionDisclosure"><b>Practice-bank status:</b> Question counts shown here reflect the current available bank. This is not a full-length mock until the complete question bank is added.</div><div class="launch-actions" style="justify-content:flex-end;margin-top:24px"><button class="secondary" onclick="backHome()">Back to subjects</button><button class="primary" onclick="beginNormalTest()">Start test →</button></div></section></div><main class="wrap">
 <section id="home">
 <div class="intro"><p class="eyebrow">Objective practice · Clerk Mains</p><h1>Practice like exam day.</h1><p class="muted">A one-question-at-a-time interface with a live timer, question palette, review flags and post-submission solutions. This page is the interface foundation; full-length verified question banks are being added separately.</p></div>
 <div class="notice"><b>Official-pattern sectional practice:</b> IBPS Clerk Mains (2025 notification shown) and SBI Clerk Mains (2026 notification shown) use different section counts and timings. Each section runs on its own timer. Wrong answers carry a one-quarter-mark penalty. The current bank is a short practice preview and will not be presented as a full-length mock until the official question count is populated.</div>
@@ -467,9 +467,18 @@ const launchParams = new URLSearchParams(location.search);
 let sectionalTestNumber = Math.max(1, Math.min(10, Number(launchParams.get('test')) || 1));
 const originalOpenDemo = openDemo;
 function setPreviewLabels(e,s){
-  const names={reasoning:'Reasoning Ability & Computer Aptitude',quant:'Quantitative Aptitude',english:'General English',awareness:'General / Financial Awareness'};
-  document.getElementById('testLabel').textContent=(e==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains')+' · '+names[s]+' · Sectional Test '+sectionalTestNumber+' preview';
-  document.getElementById('testName').textContent='Sectional Test '+sectionalTestNumber+' — '+names[s];
+  const names={reasoning:(e==='sbi'?'Reasoning & Computer Aptitude':'Reasoning Ability'),quant:'Quantitative Aptitude',english:(e==='sbi'?'General English':'English Language'),awareness:'General / Financial Awareness'};
+  const meta=sectionMetaFor(e,s), available=qs().length, each=meta.marks/meta.questions;
+  document.getElementById('testLabel').textContent=(e==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains')+' · '+names[s]+' · Test '+sectionalTestNumber;
+  document.getElementById('testName').textContent='Test '+sectionalTestNumber+' — '+names[s];
+  document.getElementById('launchTitle').textContent=(e==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains')+' · '+names[s]+' · Test '+sectionalTestNumber;
+  document.getElementById('instructionSubtitle').textContent='Read the instructions and marking criteria before you begin.';
+  document.getElementById('instructionQuestions').textContent=available+' available';
+  document.getElementById('instructionMarks').textContent=meta.marks;
+  document.getElementById('instructionTime').textContent=meta.minutes+' minutes';
+  document.getElementById('instructionCorrect').textContent='+'+each.toFixed(2)+' marks';
+  document.getElementById('instructionWrong').textContent='−'+(each/4).toFixed(3).replace(/0+$/,'').replace(/\\.$/,'')+' marks';
+  document.getElementById('instructionDisclosure').innerHTML='<b>Important:</b> This test currently has '+available+' available practice questions, not the full '+meta.questions+'-question official section. Test numbers are selectable, but separate complete question banks for all ten tests are still being built. Your score is for practice; percentile will only be shown when there is enough real attempt data.';
 }
 function openPreview(e,s){
   // Start the test in this tab. Never open a separate preview/popup window.
@@ -500,11 +509,16 @@ function beginFullscreenTest(){
 }
 function beginNormalTest(){startSelectedTest();}
 if(launchParams.get('exam') && launchParams.get('subject')){
-  // Open the sample questions immediately; no instruction-only stop screen.
+  // Correct flow: selected test -> instructions and marking scheme -> user starts test.
+  const e=launchParams.get('exam'),s=launchParams.get('subject');
+  if(!['ibps','sbi'].includes(e) || !['reasoning','quant','english','awareness'].includes(s)){
+    document.getElementById('launchTitle').textContent='Invalid test selection';
+    document.getElementById('instructionSubtitle').textContent='Please return to SCOREFREE and choose an exam, subject and test.';
+  }
   document.getElementById('home').classList.add('hidden');
-  document.getElementById('launchScreen').classList.add('hidden');
-  document.body.classList.add('focus-mode');
-  openDemo(launchParams.get('exam'),launchParams.get('subject'));
-  setPreviewLabels(launchParams.get('exam'),launchParams.get('subject'));
+  document.getElementById('test').classList.add('hidden');
+  document.getElementById('results').classList.add('hidden');
+  document.getElementById('launchScreen').classList.remove('hidden');
+  setPreviewLabels(e,s);
 }
 </script></body></html>
