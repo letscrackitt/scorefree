@@ -12,8 +12,8 @@
     section.style.cssText='max-width:960px;margin:40px auto 10px';
     section.innerHTML=`
       <p class="eyebrow">Free bank exam descriptive practice</p>
-      <h2>IBPS PO &amp; SBI PO Descriptive Practice</h2>
-      <p class="muted">SCOREFREE is a free descriptive writing practice platform for bank exam aspirants. Practice IBPS PO essay and comprehension, plus SBI PO email, situation analysis, report and précis writing.</p>
+      <h2>IBPS Clerk, SBI Clerk &amp; PO Practice</h2>
+      <p class="muted">SCOREFREE is a free practice platform for bank exam aspirants: IBPS Clerk Mains and SBI Clerk Mains sectional tests, plus IBPS PO essay and comprehension and SBI PO email, situation analysis, report and précis writing.</p>
       <p class="muted">Use SCOREFREE to build exam-ready writing habits with practice tests, word-count guidance, transparent practice scoring and learning pointers.</p>
     `;
     app.appendChild(section);
