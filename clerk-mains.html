@@ -420,6 +420,10 @@ function finish(){
   '<div class="result-metric metric-purple"><span class="metric-icon">%</span><span>Accuracy<strong>'+accuracy+'%</strong></span></div>'+
   '<div class="result-metric metric-muted"><span class="metric-icon">↗</span><span>Percentile<strong>—</strong><small>Needs more attempts</small></span></div>'+
   '<p class="result-footnote">Preview only: this score is calculated from the sample questions shown, not the full '+meta.questions+'-question section. Percentile is not estimated or fabricated.</p>';
+ const topicStats={};
+ list.forEach((q,i)=>{const topic=q.topic||'General';if(!topicStats[topic])topicStats[topic]={right:0,wrong:0,skip:0};if(answers[i]===undefined)topicStats[topic].skip++;else if(answers[i]===q.ans)topicStats[topic].right++;else topicStats[topic].wrong++;});
+ const topicRows=Object.keys(topicStats).map(topic=>{const t=topicStats[topic],attempted=t.right+t.wrong,acc=attempted?Math.round(t.right/attempted*100):0;return '<div class="history-row"><span><b>'+topic+'</b><small>'+attempted+' attempted · '+t.skip+' unanswered</small></span><strong>'+acc+'% accuracy <small>('+t.right+' correct / '+t.wrong+' wrong)</small></strong></div>';}).join('');
+ document.getElementById('resultStats').insertAdjacentHTML('beforeend','<section class="progress-panel" style="grid-column:1/-1"><p class="eyebrow">Performance analysis</p><h2>Topic-wise analysis</h2><p class="muted">Use this breakdown to identify topics to revise. Percentile is not shown until SCOREFREE has a sufficiently large, comparable attempt pool; we will not invent one.</p><div class="history-list">'+topicRows+'</div></section>');
  renderSolutionQuestion();
 }
 let solutionIdx=0;
@@ -468,7 +472,7 @@ let sectionalTestNumber = Math.max(1, Math.min(10, Number(launchParams.get('test
 const originalOpenDemo = openDemo;
 function setPreviewLabels(e,s){
   const names={reasoning:(e==='sbi'?'Reasoning & Computer Aptitude':'Reasoning Ability'),quant:'Quantitative Aptitude',english:(e==='sbi'?'General English':'English Language'),awareness:'General / Financial Awareness'};
-  const meta=sectionMetaFor(e,s), available=qs().length, each=meta.marks/meta.questions;
+  const meta=sectionMetaFor(e,s), available=(e==='ibps'&&s==='reasoning'&&sectionalTestNumber===1&&Array.isArray(window.SF_IBPS_REASONING_TEST1))?window.SF_IBPS_REASONING_TEST1.length:demos.filter(q=>s==='reasoning'?(q.topic==='Reasoning Ability'||(e==='sbi'&&q.topic==='Computer Aptitude')):s==='quant'?q.topic==='Quantitative Aptitude':s==='awareness'?q.topic==='General / Financial Awareness':q.topic==='English Language').length, each=meta.marks/meta.questions;
   document.getElementById('testLabel').textContent=(e==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains')+' · '+names[s]+' · Test '+sectionalTestNumber;
   document.getElementById('testName').textContent='Test '+sectionalTestNumber+' — '+names[s];
   document.getElementById('launchTitle').textContent=(e==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains')+' · '+names[s]+' · Test '+sectionalTestNumber;
