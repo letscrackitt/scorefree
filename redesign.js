@@ -83,7 +83,7 @@
       '</section>';
     window.scrollTo(0,0);
   };
-  window.openClerkPreview = function(exam,subject,test){var url='https://letscrackitt.github.io/scorefree/clerk-mains.html?exam='+encodeURIComponent(exam)+'&subject='+encodeURIComponent(subject)+'&test='+(test||1)+'&preview=1&v=20261025a';window.location.assign(url);};
+  window.openClerkPreview = function(exam,subject,test){var url='https://letscrackitt.github.io/scorefree/clerk-mains.html?exam='+encodeURIComponent(exam)+'&subject='+encodeURIComponent(subject)+'&test='+(test||1)+'&preview=1&v=20261026a';window.location.assign(url);};
   window.readHistory = function(){try{return JSON.parse(localStorage.getItem('sf-history')||'[]')}catch(e){return []}};
   window.progressPanel = function(){
     var history=readHistory();
