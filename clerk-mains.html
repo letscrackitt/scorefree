@@ -236,6 +236,7 @@ body.focus-mode{background:#f2f5fb}
 </section>
 </main><footer>Unofficial practice resource. Not affiliated with IBPS or SBI.</footer>
 <script src="./ibps-reasoning-test-1.js?v=20261025b"></script>
+<script src="./question-bank.js?v=20261026a"></script>
 <script>
 const demos = [
 /* SCOREFREE original Mains-style practice. Multi-question sets use a shared caselet/data context in each item. Not verbatim official questions. */
@@ -330,7 +331,7 @@ const demos = [
 {topic:"Computer Aptitude",q:"Which of these is an example of an operating system?",opts:["Linux","HTML","SQL","HTTP"],ans:0,exp:"Linux is an operating system; HTML is a markup language, SQL a query language, and HTTP a protocol."},
 {topic:"Computer Aptitude",q:"What is the main role of a router in a network?",opts:["Create spreadsheets","Forward data between networks","Scan paper documents","Compile source code"],ans:1,exp:"A router forwards packets between different networks."},
 {topic:"Computer Aptitude",q:"Which file extension is commonly associated with a modern Excel workbook?",opts:[".pptx",".xlsx",".docx",".html"],ans:1,exp:".xlsx is the standard extension for modern Excel workbook files."},
-{topic:"Computer Aptitude",q:"What is two-factor authentication intended to do?",opts:["Use two usernames","Add a second verification factor beyond the password","Double internet speed","Create two copies of every file"],ans:1,exp:"Two-factor authentication requires two different types of verification to strengthen account security."}
+{topic:"Computer Aptitude",q:"What is two-factor authentication intended to do?",opts:["Use two usernames","Add a second verification factor beyond the password","Double internet speed","Create two copies of every file"],ans:1,exp:"Two-factor authentication requires two different types of verification to strengthen account security."},
 
 
 /* More original exam-style practice. These are not claimed to be verbatim recalled PYQs. */
@@ -384,8 +385,24 @@ let exam='ibps',subject='reasoning',idx=0,answers={},reviews={},visited={},secs=
 function openDemo(e,s){exam=e;subject=s;idx=0;answers={};reviews={};visited={};secs=sectionMetaFor(e,s).minutes*60;submitted=false;document.getElementById('home').classList.add('hidden');document.getElementById('results').classList.add('hidden');document.getElementById('test').classList.remove('hidden');document.getElementById('testLabel').textContent=(e==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains')+' · '+s.toUpperCase();document.getElementById('testName').textContent=(e==='sbi'&&s==='reasoning'?'Reasoning Ability & Computer Aptitude':({reasoning:'Reasoning Ability',quant:'Quantitative Aptitude',english:'General English',awareness:'General / Financial Awareness'})[s]);document.getElementById('testLabel').textContent=(e==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains')+' · OFFICIAL SECTION TIMING';renderQ();startClock()}
 function startClock(){clearInterval(clockId);paintClock();clockId=setInterval(()=>{secs--;paintClock();if(secs<=0){clearInterval(clockId);finish()}},1000)}
 function paintClock(){document.getElementById('timer').textContent=String(Math.floor(Math.max(0,secs)/60)).padStart(2,'0')+':'+String(Math.max(0,secs)%60).padStart(2,'0')}
-function qs(){var p=new URLSearchParams(location.search);if(exam==='ibps'&&subject==='reasoning'&&Number(p.get('test')||1)===1&&Array.isArray(window.SF_IBPS_REASONING_TEST1))return window.SF_IBPS_REASONING_TEST1;return demos.filter(q=>subject==='reasoning'?(q.topic==='Reasoning Ability'||(exam==='sbi'&&q.topic==='Computer Aptitude')):subject==='quant'?q.topic==='Quantitative Aptitude':subject==='awareness'?q.topic==='General / Financial Awareness':q.topic==='English Language')}
-function renderQ(){const list=qs();if(idx>=list.length)idx=list.length-1;visited[idx]=true;const q=list[idx];document.getElementById('qcount').textContent='Question '+(idx+1);document.getElementById('qmarks').textContent=(exam==='ibps'?'Official section: '+sectionMeta().questions+' Q · '+sectionMeta().marks+' marks · '+sectionMeta().minutes+' min':'Official section: '+sectionMeta().questions+' Q · '+sectionMeta().marks+' marks · '+sectionMeta().minutes+' min')+' · '+list.length+' practice Qs currently available';document.getElementById('qtopic').textContent=q.topic;document.getElementById('setIntro').innerHTML=q.setTitle?'<div class="set-instructions"><strong>'+q.setTitle+'</strong><p>'+q.setIntro+'</p></div>':'';document.getElementById('qtext').textContent=q.q;document.getElementById('options').innerHTML=q.opts.map((o,i)=>'<label class="option"><input type="radio" name="option" value="'+i+'" '+(answers[idx]===i?'checked':'')+' onchange="chooseAnswer('+i+')"><span><b>'+String.fromCharCode(65+i)+'.</b> '+o+'</span></label>').join('');drawPalette()}
+function bankFor(e,t,sub){
+  // 1) questions you added in question-bank.js for this exact test
+  var b=window.SF_BANK&&SF_BANK[e]&&SF_BANK[e][sub]&&SF_BANK[e][sub][t];
+  if(Array.isArray(b)&&b.length)return b;
+  // 2) older sample questions, kept for Test 1 only
+  if(t!==1)return [];
+  if(e==='ibps'&&sub==='reasoning'&&Array.isArray(window.SF_IBPS_REASONING_TEST1))return window.SF_IBPS_REASONING_TEST1;
+  return demos.filter(q=>sub==='reasoning'?(q.topic==='Reasoning Ability'||(e==='sbi'&&q.topic==='Computer Aptitude')):sub==='quant'?q.topic==='Quantitative Aptitude':sub==='awareness'?q.topic==='General / Financial Awareness':q.topic==='English Language');
+}
+function filledCount(e,sub,t){return bankFor(e,t,sub).length}
+function qs(){
+  var t=Math.max(1,Math.min(10,Number(new URLSearchParams(location.search).get('test'))||1));
+  var list=bankFor(exam,t,subject).slice(),total=sectionMeta().questions;
+  // pad with "not added yet" slots so the window always has the official number of questions
+  while(list.length<total)list.push({empty:true,topic:'Not added yet',q:'This question is being prepared and has not been added to this test yet.',opts:[],exp:''});
+  return list;
+}
+function renderQ(){const list=qs();if(idx>=list.length)idx=list.length-1;visited[idx]=true;const q=list[idx];document.getElementById('qcount').textContent='Question '+(idx+1);document.getElementById('qmarks').textContent=(exam==='ibps'?'Official section: '+sectionMeta().questions+' Q · '+sectionMeta().marks+' marks · '+sectionMeta().minutes+' min':'Official section: '+sectionMeta().questions+' Q · '+sectionMeta().marks+' marks · '+sectionMeta().minutes+' min')+' · '+list.filter(x=>!x.empty).length+' of '+list.length+' questions added';document.getElementById('qtopic').textContent=q.topic;document.getElementById('setIntro').innerHTML=q.setTitle?'<div class="set-instructions"><strong>'+q.setTitle+'</strong><p>'+q.setIntro+'</p></div>':'';document.getElementById('qtext').textContent=q.q;document.getElementById('options').innerHTML=(q.opts||[]).map((o,i)=>'<label class="option"><input type="radio" name="option" value="'+i+'" '+(answers[idx]===i?'checked':'')+' onchange="chooseAnswer('+i+')"><span><b>'+String.fromCharCode(65+i)+'.</b> '+o+'</span></label>').join('');drawPalette()}
 function chooseAnswer(i){answers[idx]=i;drawPalette()}
 function drawPalette(){const list=qs();document.getElementById('palette').innerHTML=list.map((q,i)=>{const status=answers[i]!==undefined?(reviews[i]?'both':'answered'):(reviews[i]?'review':(visited[i]?'notanswered':'notvisited'));return '<button class="qnum '+status+' '+(i===idx?'current':'')+'" onclick="jump('+i+')">'+(i+1)+'</button>'}).join('');document.getElementById('answeredN').textContent=Object.keys(answers).length;document.getElementById('reviewN').textContent=Object.keys(reviews).filter(k=>reviews[k]).length}
 function jump(i){idx=i;renderQ()}
@@ -394,7 +411,7 @@ function markReview(){reviews[idx]=true;nextQ()}
 function saveNext(){delete reviews[idx];nextQ()}
 function nextQ(){if(idx<qs().length-1)idx++;renderQ()}
 function askExit(){if(confirm('Exit this preview? Your preview progress will be lost.'))backHome()}
-function submitAsk(){const a=Object.keys(answers).length;if(confirm('Submit this preview now? You answered '+a+' of '+qs().length+' questions.'))finish()}
+function submitAsk(){const a=Object.keys(answers).length;if(confirm('Submit now? You answered '+a+' of '+qs().filter(x=>!x.empty).length+' added questions.'))finish()}
 function formatMarks(value){return Number(value.toFixed(4)).toString();}
 function sectionMetaFor(e,s){return e==='ibps'?({reasoning:{questions:40,marks:60,minutes:35},quant:{questions:35,marks:50,minutes:30},english:{questions:40,marks:40,minutes:35},awareness:{questions:40,marks:50,minutes:20}})[s]:({reasoning:{questions:50,marks:60,minutes:45},quant:{questions:50,marks:50,minutes:45},english:{questions:40,marks:40,minutes:35},awareness:{questions:50,marks:50,minutes:35}})[s]}
 function sectionMeta(){return sectionMetaFor(exam,subject)}
@@ -406,9 +423,9 @@ function finish(){
  document.getElementById('solutionReview').classList.add('hidden');
  const list=qs(),meta=sectionMeta(),perQuestion=meta.marks/meta.questions;
  let score=0,correct=0,wrong=0,unanswered=0;
- list.forEach((q,i)=>{if(answers[i]===q.ans){score+=perQuestion;correct++}else if(answers[i]!==undefined){score-=perQuestion/4;wrong++}else unanswered++});
+ list.forEach((q,i)=>{if(q.empty)return;if(answers[i]===q.ans){score+=perQuestion;correct++}else if(answers[i]!==undefined){score-=perQuestion/4;wrong++}else unanswered++});
  score=Math.round(score*100)/100;
- const previewMax=Math.round(perQuestion*list.length*100)/100;
+ const filled=list.filter(x=>!x.empty).length;const previewMax=Math.round(perQuestion*filled*100)/100;
  const accuracy=Object.keys(answers).length?Math.round(correct/Object.keys(answers).length*100):0;
  const pct=previewMax?Math.max(0,Math.round(score/previewMax*100)):0;
  document.querySelector('#results .eyebrow').textContent='SECTIONAL TEST '+sectionalTestNumber+' · '+(exam==='ibps'?'IBPS':'SBI')+' CLERK MAINS';
@@ -419,9 +436,9 @@ function finish(){
   '<div class="result-metric metric-grey"><span class="metric-icon">—</span><span>Unanswered<strong>'+unanswered+'</strong></span></div>'+
   '<div class="result-metric metric-purple"><span class="metric-icon">%</span><span>Accuracy<strong>'+accuracy+'%</strong></span></div>'+
   '<div class="result-metric metric-muted"><span class="metric-icon">↗</span><span>Percentile<strong>—</strong><small>Needs more attempts</small></span></div>'+
-  '<p class="result-footnote">Preview only: this score is calculated from the sample questions shown, not the full '+meta.questions+'-question section. Percentile is not estimated or fabricated.</p>';
+  '<p class="result-footnote">'+(filled<meta.questions?'Partial bank: this score is calculated from the '+filled+' questions added so far, not the full '+meta.questions+'-question section.':'Score for the full '+meta.questions+'-question section.')+' Percentile is not estimated or fabricated.</p>';
  const topicStats={};
- list.forEach((q,i)=>{const topic=q.topic||'General';if(!topicStats[topic])topicStats[topic]={right:0,wrong:0,skip:0};if(answers[i]===undefined)topicStats[topic].skip++;else if(answers[i]===q.ans)topicStats[topic].right++;else topicStats[topic].wrong++;});
+ list.forEach((q,i)=>{if(q.empty)return;const topic=q.topic||'General';if(!topicStats[topic])topicStats[topic]={right:0,wrong:0,skip:0};if(answers[i]===undefined)topicStats[topic].skip++;else if(answers[i]===q.ans)topicStats[topic].right++;else topicStats[topic].wrong++;});
  const topicRows=Object.keys(topicStats).map(topic=>{const t=topicStats[topic],attempted=t.right+t.wrong,acc=attempted?Math.round(t.right/attempted*100):0;return '<div class="history-row"><span><b>'+topic+'</b><small>'+attempted+' attempted · '+t.skip+' unanswered</small></span><strong>'+acc+'% accuracy <small>('+t.right+' correct / '+t.wrong+' wrong)</small></strong></div>';}).join('');
  document.getElementById('resultStats').insertAdjacentHTML('beforeend','<section class="progress-panel" style="grid-column:1/-1"><p class="eyebrow">Performance analysis</p><h2>Topic-wise analysis</h2><p class="muted">Use this breakdown to identify topics to revise. Percentile is not shown until SCOREFREE has a sufficiently large, comparable attempt pool; we will not invent one.</p><div class="history-list">'+topicRows+'</div></section>');
  renderSolutionQuestion();
@@ -436,13 +453,13 @@ function renderSolutionQuestion(){
  const status=document.getElementById('solStatus');status.textContent=isSkipped?'Unanswered':isCorrect?'Correct answer':'Incorrect answer';status.className='solution-status '+(isSkipped?'status-skip':isCorrect?'status-correct':'status-wrong');
  document.getElementById('solTopic').textContent=q.topic;
  document.getElementById('solQtext').textContent=q.q;
- document.getElementById('solOptions').innerHTML=q.opts.map((o,i)=>{
+ document.getElementById('solOptions').innerHTML=(q.opts||[]).map((o,i)=>{
   const correctOption=i===q.ans,chosen=user===i;
   const cls=correctOption?'solution-option option-correct':chosen?'solution-option option-wrong':'solution-option';
   const label=correctOption?'<b class="option-verdict">Correct answer</b>':chosen?'<b class="option-verdict">Your answer</b>':'';
   return '<div class="'+cls+'"><span class="solution-letter">'+String.fromCharCode(65+i)+'</span><span class="solution-option-text">'+o+label+'</span>'+(correctOption?'<span class="option-mark">✓</span>':chosen?'<span class="option-mark">✕</span>':'')+'</div>';
  }).join('');
- document.getElementById('solExplanation').innerHTML='<h3>Explanation</h3><p>'+q.exp+'</p>';
+ document.getElementById('solExplanation').innerHTML='<h3>Explanation</h3><p>'+(q.exp||'—')+'</p>';
  document.getElementById('solutionPalette').innerHTML=list.map((item,i)=>{
   const u=answers[i],state=u===undefined?'q-skip':u===item.ans?'q-correct':'q-wrong';
   return '<button class="qnum '+state+' '+(i===solutionIdx?'current':'')+'" aria-label="Review question '+(i+1)+'" onclick="solutionJump('+i+')">'+(i+1)+'</button>';
@@ -472,17 +489,17 @@ let sectionalTestNumber = Math.max(1, Math.min(10, Number(launchParams.get('test
 const originalOpenDemo = openDemo;
 function setPreviewLabels(e,s){
   const names={reasoning:(e==='sbi'?'Reasoning & Computer Aptitude':'Reasoning Ability'),quant:'Quantitative Aptitude',english:(e==='sbi'?'General English':'English Language'),awareness:'General / Financial Awareness'};
-  const meta=sectionMetaFor(e,s), available=(e==='ibps'&&s==='reasoning'&&sectionalTestNumber===1&&Array.isArray(window.SF_IBPS_REASONING_TEST1))?window.SF_IBPS_REASONING_TEST1.length:demos.filter(q=>s==='reasoning'?(q.topic==='Reasoning Ability'||(e==='sbi'&&q.topic==='Computer Aptitude')):s==='quant'?q.topic==='Quantitative Aptitude':s==='awareness'?q.topic==='General / Financial Awareness':q.topic==='English Language').length, each=meta.marks/meta.questions;
+  const meta=sectionMetaFor(e,s), available=filledCount(e,s,sectionalTestNumber), each=meta.marks/meta.questions;
   document.getElementById('testLabel').textContent=(e==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains')+' · '+names[s]+' · Test '+sectionalTestNumber;
   document.getElementById('testName').textContent='Test '+sectionalTestNumber+' — '+names[s];
   document.getElementById('launchTitle').textContent=(e==='ibps'?'IBPS Clerk Mains':'SBI Clerk Mains')+' · '+names[s]+' · Test '+sectionalTestNumber;
   document.getElementById('instructionSubtitle').textContent='Read the instructions and marking criteria before you begin.';
-  document.getElementById('instructionQuestions').textContent=available+' available';
+  document.getElementById('instructionQuestions').textContent=meta.questions+' ('+available+' added)';
   document.getElementById('instructionMarks').textContent=meta.marks;
   document.getElementById('instructionTime').textContent=meta.minutes+' minutes';
   document.getElementById('instructionCorrect').textContent='+'+each.toFixed(2)+' marks';
   document.getElementById('instructionWrong').textContent='−'+(each/4).toFixed(3).replace(/0+$/,'').replace(/\\.$/,'')+' marks';
-  document.getElementById('instructionDisclosure').innerHTML='<b>Important:</b> This test currently has '+available+' available practice questions, not the full '+meta.questions+'-question official section. Test numbers are selectable, but separate complete question banks for all ten tests are still being built. Your score is for practice; percentile will only be shown when there is enough real attempt data.';
+  document.getElementById('instructionDisclosure').innerHTML=available>=meta.questions?'<b>Full-length section:</b> '+meta.questions+' questions, '+meta.marks+' marks, '+meta.minutes+' minutes, as per the official pattern.':available===0?'<b>Coming soon:</b> The '+meta.questions+' questions for this test are still being prepared. You can open the test window to see the exam layout and timer.':'<b>Partial test:</b> '+available+' of the '+meta.questions+' questions are added so far. Unadded questions are marked and are not scored. Percentile is shown only when there is enough real attempt data.';
 }
 function openPreview(e,s){
   // Start the test in this tab. Never open a separate preview/popup window.
