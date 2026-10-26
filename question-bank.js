@@ -33,6 +33,8 @@
    SAFETY TIP: after editing, open the site. If a test window does not
    open, you most likely forgot a comma or a quote mark in this file.
    ===================================================================== */
+/* Old 4-option sample questions. false = hidden (recommended). Real exams have 5 options, so always give 5. */
+window.SF_USE_LEGACY_SAMPLES = false;
 window.SF_BANK = { ibps: {}, sbi: {} };
 ['ibps', 'sbi'].forEach(function (e) {
   ['reasoning', 'quant', 'english', 'awareness'].forEach(function (s) {

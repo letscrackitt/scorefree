@@ -212,6 +212,16 @@ body.focus-mode{background:#f2f5fb}
 #launchScreen .launch-actions .secondary{background:#fff;border:1px solid var(--line);color:var(--ink)}
 @media(max-width:900px){#launchScreen .launch-card{grid-template-columns:1fr}}
 @media(max-width:560px){#launchScreen .launch-actions button{flex:1;min-width:0;padding:12px 10px}#launchScreen .instructions-metrics strong{font-size:1.1rem}}
+
+/* Split-screen window: passage on the left, question in the middle, palette on the right */
+.testgrid.has-set{grid-template-columns:minmax(260px,1fr) minmax(300px,1.05fr) 285px}
+.focus-mode .testgrid.has-set{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr) 265px}
+.setpane{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 24px;align-self:start;position:sticky;top:12px;max-height:calc(100vh - 28px);overflow-y:auto}
+.setpane h3{margin:4px 0 12px;font-size:1.1rem}
+.setpane .setbody{line-height:1.8;font-size:1rem;font-weight:550;color:#302a4c}
+#qcount,#solQcount{white-space:nowrap}
+.qhead{gap:10px}
+@media(max-width:1000px){.testgrid.has-set,.focus-mode .testgrid.has-set{grid-template-columns:1fr}.setpane{position:static;max-height:42vh}}
 </style></head>
 <body>
 <header class="top"><a class="brand" href="./index.html">SCOREFREE</a><nav style="display:flex;gap:16px;flex-wrap:wrap"><a class="muted" href="./index.html">← Main site</a></nav></header>
@@ -240,7 +250,7 @@ body.focus-mode{background:#f2f5fb}
 </section>
 <section id="test" class="hidden">
 <div class="exambar"><div><div class="eyebrow" id="testLabel">Practice preview</div><b id="testName">Reasoning Ability</b></div><div><div class="muted" style="font-size:.78rem">TIME LEFT</div><div class="timer" id="timer">05:00</div></div><button class="secondary" onclick="askExit()">Exit preview</button></div>
-<div class="testgrid"><section class="qpanel"><div class="qhead"><b id="qcount">Question 1</b><span class="muted" id="qmarks">1 mark</span></div><div class="qbody"><div class="muted" id="qtopic">Practice question</div><div id="setIntro"></div><div class="qtext" id="qtext"></div><div id="options"></div></div><div class="actions test-action-buttons"><button class="clear-response-button" onclick="clearAnswer()">✕ Clear Response</button><button class="mark-review-button" onclick="markReview()">★ Mark for Review & Next</button><button class="save-next-button" onclick="saveNext()">✓ Save & Next</button></div></section>
+<div class="testgrid" id="testGrid"><section class="setpane hidden" id="setPane"></section><section class="qpanel"><div class="qhead"><b id="qcount">Question 1</b><span class="muted" id="qmarks">1 mark</span></div><div class="qbody"><div class="muted" id="qtopic">Practice question</div><div class="qtext" id="qtext"></div><div id="options"></div></div><div class="actions test-action-buttons"><button class="clear-response-button" onclick="clearAnswer()">✕ Clear Response</button><button class="mark-review-button" onclick="markReview()">★ Mark for Review & Next</button><button class="save-next-button" onclick="saveNext()">✓ Save & Next</button></div></section>
 <aside class="palette"><b>Question Palette</b><p class="muted" style="font-size:.82rem">Select a number to jump to a question.</p><div class="palette-grid" id="palette"></div><div class="legend"><span class="l-answer">Answered</span><span class="l-review">Marked for Review</span><span class="l-unvisited">Not Visited</span><span>Not Answered (visited, no response)</span></div><hr style="border:0;border-top:1px solid var(--line);margin:18px 0"><div class="stats"><div class="stat">Answered: <b id="answeredN">0</b></div><div class="stat">Review: <b id="reviewN">0</b></div></div><button class="primary" style="width:100%;margin-top:16px" onclick="submitAsk()">Submit Test</button></aside></div>
 </section>
 <section id="results" class="hidden">
@@ -250,7 +260,8 @@ body.focus-mode{background:#f2f5fb}
   <div class="result-actions"><button class="primary" onclick="openSolutions()">View solutions <span aria-hidden="true">→</span></button><button class="secondary" onclick="retryTest()">Reattempt test</button><button class="secondary" onclick="backHome()">Practice menu</button></div>
   <div id="solutionReview" class="hidden">
     <div class="solution-toolbar"><div><p class="eyebrow">Answer review</p><h2>Solutions & explanations</h2><p class="muted">Use Previous / Next or select a question number. Green means correct; red means incorrect.</p></div><button class="secondary" onclick="hideSolutions()">← Back to result</button></div>
-    <div class="testgrid solution-grid">
+    <div class="testgrid solution-grid" id="solGrid">
+      <section class="setpane hidden" id="solSetPane"></section>
       <section class="qpanel">
         <div class="qhead"><b id="solQcount">Question 1</b><span id="solStatus" class="solution-status"></span></div>
         <div class="qbody"><div class="muted" id="solTopic"></div><div class="qtext" id="solQtext"></div><div id="solOptions"></div><div class="answer-explanation" id="solExplanation"></div></div>
@@ -416,7 +427,7 @@ function bankFor(e,t,sub){
   var b=window.SF_BANK&&SF_BANK[e]&&SF_BANK[e][sub]&&SF_BANK[e][sub][t];
   if(Array.isArray(b)&&b.length)return b;
   // 2) older sample questions, kept for Test 1 only
-  if(t!==1)return [];
+  if(t!==1||window.SF_USE_LEGACY_SAMPLES===false)return [];
   if(e==='ibps'&&sub==='reasoning'&&Array.isArray(window.SF_IBPS_REASONING_TEST1))return window.SF_IBPS_REASONING_TEST1;
   return demos.filter(q=>sub==='reasoning'?(q.topic==='Reasoning Ability'||(e==='sbi'&&q.topic==='Computer Aptitude')):sub==='quant'?q.topic==='Quantitative Aptitude':sub==='awareness'?q.topic==='General / Financial Awareness':q.topic==='English Language');
 }
@@ -428,7 +439,8 @@ function qs(){
   while(list.length<total)list.push({empty:true,topic:'Not added yet',q:'This question is being prepared and has not been added to this test yet.',opts:[],exp:''});
   return list;
 }
-function renderQ(){const list=qs();if(idx>=list.length)idx=list.length-1;visited[idx]=true;const q=list[idx];document.getElementById('qcount').textContent='Question '+(idx+1);document.getElementById('qmarks').textContent=(exam==='ibps'?'Official section: '+sectionMeta().questions+' Q · '+sectionMeta().marks+' marks · '+sectionMeta().minutes+' min':'Official section: '+sectionMeta().questions+' Q · '+sectionMeta().marks+' marks · '+sectionMeta().minutes+' min')+' · '+list.filter(x=>!x.empty).length+' of '+list.length+' questions added';document.getElementById('qtopic').textContent=q.topic;document.getElementById('setIntro').innerHTML=q.setTitle?'<div class="set-instructions"><strong>'+q.setTitle+'</strong><p>'+q.setIntro+'</p></div>':'';document.getElementById('qtext').textContent=q.q;document.getElementById('options').innerHTML=(q.opts||[]).map((o,i)=>'<label class="option"><input type="radio" name="option" value="'+i+'" '+(answers[idx]===i?'checked':'')+' onchange="chooseAnswer('+i+')"><span><b>'+String.fromCharCode(65+i)+'.</b> '+o+'</span></label>').join('');drawPalette()}
+function showSet(pid,gid,q){const p=document.getElementById(pid),g=document.getElementById(gid),has=!!(q.setTitle||q.setIntro);p.classList.toggle('hidden',!has);g.classList.toggle('has-set',has);if(has&&p.dataset.t!==q.setTitle){p.dataset.t=q.setTitle||'';p.scrollTop=0}p.innerHTML=has?'<p class="eyebrow">Directions</p><h3>'+(q.setTitle||'')+'</h3><div class="setbody">'+(q.setIntro||'')+'</div>':''}
+function renderQ(){const list=qs();if(idx>=list.length)idx=list.length-1;visited[idx]=true;const q=list[idx];document.getElementById('qcount').textContent='Question '+(idx+1);document.getElementById('qmarks').textContent=(exam==='ibps'?'Official section: '+sectionMeta().questions+' Q · '+sectionMeta().marks+' marks · '+sectionMeta().minutes+' min':'Official section: '+sectionMeta().questions+' Q · '+sectionMeta().marks+' marks · '+sectionMeta().minutes+' min')+' · '+list.filter(x=>!x.empty).length+' of '+list.length+' questions added';document.getElementById('qtopic').textContent=q.topic;showSet('setPane','testGrid',q);document.getElementById('qtext').textContent=q.q;document.getElementById('options').innerHTML=(q.opts||[]).map((o,i)=>'<label class="option"><input type="radio" name="option" value="'+i+'" '+(answers[idx]===i?'checked':'')+' onchange="chooseAnswer('+i+')"><span><b>'+String.fromCharCode(65+i)+'.</b> '+o+'</span></label>').join('');drawPalette()}
 function chooseAnswer(i){answers[idx]=i;drawPalette()}
 function drawPalette(){const list=qs();document.getElementById('palette').innerHTML=list.map((q,i)=>{const status=answers[i]!==undefined?(reviews[i]?'both':'answered'):(reviews[i]?'review':(visited[i]?'notanswered':'notvisited'));return '<button class="qnum '+status+' '+(i===idx?'current':'')+'" onclick="jump('+i+')">'+(i+1)+'</button>'}).join('');document.getElementById('answeredN').textContent=Object.keys(answers).length;document.getElementById('reviewN').textContent=Object.keys(reviews).filter(k=>reviews[k]).length}
 function jump(i){idx=i;renderQ()}
@@ -477,7 +489,7 @@ function renderSolutionQuestion(){
  const q=list[solutionIdx],user=answers[solutionIdx],isCorrect=user===q.ans,isSkipped=user===undefined;
  document.getElementById('solQcount').textContent='Question '+(solutionIdx+1)+' of '+list.length;
  const status=document.getElementById('solStatus');status.textContent=isSkipped?'Unanswered':isCorrect?'Correct answer':'Incorrect answer';status.className='solution-status '+(isSkipped?'status-skip':isCorrect?'status-correct':'status-wrong');
- document.getElementById('solTopic').textContent=q.topic;
+ document.getElementById('solTopic').textContent=q.topic;showSet('solSetPane','solGrid',q);
  document.getElementById('solQtext').textContent=q.q;
  document.getElementById('solOptions').innerHTML=(q.opts||[]).map((o,i)=>{
   const correctOption=i===q.ans,chosen=user===i;
