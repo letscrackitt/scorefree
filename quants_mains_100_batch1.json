@@ -1,0 +1,1406 @@
+{
+  "title": "Quantitative Aptitude Batch 1 - 100 IBPS & SBI Clerk Mains Questions",
+  "total_questions": 100,
+  "questions": [
+    {
+      "question_no": 1,
+      "topic": "Number Series & Pattern Identification (Mains)",
+      "question": "Q1. Find the wrong term in the series: 3, 8, 8, 14, 82, 340",
+      "options": [
+        "A) 8",
+        "B) 8",
+        "C) 14",
+        "D) 82",
+        "E) None of these"
+      ],
+      "correct_answer": "C",
+      "explanation": "Pattern follows *1+5, *2-8, *3+11, *4-14, *5+17. Evaluating for n=1 yields option C as the incorrect term."
+    },
+    {
+      "question_no": 2,
+      "topic": "Number Series & Pattern Identification (Mains)",
+      "question": "Q2. Find the wrong term in the series: 6, 11, 14, 32, 154, 700",
+      "options": [
+        "A) 11",
+        "B) 14",
+        "C) 32",
+        "D) 154",
+        "E) None of these"
+      ],
+      "correct_answer": "C",
+      "explanation": "Pattern follows *1+5, *2-8, *3+11, *4-14, *5+17. Evaluating for n=2 yields option C as the incorrect term."
+    },
+    {
+      "question_no": 3,
+      "topic": "Number Series & Pattern Identification (Mains)",
+      "question": "Q3. Find the wrong term in the series: 9, 14, 20, 50, 226, 1060",
+      "options": [
+        "A) 14",
+        "B) 20",
+        "C) 50",
+        "D) 226",
+        "E) None of these"
+      ],
+      "correct_answer": "C",
+      "explanation": "Pattern follows *1+5, *2-8, *3+11, *4-14, *5+17. Evaluating for n=3 yields option C as the incorrect term."
+    },
+    {
+      "question_no": 4,
+      "topic": "Number Series & Pattern Identification (Mains)",
+      "question": "Q4. Find the wrong term in the series: 12, 17, 26, 68, 298, 1420",
+      "options": [
+        "A) 17",
+        "B) 26",
+        "C) 68",
+        "D) 298",
+        "E) None of these"
+      ],
+      "correct_answer": "C",
+      "explanation": "Pattern follows *1+5, *2-8, *3+11, *4-14, *5+17. Evaluating for n=4 yields option C as the incorrect term."
+    },
+    {
+      "question_no": 5,
+      "topic": "Number Series & Pattern Identification (Mains)",
+      "question": "Q5. Find the wrong term in the series: 15, 20, 32, 86, 370, 1780",
+      "options": [
+        "A) 20",
+        "B) 32",
+        "C) 86",
+        "D) 370",
+        "E) None of these"
+      ],
+      "correct_answer": "C",
+      "explanation": "Pattern follows *1+5, *2-8, *3+11, *4-14, *5+17. Evaluating for n=5 yields option C as the incorrect term."
+    },
+    {
+      "question_no": 6,
+      "topic": "Number Series & Pattern Identification (Mains)",
+      "question": "Q6. Find the wrong term in the series: 18, 23, 38, 104, 442, 2140",
+      "options": [
+        "A) 23",
+        "B) 38",
+        "C) 104",
+        "D) 442",
+        "E) None of these"
+      ],
+      "correct_answer": "C",
+      "explanation": "Pattern follows *1+5, *2-8, *3+11, *4-14, *5+17. Evaluating for n=6 yields option C as the incorrect term."
+    },
+    {
+      "question_no": 7,
+      "topic": "Number Series & Pattern Identification (Mains)",
+      "question": "Q7. Find the wrong term in the series: 21, 26, 44, 122, 514, 2500",
+      "options": [
+        "A) 26",
+        "B) 44",
+        "C) 122",
+        "D) 514",
+        "E) None of these"
+      ],
+      "correct_answer": "C",
+      "explanation": "Pattern follows *1+5, *2-8, *3+11, *4-14, *5+17. Evaluating for n=7 yields option C as the incorrect term."
+    },
+    {
+      "question_no": 8,
+      "topic": "Number Series & Pattern Identification (Mains)",
+      "question": "Q8. Find the wrong term in the series: 24, 29, 50, 140, 586, 2860",
+      "options": [
+        "A) 29",
+        "B) 50",
+        "C) 140",
+        "D) 586",
+        "E) None of these"
+      ],
+      "correct_answer": "C",
+      "explanation": "Pattern follows *1+5, *2-8, *3+11, *4-14, *5+17. Evaluating for n=8 yields option C as the incorrect term."
+    },
+    {
+      "question_no": 9,
+      "topic": "Number Series & Pattern Identification (Mains)",
+      "question": "Q9. Find the wrong term in the series: 27, 32, 56, 158, 658, 3220",
+      "options": [
+        "A) 32",
+        "B) 56",
+        "C) 158",
+        "D) 658",
+        "E) None of these"
+      ],
+      "correct_answer": "C",
+      "explanation": "Pattern follows *1+5, *2-8, *3+11, *4-14, *5+17. Evaluating for n=9 yields option C as the incorrect term."
+    },
+    {
+      "question_no": 10,
+      "topic": "Number Series & Pattern Identification (Mains)",
+      "question": "Q10. Find the wrong term in the series: 30, 35, 62, 176, 730, 3580",
+      "options": [
+        "A) 35",
+        "B) 62",
+        "C) 176",
+        "D) 730",
+        "E) None of these"
+      ],
+      "correct_answer": "C",
+      "explanation": "Pattern follows *1+5, *2-8, *3+11, *4-14, *5+17. Evaluating for n=10 yields option C as the incorrect term."
+    },
+    {
+      "question_no": 11,
+      "topic": "Number Series & Pattern Identification (Mains)",
+      "question": "Q11. Find the wrong term in the series: 33, 38, 68, 194, 802, 3940",
+      "options": [
+        "A) 38",
+        "B) 68",
+        "C) 194",
+        "D) 802",
+        "E) None of these"
+      ],
+      "correct_answer": "C",
+      "explanation": "Pattern follows *1+5, *2-8, *3+11, *4-14, *5+17. Evaluating for n=11 yields option C as the incorrect term."
+    },
+    {
+      "question_no": 12,
+      "topic": "Number Series & Pattern Identification (Mains)",
+      "question": "Q12. Find the wrong term in the series: 36, 41, 74, 212, 874, 4300",
+      "options": [
+        "A) 41",
+        "B) 74",
+        "C) 212",
+        "D) 874",
+        "E) None of these"
+      ],
+      "correct_answer": "C",
+      "explanation": "Pattern follows *1+5, *2-8, *3+11, *4-14, *5+17. Evaluating for n=12 yields option C as the incorrect term."
+    },
+    {
+      "question_no": 13,
+      "topic": "Number Series & Pattern Identification (Mains)",
+      "question": "Q13. Find the wrong term in the series: 39, 44, 80, 230, 946, 4660",
+      "options": [
+        "A) 44",
+        "B) 80",
+        "C) 230",
+        "D) 946",
+        "E) None of these"
+      ],
+      "correct_answer": "C",
+      "explanation": "Pattern follows *1+5, *2-8, *3+11, *4-14, *5+17. Evaluating for n=13 yields option C as the incorrect term."
+    },
+    {
+      "question_no": 14,
+      "topic": "Number Series & Pattern Identification (Mains)",
+      "question": "Q14. Find the wrong term in the series: 42, 47, 86, 248, 1018, 5020",
+      "options": [
+        "A) 47",
+        "B) 86",
+        "C) 248",
+        "D) 1018",
+        "E) None of these"
+      ],
+      "correct_answer": "C",
+      "explanation": "Pattern follows *1+5, *2-8, *3+11, *4-14, *5+17. Evaluating for n=14 yields option C as the incorrect term."
+    },
+    {
+      "question_no": 15,
+      "topic": "Number Series & Pattern Identification (Mains)",
+      "question": "Q15. Find the wrong term in the series: 45, 50, 92, 266, 1090, 5380",
+      "options": [
+        "A) 50",
+        "B) 92",
+        "C) 266",
+        "D) 1090",
+        "E) None of these"
+      ],
+      "correct_answer": "C",
+      "explanation": "Pattern follows *1+5, *2-8, *3+11, *4-14, *5+17. Evaluating for n=15 yields option C as the incorrect term."
+    },
+    {
+      "question_no": 16,
+      "topic": "Number Series & Pattern Identification (Mains)",
+      "question": "Q16. Find the wrong term in the series: 48, 53, 98, 284, 1162, 5740",
+      "options": [
+        "A) 53",
+        "B) 98",
+        "C) 284",
+        "D) 1162",
+        "E) None of these"
+      ],
+      "correct_answer": "C",
+      "explanation": "Pattern follows *1+5, *2-8, *3+11, *4-14, *5+17. Evaluating for n=16 yields option C as the incorrect term."
+    },
+    {
+      "question_no": 17,
+      "topic": "Number Series & Pattern Identification (Mains)",
+      "question": "Q17. Find the wrong term in the series: 51, 56, 104, 302, 1234, 6100",
+      "options": [
+        "A) 56",
+        "B) 104",
+        "C) 302",
+        "D) 1234",
+        "E) None of these"
+      ],
+      "correct_answer": "C",
+      "explanation": "Pattern follows *1+5, *2-8, *3+11, *4-14, *5+17. Evaluating for n=17 yields option C as the incorrect term."
+    },
+    {
+      "question_no": 18,
+      "topic": "Number Series & Pattern Identification (Mains)",
+      "question": "Q18. Find the wrong term in the series: 54, 59, 110, 320, 1306, 6460",
+      "options": [
+        "A) 59",
+        "B) 110",
+        "C) 320",
+        "D) 1306",
+        "E) None of these"
+      ],
+      "correct_answer": "C",
+      "explanation": "Pattern follows *1+5, *2-8, *3+11, *4-14, *5+17. Evaluating for n=18 yields option C as the incorrect term."
+    },
+    {
+      "question_no": 19,
+      "topic": "Number Series & Pattern Identification (Mains)",
+      "question": "Q19. Find the wrong term in the series: 57, 62, 116, 338, 1378, 6820",
+      "options": [
+        "A) 62",
+        "B) 116",
+        "C) 338",
+        "D) 1378",
+        "E) None of these"
+      ],
+      "correct_answer": "C",
+      "explanation": "Pattern follows *1+5, *2-8, *3+11, *4-14, *5+17. Evaluating for n=19 yields option C as the incorrect term."
+    },
+    {
+      "question_no": 20,
+      "topic": "Number Series & Pattern Identification (Mains)",
+      "question": "Q20. Find the wrong term in the series: 60, 65, 122, 356, 1450, 7180",
+      "options": [
+        "A) 65",
+        "B) 122",
+        "C) 356",
+        "D) 1450",
+        "E) None of these"
+      ],
+      "correct_answer": "C",
+      "explanation": "Pattern follows *1+5, *2-8, *3+11, *4-14, *5+17. Evaluating for n=20 yields option C as the incorrect term."
+    },
+    {
+      "question_no": 21,
+      "topic": "Quantity Comparison (Quantity I vs Quantity II)",
+      "question": "Q21. Compare Quantity I and Quantity II:\nQuantity I: A sum of Rs. 21000 amounts to Rs. 25200 in 2 years at Simple Interest. Find the interest earned in 3 years at the same rate.\nQuantity II: Rs. 7350",
+      "options": [
+        "A) Quantity I > Quantity II",
+        "B) Quantity I >= Quantity II",
+        "C) Quantity I < Quantity II",
+        "D) Quantity I <= Quantity II",
+        "E) Quantity I = Quantity II or No Relation"
+      ],
+      "correct_answer": "A",
+      "explanation": "Quantity I = (21000 * r * 2)/100 = 4200 => rate r = 10%. 3 year SI = 6300. Comparing with Quantity II (7350) gives the relation."
+    },
+    {
+      "question_no": 22,
+      "topic": "Quantity Comparison (Quantity I vs Quantity II)",
+      "question": "Q22. Compare Quantity I and Quantity II:\nQuantity I: A sum of Rs. 22000 amounts to Rs. 26400 in 2 years at Simple Interest. Find the interest earned in 3 years at the same rate.\nQuantity II: Rs. 7700",
+      "options": [
+        "A) Quantity I > Quantity II",
+        "B) Quantity I >= Quantity II",
+        "C) Quantity I < Quantity II",
+        "D) Quantity I <= Quantity II",
+        "E) Quantity I = Quantity II or No Relation"
+      ],
+      "correct_answer": "C",
+      "explanation": "Quantity I = (22000 * r * 2)/100 = 4400 => rate r = 10%. 3 year SI = 6600. Comparing with Quantity II (7700) gives the relation."
+    },
+    {
+      "question_no": 23,
+      "topic": "Quantity Comparison (Quantity I vs Quantity II)",
+      "question": "Q23. Compare Quantity I and Quantity II:\nQuantity I: A sum of Rs. 23000 amounts to Rs. 27600 in 2 years at Simple Interest. Find the interest earned in 3 years at the same rate.\nQuantity II: Rs. 8050",
+      "options": [
+        "A) Quantity I > Quantity II",
+        "B) Quantity I >= Quantity II",
+        "C) Quantity I < Quantity II",
+        "D) Quantity I <= Quantity II",
+        "E) Quantity I = Quantity II or No Relation"
+      ],
+      "correct_answer": "A",
+      "explanation": "Quantity I = (23000 * r * 2)/100 = 4600 => rate r = 10%. 3 year SI = 6900. Comparing with Quantity II (8050) gives the relation."
+    },
+    {
+      "question_no": 24,
+      "topic": "Quantity Comparison (Quantity I vs Quantity II)",
+      "question": "Q24. Compare Quantity I and Quantity II:\nQuantity I: A sum of Rs. 24000 amounts to Rs. 28800 in 2 years at Simple Interest. Find the interest earned in 3 years at the same rate.\nQuantity II: Rs. 8400",
+      "options": [
+        "A) Quantity I > Quantity II",
+        "B) Quantity I >= Quantity II",
+        "C) Quantity I < Quantity II",
+        "D) Quantity I <= Quantity II",
+        "E) Quantity I = Quantity II or No Relation"
+      ],
+      "correct_answer": "C",
+      "explanation": "Quantity I = (24000 * r * 2)/100 = 4800 => rate r = 10%. 3 year SI = 7200. Comparing with Quantity II (8400) gives the relation."
+    },
+    {
+      "question_no": 25,
+      "topic": "Quantity Comparison (Quantity I vs Quantity II)",
+      "question": "Q25. Compare Quantity I and Quantity II:\nQuantity I: A sum of Rs. 25000 amounts to Rs. 30000 in 2 years at Simple Interest. Find the interest earned in 3 years at the same rate.\nQuantity II: Rs. 8750",
+      "options": [
+        "A) Quantity I > Quantity II",
+        "B) Quantity I >= Quantity II",
+        "C) Quantity I < Quantity II",
+        "D) Quantity I <= Quantity II",
+        "E) Quantity I = Quantity II or No Relation"
+      ],
+      "correct_answer": "A",
+      "explanation": "Quantity I = (25000 * r * 2)/100 = 5000 => rate r = 10%. 3 year SI = 7500. Comparing with Quantity II (8750) gives the relation."
+    },
+    {
+      "question_no": 26,
+      "topic": "Quantity Comparison (Quantity I vs Quantity II)",
+      "question": "Q26. Compare Quantity I and Quantity II:\nQuantity I: A sum of Rs. 26000 amounts to Rs. 31200 in 2 years at Simple Interest. Find the interest earned in 3 years at the same rate.\nQuantity II: Rs. 9100",
+      "options": [
+        "A) Quantity I > Quantity II",
+        "B) Quantity I >= Quantity II",
+        "C) Quantity I < Quantity II",
+        "D) Quantity I <= Quantity II",
+        "E) Quantity I = Quantity II or No Relation"
+      ],
+      "correct_answer": "C",
+      "explanation": "Quantity I = (26000 * r * 2)/100 = 5200 => rate r = 10%. 3 year SI = 7800. Comparing with Quantity II (9100) gives the relation."
+    },
+    {
+      "question_no": 27,
+      "topic": "Quantity Comparison (Quantity I vs Quantity II)",
+      "question": "Q27. Compare Quantity I and Quantity II:\nQuantity I: A sum of Rs. 27000 amounts to Rs. 32400 in 2 years at Simple Interest. Find the interest earned in 3 years at the same rate.\nQuantity II: Rs. 9450",
+      "options": [
+        "A) Quantity I > Quantity II",
+        "B) Quantity I >= Quantity II",
+        "C) Quantity I < Quantity II",
+        "D) Quantity I <= Quantity II",
+        "E) Quantity I = Quantity II or No Relation"
+      ],
+      "correct_answer": "A",
+      "explanation": "Quantity I = (27000 * r * 2)/100 = 5400 => rate r = 10%. 3 year SI = 8100. Comparing with Quantity II (9450) gives the relation."
+    },
+    {
+      "question_no": 28,
+      "topic": "Quantity Comparison (Quantity I vs Quantity II)",
+      "question": "Q28. Compare Quantity I and Quantity II:\nQuantity I: A sum of Rs. 28000 amounts to Rs. 33600 in 2 years at Simple Interest. Find the interest earned in 3 years at the same rate.\nQuantity II: Rs. 9800",
+      "options": [
+        "A) Quantity I > Quantity II",
+        "B) Quantity I >= Quantity II",
+        "C) Quantity I < Quantity II",
+        "D) Quantity I <= Quantity II",
+        "E) Quantity I = Quantity II or No Relation"
+      ],
+      "correct_answer": "C",
+      "explanation": "Quantity I = (28000 * r * 2)/100 = 5600 => rate r = 10%. 3 year SI = 8400. Comparing with Quantity II (9800) gives the relation."
+    },
+    {
+      "question_no": 29,
+      "topic": "Quantity Comparison (Quantity I vs Quantity II)",
+      "question": "Q29. Compare Quantity I and Quantity II:\nQuantity I: A sum of Rs. 29000 amounts to Rs. 34800 in 2 years at Simple Interest. Find the interest earned in 3 years at the same rate.\nQuantity II: Rs. 10150",
+      "options": [
+        "A) Quantity I > Quantity II",
+        "B) Quantity I >= Quantity II",
+        "C) Quantity I < Quantity II",
+        "D) Quantity I <= Quantity II",
+        "E) Quantity I = Quantity II or No Relation"
+      ],
+      "correct_answer": "A",
+      "explanation": "Quantity I = (29000 * r * 2)/100 = 5800 => rate r = 10%. 3 year SI = 8700. Comparing with Quantity II (10150) gives the relation."
+    },
+    {
+      "question_no": 30,
+      "topic": "Quantity Comparison (Quantity I vs Quantity II)",
+      "question": "Q30. Compare Quantity I and Quantity II:\nQuantity I: A sum of Rs. 30000 amounts to Rs. 36000 in 2 years at Simple Interest. Find the interest earned in 3 years at the same rate.\nQuantity II: Rs. 10500",
+      "options": [
+        "A) Quantity I > Quantity II",
+        "B) Quantity I >= Quantity II",
+        "C) Quantity I < Quantity II",
+        "D) Quantity I <= Quantity II",
+        "E) Quantity I = Quantity II or No Relation"
+      ],
+      "correct_answer": "C",
+      "explanation": "Quantity I = (30000 * r * 2)/100 = 6000 => rate r = 10%. 3 year SI = 9000. Comparing with Quantity II (10500) gives the relation."
+    },
+    {
+      "question_no": 31,
+      "topic": "Quantity Comparison (Quantity I vs Quantity II)",
+      "question": "Q31. Compare Quantity I and Quantity II:\nQuantity I: A sum of Rs. 31000 amounts to Rs. 37200 in 2 years at Simple Interest. Find the interest earned in 3 years at the same rate.\nQuantity II: Rs. 10850",
+      "options": [
+        "A) Quantity I > Quantity II",
+        "B) Quantity I >= Quantity II",
+        "C) Quantity I < Quantity II",
+        "D) Quantity I <= Quantity II",
+        "E) Quantity I = Quantity II or No Relation"
+      ],
+      "correct_answer": "A",
+      "explanation": "Quantity I = (31000 * r * 2)/100 = 6200 => rate r = 10%. 3 year SI = 9300. Comparing with Quantity II (10850) gives the relation."
+    },
+    {
+      "question_no": 32,
+      "topic": "Quantity Comparison (Quantity I vs Quantity II)",
+      "question": "Q32. Compare Quantity I and Quantity II:\nQuantity I: A sum of Rs. 32000 amounts to Rs. 38400 in 2 years at Simple Interest. Find the interest earned in 3 years at the same rate.\nQuantity II: Rs. 11200",
+      "options": [
+        "A) Quantity I > Quantity II",
+        "B) Quantity I >= Quantity II",
+        "C) Quantity I < Quantity II",
+        "D) Quantity I <= Quantity II",
+        "E) Quantity I = Quantity II or No Relation"
+      ],
+      "correct_answer": "C",
+      "explanation": "Quantity I = (32000 * r * 2)/100 = 6400 => rate r = 10%. 3 year SI = 9600. Comparing with Quantity II (11200) gives the relation."
+    },
+    {
+      "question_no": 33,
+      "topic": "Quantity Comparison (Quantity I vs Quantity II)",
+      "question": "Q33. Compare Quantity I and Quantity II:\nQuantity I: A sum of Rs. 33000 amounts to Rs. 39600 in 2 years at Simple Interest. Find the interest earned in 3 years at the same rate.\nQuantity II: Rs. 11550",
+      "options": [
+        "A) Quantity I > Quantity II",
+        "B) Quantity I >= Quantity II",
+        "C) Quantity I < Quantity II",
+        "D) Quantity I <= Quantity II",
+        "E) Quantity I = Quantity II or No Relation"
+      ],
+      "correct_answer": "A",
+      "explanation": "Quantity I = (33000 * r * 2)/100 = 6600 => rate r = 10%. 3 year SI = 9900. Comparing with Quantity II (11550) gives the relation."
+    },
+    {
+      "question_no": 34,
+      "topic": "Quantity Comparison (Quantity I vs Quantity II)",
+      "question": "Q34. Compare Quantity I and Quantity II:\nQuantity I: A sum of Rs. 34000 amounts to Rs. 40800 in 2 years at Simple Interest. Find the interest earned in 3 years at the same rate.\nQuantity II: Rs. 11900",
+      "options": [
+        "A) Quantity I > Quantity II",
+        "B) Quantity I >= Quantity II",
+        "C) Quantity I < Quantity II",
+        "D) Quantity I <= Quantity II",
+        "E) Quantity I = Quantity II or No Relation"
+      ],
+      "correct_answer": "C",
+      "explanation": "Quantity I = (34000 * r * 2)/100 = 6800 => rate r = 10%. 3 year SI = 10200. Comparing with Quantity II (11900) gives the relation."
+    },
+    {
+      "question_no": 35,
+      "topic": "Quantity Comparison (Quantity I vs Quantity II)",
+      "question": "Q35. Compare Quantity I and Quantity II:\nQuantity I: A sum of Rs. 35000 amounts to Rs. 42000 in 2 years at Simple Interest. Find the interest earned in 3 years at the same rate.\nQuantity II: Rs. 12250",
+      "options": [
+        "A) Quantity I > Quantity II",
+        "B) Quantity I >= Quantity II",
+        "C) Quantity I < Quantity II",
+        "D) Quantity I <= Quantity II",
+        "E) Quantity I = Quantity II or No Relation"
+      ],
+      "correct_answer": "A",
+      "explanation": "Quantity I = (35000 * r * 2)/100 = 7000 => rate r = 10%. 3 year SI = 10500. Comparing with Quantity II (12250) gives the relation."
+    },
+    {
+      "question_no": 36,
+      "topic": "Quantity Comparison (Quantity I vs Quantity II)",
+      "question": "Q36. Compare Quantity I and Quantity II:\nQuantity I: A sum of Rs. 36000 amounts to Rs. 43200 in 2 years at Simple Interest. Find the interest earned in 3 years at the same rate.\nQuantity II: Rs. 12600",
+      "options": [
+        "A) Quantity I > Quantity II",
+        "B) Quantity I >= Quantity II",
+        "C) Quantity I < Quantity II",
+        "D) Quantity I <= Quantity II",
+        "E) Quantity I = Quantity II or No Relation"
+      ],
+      "correct_answer": "C",
+      "explanation": "Quantity I = (36000 * r * 2)/100 = 7200 => rate r = 10%. 3 year SI = 10800. Comparing with Quantity II (12600) gives the relation."
+    },
+    {
+      "question_no": 37,
+      "topic": "Quantity Comparison (Quantity I vs Quantity II)",
+      "question": "Q37. Compare Quantity I and Quantity II:\nQuantity I: A sum of Rs. 37000 amounts to Rs. 44400 in 2 years at Simple Interest. Find the interest earned in 3 years at the same rate.\nQuantity II: Rs. 12950",
+      "options": [
+        "A) Quantity I > Quantity II",
+        "B) Quantity I >= Quantity II",
+        "C) Quantity I < Quantity II",
+        "D) Quantity I <= Quantity II",
+        "E) Quantity I = Quantity II or No Relation"
+      ],
+      "correct_answer": "A",
+      "explanation": "Quantity I = (37000 * r * 2)/100 = 7400 => rate r = 10%. 3 year SI = 11100. Comparing with Quantity II (12950) gives the relation."
+    },
+    {
+      "question_no": 38,
+      "topic": "Quantity Comparison (Quantity I vs Quantity II)",
+      "question": "Q38. Compare Quantity I and Quantity II:\nQuantity I: A sum of Rs. 38000 amounts to Rs. 45600 in 2 years at Simple Interest. Find the interest earned in 3 years at the same rate.\nQuantity II: Rs. 13300",
+      "options": [
+        "A) Quantity I > Quantity II",
+        "B) Quantity I >= Quantity II",
+        "C) Quantity I < Quantity II",
+        "D) Quantity I <= Quantity II",
+        "E) Quantity I = Quantity II or No Relation"
+      ],
+      "correct_answer": "C",
+      "explanation": "Quantity I = (38000 * r * 2)/100 = 7600 => rate r = 10%. 3 year SI = 11400. Comparing with Quantity II (13300) gives the relation."
+    },
+    {
+      "question_no": 39,
+      "topic": "Quantity Comparison (Quantity I vs Quantity II)",
+      "question": "Q39. Compare Quantity I and Quantity II:\nQuantity I: A sum of Rs. 39000 amounts to Rs. 46800 in 2 years at Simple Interest. Find the interest earned in 3 years at the same rate.\nQuantity II: Rs. 13650",
+      "options": [
+        "A) Quantity I > Quantity II",
+        "B) Quantity I >= Quantity II",
+        "C) Quantity I < Quantity II",
+        "D) Quantity I <= Quantity II",
+        "E) Quantity I = Quantity II or No Relation"
+      ],
+      "correct_answer": "A",
+      "explanation": "Quantity I = (39000 * r * 2)/100 = 7800 => rate r = 10%. 3 year SI = 11700. Comparing with Quantity II (13650) gives the relation."
+    },
+    {
+      "question_no": 40,
+      "topic": "Quantity Comparison (Quantity I vs Quantity II)",
+      "question": "Q40. Compare Quantity I and Quantity II:\nQuantity I: A sum of Rs. 40000 amounts to Rs. 48000 in 2 years at Simple Interest. Find the interest earned in 3 years at the same rate.\nQuantity II: Rs. 14000",
+      "options": [
+        "A) Quantity I > Quantity II",
+        "B) Quantity I >= Quantity II",
+        "C) Quantity I < Quantity II",
+        "D) Quantity I <= Quantity II",
+        "E) Quantity I = Quantity II or No Relation"
+      ],
+      "correct_answer": "C",
+      "explanation": "Quantity I = (40000 * r * 2)/100 = 8000 => rate r = 10%. 3 year SI = 12000. Comparing with Quantity II (14000) gives the relation."
+    },
+    {
+      "question_no": 41,
+      "topic": "Data Sufficiency (Mains)",
+      "question": "Q41. What is the age of person A?\nStatement I: The average age of A, B, and C is 61 years.\nStatement II: B is 6 years older than C and A is twice as old as C.",
+      "options": [
+        "A) Statement I alone is sufficient",
+        "B) Statement II alone is sufficient",
+        "C) Both statements together are necessary",
+        "D) Either statement alone is sufficient",
+        "E) Neither statement is sufficient"
+      ],
+      "correct_answer": "C",
+      "explanation": "From Statement I: A + B + C = 3*(20+i). From Statement II: B = C + k, A = 2C. Combining both gives 2C + C + k + C = 3*(20+i) => 4C + k = 3*(20+i). Thus C can be uniquely determined, and hence A can be calculated."
+    },
+    {
+      "question_no": 42,
+      "topic": "Data Sufficiency (Mains)",
+      "question": "Q42. What is the age of person A?\nStatement I: The average age of A, B, and C is 62 years.\nStatement II: B is 4 years older than C and A is twice as old as C.",
+      "options": [
+        "A) Statement I alone is sufficient",
+        "B) Statement II alone is sufficient",
+        "C) Both statements together are necessary",
+        "D) Either statement alone is sufficient",
+        "E) Neither statement is sufficient"
+      ],
+      "correct_answer": "C",
+      "explanation": "From Statement I: A + B + C = 3*(20+i). From Statement II: B = C + k, A = 2C. Combining both gives 2C + C + k + C = 3*(20+i) => 4C + k = 3*(20+i). Thus C can be uniquely determined, and hence A can be calculated."
+    },
+    {
+      "question_no": 43,
+      "topic": "Data Sufficiency (Mains)",
+      "question": "Q43. What is the age of person A?\nStatement I: The average age of A, B, and C is 63 years.\nStatement II: B is 5 years older than C and A is twice as old as C.",
+      "options": [
+        "A) Statement I alone is sufficient",
+        "B) Statement II alone is sufficient",
+        "C) Both statements together are necessary",
+        "D) Either statement alone is sufficient",
+        "E) Neither statement is sufficient"
+      ],
+      "correct_answer": "C",
+      "explanation": "From Statement I: A + B + C = 3*(20+i). From Statement II: B = C + k, A = 2C. Combining both gives 2C + C + k + C = 3*(20+i) => 4C + k = 3*(20+i). Thus C can be uniquely determined, and hence A can be calculated."
+    },
+    {
+      "question_no": 44,
+      "topic": "Data Sufficiency (Mains)",
+      "question": "Q44. What is the age of person A?\nStatement I: The average age of A, B, and C is 64 years.\nStatement II: B is 6 years older than C and A is twice as old as C.",
+      "options": [
+        "A) Statement I alone is sufficient",
+        "B) Statement II alone is sufficient",
+        "C) Both statements together are necessary",
+        "D) Either statement alone is sufficient",
+        "E) Neither statement is sufficient"
+      ],
+      "correct_answer": "C",
+      "explanation": "From Statement I: A + B + C = 3*(20+i). From Statement II: B = C + k, A = 2C. Combining both gives 2C + C + k + C = 3*(20+i) => 4C + k = 3*(20+i). Thus C can be uniquely determined, and hence A can be calculated."
+    },
+    {
+      "question_no": 45,
+      "topic": "Data Sufficiency (Mains)",
+      "question": "Q45. What is the age of person A?\nStatement I: The average age of A, B, and C is 65 years.\nStatement II: B is 4 years older than C and A is twice as old as C.",
+      "options": [
+        "A) Statement I alone is sufficient",
+        "B) Statement II alone is sufficient",
+        "C) Both statements together are necessary",
+        "D) Either statement alone is sufficient",
+        "E) Neither statement is sufficient"
+      ],
+      "correct_answer": "C",
+      "explanation": "From Statement I: A + B + C = 3*(20+i). From Statement II: B = C + k, A = 2C. Combining both gives 2C + C + k + C = 3*(20+i) => 4C + k = 3*(20+i). Thus C can be uniquely determined, and hence A can be calculated."
+    },
+    {
+      "question_no": 46,
+      "topic": "Data Sufficiency (Mains)",
+      "question": "Q46. What is the age of person A?\nStatement I: The average age of A, B, and C is 66 years.\nStatement II: B is 5 years older than C and A is twice as old as C.",
+      "options": [
+        "A) Statement I alone is sufficient",
+        "B) Statement II alone is sufficient",
+        "C) Both statements together are necessary",
+        "D) Either statement alone is sufficient",
+        "E) Neither statement is sufficient"
+      ],
+      "correct_answer": "C",
+      "explanation": "From Statement I: A + B + C = 3*(20+i). From Statement II: B = C + k, A = 2C. Combining both gives 2C + C + k + C = 3*(20+i) => 4C + k = 3*(20+i). Thus C can be uniquely determined, and hence A can be calculated."
+    },
+    {
+      "question_no": 47,
+      "topic": "Data Sufficiency (Mains)",
+      "question": "Q47. What is the age of person A?\nStatement I: The average age of A, B, and C is 67 years.\nStatement II: B is 6 years older than C and A is twice as old as C.",
+      "options": [
+        "A) Statement I alone is sufficient",
+        "B) Statement II alone is sufficient",
+        "C) Both statements together are necessary",
+        "D) Either statement alone is sufficient",
+        "E) Neither statement is sufficient"
+      ],
+      "correct_answer": "C",
+      "explanation": "From Statement I: A + B + C = 3*(20+i). From Statement II: B = C + k, A = 2C. Combining both gives 2C + C + k + C = 3*(20+i) => 4C + k = 3*(20+i). Thus C can be uniquely determined, and hence A can be calculated."
+    },
+    {
+      "question_no": 48,
+      "topic": "Data Sufficiency (Mains)",
+      "question": "Q48. What is the age of person A?\nStatement I: The average age of A, B, and C is 68 years.\nStatement II: B is 4 years older than C and A is twice as old as C.",
+      "options": [
+        "A) Statement I alone is sufficient",
+        "B) Statement II alone is sufficient",
+        "C) Both statements together are necessary",
+        "D) Either statement alone is sufficient",
+        "E) Neither statement is sufficient"
+      ],
+      "correct_answer": "C",
+      "explanation": "From Statement I: A + B + C = 3*(20+i). From Statement II: B = C + k, A = 2C. Combining both gives 2C + C + k + C = 3*(20+i) => 4C + k = 3*(20+i). Thus C can be uniquely determined, and hence A can be calculated."
+    },
+    {
+      "question_no": 49,
+      "topic": "Data Sufficiency (Mains)",
+      "question": "Q49. What is the age of person A?\nStatement I: The average age of A, B, and C is 69 years.\nStatement II: B is 5 years older than C and A is twice as old as C.",
+      "options": [
+        "A) Statement I alone is sufficient",
+        "B) Statement II alone is sufficient",
+        "C) Both statements together are necessary",
+        "D) Either statement alone is sufficient",
+        "E) Neither statement is sufficient"
+      ],
+      "correct_answer": "C",
+      "explanation": "From Statement I: A + B + C = 3*(20+i). From Statement II: B = C + k, A = 2C. Combining both gives 2C + C + k + C = 3*(20+i) => 4C + k = 3*(20+i). Thus C can be uniquely determined, and hence A can be calculated."
+    },
+    {
+      "question_no": 50,
+      "topic": "Data Sufficiency (Mains)",
+      "question": "Q50. What is the age of person A?\nStatement I: The average age of A, B, and C is 70 years.\nStatement II: B is 6 years older than C and A is twice as old as C.",
+      "options": [
+        "A) Statement I alone is sufficient",
+        "B) Statement II alone is sufficient",
+        "C) Both statements together are necessary",
+        "D) Either statement alone is sufficient",
+        "E) Neither statement is sufficient"
+      ],
+      "correct_answer": "C",
+      "explanation": "From Statement I: A + B + C = 3*(20+i). From Statement II: B = C + k, A = 2C. Combining both gives 2C + C + k + C = 3*(20+i) => 4C + k = 3*(20+i). Thus C can be uniquely determined, and hence A can be calculated."
+    },
+    {
+      "question_no": 51,
+      "topic": "Data Sufficiency (Mains)",
+      "question": "Q51. What is the age of person A?\nStatement I: The average age of A, B, and C is 71 years.\nStatement II: B is 4 years older than C and A is twice as old as C.",
+      "options": [
+        "A) Statement I alone is sufficient",
+        "B) Statement II alone is sufficient",
+        "C) Both statements together are necessary",
+        "D) Either statement alone is sufficient",
+        "E) Neither statement is sufficient"
+      ],
+      "correct_answer": "C",
+      "explanation": "From Statement I: A + B + C = 3*(20+i). From Statement II: B = C + k, A = 2C. Combining both gives 2C + C + k + C = 3*(20+i) => 4C + k = 3*(20+i). Thus C can be uniquely determined, and hence A can be calculated."
+    },
+    {
+      "question_no": 52,
+      "topic": "Data Sufficiency (Mains)",
+      "question": "Q52. What is the age of person A?\nStatement I: The average age of A, B, and C is 72 years.\nStatement II: B is 5 years older than C and A is twice as old as C.",
+      "options": [
+        "A) Statement I alone is sufficient",
+        "B) Statement II alone is sufficient",
+        "C) Both statements together are necessary",
+        "D) Either statement alone is sufficient",
+        "E) Neither statement is sufficient"
+      ],
+      "correct_answer": "C",
+      "explanation": "From Statement I: A + B + C = 3*(20+i). From Statement II: B = C + k, A = 2C. Combining both gives 2C + C + k + C = 3*(20+i) => 4C + k = 3*(20+i). Thus C can be uniquely determined, and hence A can be calculated."
+    },
+    {
+      "question_no": 53,
+      "topic": "Data Sufficiency (Mains)",
+      "question": "Q53. What is the age of person A?\nStatement I: The average age of A, B, and C is 73 years.\nStatement II: B is 6 years older than C and A is twice as old as C.",
+      "options": [
+        "A) Statement I alone is sufficient",
+        "B) Statement II alone is sufficient",
+        "C) Both statements together are necessary",
+        "D) Either statement alone is sufficient",
+        "E) Neither statement is sufficient"
+      ],
+      "correct_answer": "C",
+      "explanation": "From Statement I: A + B + C = 3*(20+i). From Statement II: B = C + k, A = 2C. Combining both gives 2C + C + k + C = 3*(20+i) => 4C + k = 3*(20+i). Thus C can be uniquely determined, and hence A can be calculated."
+    },
+    {
+      "question_no": 54,
+      "topic": "Data Sufficiency (Mains)",
+      "question": "Q54. What is the age of person A?\nStatement I: The average age of A, B, and C is 74 years.\nStatement II: B is 4 years older than C and A is twice as old as C.",
+      "options": [
+        "A) Statement I alone is sufficient",
+        "B) Statement II alone is sufficient",
+        "C) Both statements together are necessary",
+        "D) Either statement alone is sufficient",
+        "E) Neither statement is sufficient"
+      ],
+      "correct_answer": "C",
+      "explanation": "From Statement I: A + B + C = 3*(20+i). From Statement II: B = C + k, A = 2C. Combining both gives 2C + C + k + C = 3*(20+i) => 4C + k = 3*(20+i). Thus C can be uniquely determined, and hence A can be calculated."
+    },
+    {
+      "question_no": 55,
+      "topic": "Data Sufficiency (Mains)",
+      "question": "Q55. What is the age of person A?\nStatement I: The average age of A, B, and C is 75 years.\nStatement II: B is 5 years older than C and A is twice as old as C.",
+      "options": [
+        "A) Statement I alone is sufficient",
+        "B) Statement II alone is sufficient",
+        "C) Both statements together are necessary",
+        "D) Either statement alone is sufficient",
+        "E) Neither statement is sufficient"
+      ],
+      "correct_answer": "C",
+      "explanation": "From Statement I: A + B + C = 3*(20+i). From Statement II: B = C + k, A = 2C. Combining both gives 2C + C + k + C = 3*(20+i) => 4C + k = 3*(20+i). Thus C can be uniquely determined, and hence A can be calculated."
+    },
+    {
+      "question_no": 56,
+      "topic": "Data Sufficiency (Mains)",
+      "question": "Q56. What is the age of person A?\nStatement I: The average age of A, B, and C is 76 years.\nStatement II: B is 6 years older than C and A is twice as old as C.",
+      "options": [
+        "A) Statement I alone is sufficient",
+        "B) Statement II alone is sufficient",
+        "C) Both statements together are necessary",
+        "D) Either statement alone is sufficient",
+        "E) Neither statement is sufficient"
+      ],
+      "correct_answer": "C",
+      "explanation": "From Statement I: A + B + C = 3*(20+i). From Statement II: B = C + k, A = 2C. Combining both gives 2C + C + k + C = 3*(20+i) => 4C + k = 3*(20+i). Thus C can be uniquely determined, and hence A can be calculated."
+    },
+    {
+      "question_no": 57,
+      "topic": "Data Sufficiency (Mains)",
+      "question": "Q57. What is the age of person A?\nStatement I: The average age of A, B, and C is 77 years.\nStatement II: B is 4 years older than C and A is twice as old as C.",
+      "options": [
+        "A) Statement I alone is sufficient",
+        "B) Statement II alone is sufficient",
+        "C) Both statements together are necessary",
+        "D) Either statement alone is sufficient",
+        "E) Neither statement is sufficient"
+      ],
+      "correct_answer": "C",
+      "explanation": "From Statement I: A + B + C = 3*(20+i). From Statement II: B = C + k, A = 2C. Combining both gives 2C + C + k + C = 3*(20+i) => 4C + k = 3*(20+i). Thus C can be uniquely determined, and hence A can be calculated."
+    },
+    {
+      "question_no": 58,
+      "topic": "Data Sufficiency (Mains)",
+      "question": "Q58. What is the age of person A?\nStatement I: The average age of A, B, and C is 78 years.\nStatement II: B is 5 years older than C and A is twice as old as C.",
+      "options": [
+        "A) Statement I alone is sufficient",
+        "B) Statement II alone is sufficient",
+        "C) Both statements together are necessary",
+        "D) Either statement alone is sufficient",
+        "E) Neither statement is sufficient"
+      ],
+      "correct_answer": "C",
+      "explanation": "From Statement I: A + B + C = 3*(20+i). From Statement II: B = C + k, A = 2C. Combining both gives 2C + C + k + C = 3*(20+i) => 4C + k = 3*(20+i). Thus C can be uniquely determined, and hence A can be calculated."
+    },
+    {
+      "question_no": 59,
+      "topic": "Data Sufficiency (Mains)",
+      "question": "Q59. What is the age of person A?\nStatement I: The average age of A, B, and C is 79 years.\nStatement II: B is 6 years older than C and A is twice as old as C.",
+      "options": [
+        "A) Statement I alone is sufficient",
+        "B) Statement II alone is sufficient",
+        "C) Both statements together are necessary",
+        "D) Either statement alone is sufficient",
+        "E) Neither statement is sufficient"
+      ],
+      "correct_answer": "C",
+      "explanation": "From Statement I: A + B + C = 3*(20+i). From Statement II: B = C + k, A = 2C. Combining both gives 2C + C + k + C = 3*(20+i) => 4C + k = 3*(20+i). Thus C can be uniquely determined, and hence A can be calculated."
+    },
+    {
+      "question_no": 60,
+      "topic": "Data Sufficiency (Mains)",
+      "question": "Q60. What is the age of person A?\nStatement I: The average age of A, B, and C is 80 years.\nStatement II: B is 4 years older than C and A is twice as old as C.",
+      "options": [
+        "A) Statement I alone is sufficient",
+        "B) Statement II alone is sufficient",
+        "C) Both statements together are necessary",
+        "D) Either statement alone is sufficient",
+        "E) Neither statement is sufficient"
+      ],
+      "correct_answer": "C",
+      "explanation": "From Statement I: A + B + C = 3*(20+i). From Statement II: B = C + k, A = 2C. Combining both gives 2C + C + k + C = 3*(20+i) => 4C + k = 3*(20+i). Thus C can be uniquely determined, and hence A can be calculated."
+    },
+    {
+      "question_no": 61,
+      "topic": "Arithmetic Word Problems",
+      "question": "Q61. A pipe can fill a tank in 11 hours while an outlet pipe can empty it in 16 hours. If both pipes are opened together, in how many hours will the tank be filled completely?",
+      "options": [
+        "A) 35.2 hours",
+        "B) 37.2 hours",
+        "C) 33.7 hours",
+        "D) 40.2 hours",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Net rate = (1/11 - 1/16) = (5/176). Time required = 176/5 = 35.2 hours."
+    },
+    {
+      "question_no": 62,
+      "topic": "Arithmetic Word Problems",
+      "question": "Q62. A pipe can fill a tank in 12 hours while an outlet pipe can empty it in 17 hours. If both pipes are opened together, in how many hours will the tank be filled completely?",
+      "options": [
+        "A) 40.8 hours",
+        "B) 42.8 hours",
+        "C) 39.3 hours",
+        "D) 45.8 hours",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Net rate = (1/12 - 1/17) = (5/204). Time required = 204/5 = 40.8 hours."
+    },
+    {
+      "question_no": 63,
+      "topic": "Arithmetic Word Problems",
+      "question": "Q63. A pipe can fill a tank in 13 hours while an outlet pipe can empty it in 18 hours. If both pipes are opened together, in how many hours will the tank be filled completely?",
+      "options": [
+        "A) 46.8 hours",
+        "B) 48.8 hours",
+        "C) 45.3 hours",
+        "D) 51.8 hours",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Net rate = (1/13 - 1/18) = (5/234). Time required = 234/5 = 46.8 hours."
+    },
+    {
+      "question_no": 64,
+      "topic": "Arithmetic Word Problems",
+      "question": "Q64. A pipe can fill a tank in 14 hours while an outlet pipe can empty it in 19 hours. If both pipes are opened together, in how many hours will the tank be filled completely?",
+      "options": [
+        "A) 53.2 hours",
+        "B) 55.2 hours",
+        "C) 51.7 hours",
+        "D) 58.2 hours",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Net rate = (1/14 - 1/19) = (5/266). Time required = 266/5 = 53.2 hours."
+    },
+    {
+      "question_no": 65,
+      "topic": "Arithmetic Word Problems",
+      "question": "Q65. A pipe can fill a tank in 15 hours while an outlet pipe can empty it in 20 hours. If both pipes are opened together, in how many hours will the tank be filled completely?",
+      "options": [
+        "A) 60.0 hours",
+        "B) 62.0 hours",
+        "C) 58.5 hours",
+        "D) 65.0 hours",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Net rate = (1/15 - 1/20) = (5/300). Time required = 300/5 = 60.0 hours."
+    },
+    {
+      "question_no": 66,
+      "topic": "Arithmetic Word Problems",
+      "question": "Q66. A pipe can fill a tank in 16 hours while an outlet pipe can empty it in 21 hours. If both pipes are opened together, in how many hours will the tank be filled completely?",
+      "options": [
+        "A) 67.2 hours",
+        "B) 69.2 hours",
+        "C) 65.7 hours",
+        "D) 72.2 hours",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Net rate = (1/16 - 1/21) = (5/336). Time required = 336/5 = 67.2 hours."
+    },
+    {
+      "question_no": 67,
+      "topic": "Arithmetic Word Problems",
+      "question": "Q67. A pipe can fill a tank in 17 hours while an outlet pipe can empty it in 22 hours. If both pipes are opened together, in how many hours will the tank be filled completely?",
+      "options": [
+        "A) 74.8 hours",
+        "B) 76.8 hours",
+        "C) 73.3 hours",
+        "D) 79.8 hours",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Net rate = (1/17 - 1/22) = (5/374). Time required = 374/5 = 74.8 hours."
+    },
+    {
+      "question_no": 68,
+      "topic": "Arithmetic Word Problems",
+      "question": "Q68. A pipe can fill a tank in 18 hours while an outlet pipe can empty it in 23 hours. If both pipes are opened together, in how many hours will the tank be filled completely?",
+      "options": [
+        "A) 82.8 hours",
+        "B) 84.8 hours",
+        "C) 81.3 hours",
+        "D) 87.8 hours",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Net rate = (1/18 - 1/23) = (5/414). Time required = 414/5 = 82.8 hours."
+    },
+    {
+      "question_no": 69,
+      "topic": "Arithmetic Word Problems",
+      "question": "Q69. A pipe can fill a tank in 19 hours while an outlet pipe can empty it in 24 hours. If both pipes are opened together, in how many hours will the tank be filled completely?",
+      "options": [
+        "A) 91.2 hours",
+        "B) 93.2 hours",
+        "C) 89.7 hours",
+        "D) 96.2 hours",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Net rate = (1/19 - 1/24) = (5/456). Time required = 456/5 = 91.2 hours."
+    },
+    {
+      "question_no": 70,
+      "topic": "Arithmetic Word Problems",
+      "question": "Q70. A pipe can fill a tank in 10 hours while an outlet pipe can empty it in 15 hours. If both pipes are opened together, in how many hours will the tank be filled completely?",
+      "options": [
+        "A) 30.0 hours",
+        "B) 32.0 hours",
+        "C) 28.5 hours",
+        "D) 35.0 hours",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Net rate = (1/10 - 1/15) = (5/150). Time required = 150/5 = 30.0 hours."
+    },
+    {
+      "question_no": 71,
+      "topic": "Arithmetic Word Problems",
+      "question": "Q71. A pipe can fill a tank in 11 hours while an outlet pipe can empty it in 16 hours. If both pipes are opened together, in how many hours will the tank be filled completely?",
+      "options": [
+        "A) 35.2 hours",
+        "B) 37.2 hours",
+        "C) 33.7 hours",
+        "D) 40.2 hours",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Net rate = (1/11 - 1/16) = (5/176). Time required = 176/5 = 35.2 hours."
+    },
+    {
+      "question_no": 72,
+      "topic": "Arithmetic Word Problems",
+      "question": "Q72. A pipe can fill a tank in 12 hours while an outlet pipe can empty it in 17 hours. If both pipes are opened together, in how many hours will the tank be filled completely?",
+      "options": [
+        "A) 40.8 hours",
+        "B) 42.8 hours",
+        "C) 39.3 hours",
+        "D) 45.8 hours",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Net rate = (1/12 - 1/17) = (5/204). Time required = 204/5 = 40.8 hours."
+    },
+    {
+      "question_no": 73,
+      "topic": "Arithmetic Word Problems",
+      "question": "Q73. A pipe can fill a tank in 13 hours while an outlet pipe can empty it in 18 hours. If both pipes are opened together, in how many hours will the tank be filled completely?",
+      "options": [
+        "A) 46.8 hours",
+        "B) 48.8 hours",
+        "C) 45.3 hours",
+        "D) 51.8 hours",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Net rate = (1/13 - 1/18) = (5/234). Time required = 234/5 = 46.8 hours."
+    },
+    {
+      "question_no": 74,
+      "topic": "Arithmetic Word Problems",
+      "question": "Q74. A pipe can fill a tank in 14 hours while an outlet pipe can empty it in 19 hours. If both pipes are opened together, in how many hours will the tank be filled completely?",
+      "options": [
+        "A) 53.2 hours",
+        "B) 55.2 hours",
+        "C) 51.7 hours",
+        "D) 58.2 hours",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Net rate = (1/14 - 1/19) = (5/266). Time required = 266/5 = 53.2 hours."
+    },
+    {
+      "question_no": 75,
+      "topic": "Arithmetic Word Problems",
+      "question": "Q75. A pipe can fill a tank in 15 hours while an outlet pipe can empty it in 20 hours. If both pipes are opened together, in how many hours will the tank be filled completely?",
+      "options": [
+        "A) 60.0 hours",
+        "B) 62.0 hours",
+        "C) 58.5 hours",
+        "D) 65.0 hours",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Net rate = (1/15 - 1/20) = (5/300). Time required = 300/5 = 60.0 hours."
+    },
+    {
+      "question_no": 76,
+      "topic": "Arithmetic Word Problems",
+      "question": "Q76. A pipe can fill a tank in 16 hours while an outlet pipe can empty it in 21 hours. If both pipes are opened together, in how many hours will the tank be filled completely?",
+      "options": [
+        "A) 67.2 hours",
+        "B) 69.2 hours",
+        "C) 65.7 hours",
+        "D) 72.2 hours",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Net rate = (1/16 - 1/21) = (5/336). Time required = 336/5 = 67.2 hours."
+    },
+    {
+      "question_no": 77,
+      "topic": "Arithmetic Word Problems",
+      "question": "Q77. A pipe can fill a tank in 17 hours while an outlet pipe can empty it in 22 hours. If both pipes are opened together, in how many hours will the tank be filled completely?",
+      "options": [
+        "A) 74.8 hours",
+        "B) 76.8 hours",
+        "C) 73.3 hours",
+        "D) 79.8 hours",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Net rate = (1/17 - 1/22) = (5/374). Time required = 374/5 = 74.8 hours."
+    },
+    {
+      "question_no": 78,
+      "topic": "Arithmetic Word Problems",
+      "question": "Q78. A pipe can fill a tank in 18 hours while an outlet pipe can empty it in 23 hours. If both pipes are opened together, in how many hours will the tank be filled completely?",
+      "options": [
+        "A) 82.8 hours",
+        "B) 84.8 hours",
+        "C) 81.3 hours",
+        "D) 87.8 hours",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Net rate = (1/18 - 1/23) = (5/414). Time required = 414/5 = 82.8 hours."
+    },
+    {
+      "question_no": 79,
+      "topic": "Arithmetic Word Problems",
+      "question": "Q79. A pipe can fill a tank in 19 hours while an outlet pipe can empty it in 24 hours. If both pipes are opened together, in how many hours will the tank be filled completely?",
+      "options": [
+        "A) 91.2 hours",
+        "B) 93.2 hours",
+        "C) 89.7 hours",
+        "D) 96.2 hours",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Net rate = (1/19 - 1/24) = (5/456). Time required = 456/5 = 91.2 hours."
+    },
+    {
+      "question_no": 80,
+      "topic": "Arithmetic Word Problems",
+      "question": "Q80. A pipe can fill a tank in 10 hours while an outlet pipe can empty it in 15 hours. If both pipes are opened together, in how many hours will the tank be filled completely?",
+      "options": [
+        "A) 30.0 hours",
+        "B) 32.0 hours",
+        "C) 28.5 hours",
+        "D) 35.0 hours",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Net rate = (1/10 - 1/15) = (5/150). Time required = 150/5 = 30.0 hours."
+    },
+    {
+      "question_no": 81,
+      "topic": "Mains Data Interpretation",
+      "question": "Q81. Directions (81-100): Study the table showing production of items X and Y across years.\nIn year 2021, if production of X increased by 16% and Y decreased by 6%, find the ratio of updated X to updated Y.",
+      "options": [
+        "A) 11:8",
+        "B) 13:10",
+        "C) 15:12",
+        "D) 15:13",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Calculate 100 + increase % for X and 100 - decrease % for Y. Take their lowest ratio terms."
+    },
+    {
+      "question_no": 82,
+      "topic": "Mains Data Interpretation",
+      "question": "Q82. Directions (81-100): Study the table showing production of items X and Y across years.\nIn year 2022, if production of X increased by 17% and Y decreased by 7%, find the ratio of updated X to updated Y.",
+      "options": [
+        "A) 12:9",
+        "B) 14:9",
+        "C) 16:13",
+        "D) 14:14",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Calculate 100 + increase % for X and 100 - decrease % for Y. Take their lowest ratio terms."
+    },
+    {
+      "question_no": 83,
+      "topic": "Mains Data Interpretation",
+      "question": "Q83. Directions (81-100): Study the table showing production of items X and Y across years.\nIn year 2023, if production of X increased by 18% and Y decreased by 8%, find the ratio of updated X to updated Y.",
+      "options": [
+        "A) 13:10",
+        "B) 15:10",
+        "C) 17:14",
+        "D) 15:15",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Calculate 100 + increase % for X and 100 - decrease % for Y. Take their lowest ratio terms."
+    },
+    {
+      "question_no": 84,
+      "topic": "Mains Data Interpretation",
+      "question": "Q84. Directions (81-100): Study the table showing production of items X and Y across years.\nIn year 2024, if production of X increased by 19% and Y decreased by 9%, find the ratio of updated X to updated Y.",
+      "options": [
+        "A) 14:8",
+        "B) 12:9",
+        "C) 15:11",
+        "D) 14:13",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Calculate 100 + increase % for X and 100 - decrease % for Y. Take their lowest ratio terms."
+    },
+    {
+      "question_no": 85,
+      "topic": "Mains Data Interpretation",
+      "question": "Q85. Directions (81-100): Study the table showing production of items X and Y across years.\nIn year 2020, if production of X increased by 20% and Y decreased by 10%, find the ratio of updated X to updated Y.",
+      "options": [
+        "A) 10:9",
+        "B) 13:10",
+        "C) 16:12",
+        "D) 15:14",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Calculate 100 + increase % for X and 100 - decrease % for Y. Take their lowest ratio terms."
+    },
+    {
+      "question_no": 86,
+      "topic": "Mains Data Interpretation",
+      "question": "Q86. Directions (81-100): Study the table showing production of items X and Y across years.\nIn year 2021, if production of X increased by 21% and Y decreased by 11%, find the ratio of updated X to updated Y.",
+      "options": [
+        "A) 11:10",
+        "B) 14:9",
+        "C) 17:13",
+        "D) 14:15",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Calculate 100 + increase % for X and 100 - decrease % for Y. Take their lowest ratio terms."
+    },
+    {
+      "question_no": 87,
+      "topic": "Mains Data Interpretation",
+      "question": "Q87. Directions (81-100): Study the table showing production of items X and Y across years.\nIn year 2022, if production of X increased by 22% and Y decreased by 12%, find the ratio of updated X to updated Y.",
+      "options": [
+        "A) 12:8",
+        "B) 15:10",
+        "C) 15:14",
+        "D) 15:13",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Calculate 100 + increase % for X and 100 - decrease % for Y. Take their lowest ratio terms."
+    },
+    {
+      "question_no": 88,
+      "topic": "Mains Data Interpretation",
+      "question": "Q88. Directions (81-100): Study the table showing production of items X and Y across years.\nIn year 2023, if production of X increased by 23% and Y decreased by 13%, find the ratio of updated X to updated Y.",
+      "options": [
+        "A) 13:9",
+        "B) 12:9",
+        "C) 16:11",
+        "D) 14:14",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Calculate 100 + increase % for X and 100 - decrease % for Y. Take their lowest ratio terms."
+    },
+    {
+      "question_no": 89,
+      "topic": "Mains Data Interpretation",
+      "question": "Q89. Directions (81-100): Study the table showing production of items X and Y across years.\nIn year 2024, if production of X increased by 24% and Y decreased by 14%, find the ratio of updated X to updated Y.",
+      "options": [
+        "A) 14:10",
+        "B) 13:10",
+        "C) 17:12",
+        "D) 15:15",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Calculate 100 + increase % for X and 100 - decrease % for Y. Take their lowest ratio terms."
+    },
+    {
+      "question_no": 90,
+      "topic": "Mains Data Interpretation",
+      "question": "Q90. Directions (81-100): Study the table showing production of items X and Y across years.\nIn year 2020, if production of X increased by 10% and Y decreased by 5%, find the ratio of updated X to updated Y.",
+      "options": [
+        "A) 10:8",
+        "B) 14:9",
+        "C) 15:13",
+        "D) 14:13",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Calculate 100 + increase % for X and 100 - decrease % for Y. Take their lowest ratio terms."
+    },
+    {
+      "question_no": 91,
+      "topic": "Mains Data Interpretation",
+      "question": "Q91. Directions (81-100): Study the table showing production of items X and Y across years.\nIn year 2021, if production of X increased by 11% and Y decreased by 6%, find the ratio of updated X to updated Y.",
+      "options": [
+        "A) 11:9",
+        "B) 15:10",
+        "C) 16:14",
+        "D) 15:14",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Calculate 100 + increase % for X and 100 - decrease % for Y. Take their lowest ratio terms."
+    },
+    {
+      "question_no": 92,
+      "topic": "Mains Data Interpretation",
+      "question": "Q92. Directions (81-100): Study the table showing production of items X and Y across years.\nIn year 2022, if production of X increased by 12% and Y decreased by 7%, find the ratio of updated X to updated Y.",
+      "options": [
+        "A) 12:10",
+        "B) 12:9",
+        "C) 17:11",
+        "D) 14:15",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Calculate 100 + increase % for X and 100 - decrease % for Y. Take their lowest ratio terms."
+    },
+    {
+      "question_no": 93,
+      "topic": "Mains Data Interpretation",
+      "question": "Q93. Directions (81-100): Study the table showing production of items X and Y across years.\nIn year 2023, if production of X increased by 13% and Y decreased by 8%, find the ratio of updated X to updated Y.",
+      "options": [
+        "A) 13:8",
+        "B) 13:10",
+        "C) 15:12",
+        "D) 15:13",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Calculate 100 + increase % for X and 100 - decrease % for Y. Take their lowest ratio terms."
+    },
+    {
+      "question_no": 94,
+      "topic": "Mains Data Interpretation",
+      "question": "Q94. Directions (81-100): Study the table showing production of items X and Y across years.\nIn year 2024, if production of X increased by 14% and Y decreased by 9%, find the ratio of updated X to updated Y.",
+      "options": [
+        "A) 14:9",
+        "B) 14:9",
+        "C) 16:13",
+        "D) 14:14",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Calculate 100 + increase % for X and 100 - decrease % for Y. Take their lowest ratio terms."
+    },
+    {
+      "question_no": 95,
+      "topic": "Mains Data Interpretation",
+      "question": "Q95. Directions (81-100): Study the table showing production of items X and Y across years.\nIn year 2020, if production of X increased by 15% and Y decreased by 10%, find the ratio of updated X to updated Y.",
+      "options": [
+        "A) 10:10",
+        "B) 15:10",
+        "C) 17:14",
+        "D) 15:15",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Calculate 100 + increase % for X and 100 - decrease % for Y. Take their lowest ratio terms."
+    },
+    {
+      "question_no": 96,
+      "topic": "Mains Data Interpretation",
+      "question": "Q96. Directions (81-100): Study the table showing production of items X and Y across years.\nIn year 2021, if production of X increased by 16% and Y decreased by 11%, find the ratio of updated X to updated Y.",
+      "options": [
+        "A) 11:8",
+        "B) 12:9",
+        "C) 15:11",
+        "D) 14:13",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Calculate 100 + increase % for X and 100 - decrease % for Y. Take their lowest ratio terms."
+    },
+    {
+      "question_no": 97,
+      "topic": "Mains Data Interpretation",
+      "question": "Q97. Directions (81-100): Study the table showing production of items X and Y across years.\nIn year 2022, if production of X increased by 17% and Y decreased by 12%, find the ratio of updated X to updated Y.",
+      "options": [
+        "A) 12:9",
+        "B) 13:10",
+        "C) 16:12",
+        "D) 15:14",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Calculate 100 + increase % for X and 100 - decrease % for Y. Take their lowest ratio terms."
+    },
+    {
+      "question_no": 98,
+      "topic": "Mains Data Interpretation",
+      "question": "Q98. Directions (81-100): Study the table showing production of items X and Y across years.\nIn year 2023, if production of X increased by 18% and Y decreased by 13%, find the ratio of updated X to updated Y.",
+      "options": [
+        "A) 13:10",
+        "B) 14:9",
+        "C) 17:13",
+        "D) 14:15",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Calculate 100 + increase % for X and 100 - decrease % for Y. Take their lowest ratio terms."
+    },
+    {
+      "question_no": 99,
+      "topic": "Mains Data Interpretation",
+      "question": "Q99. Directions (81-100): Study the table showing production of items X and Y across years.\nIn year 2024, if production of X increased by 19% and Y decreased by 14%, find the ratio of updated X to updated Y.",
+      "options": [
+        "A) 14:8",
+        "B) 15:10",
+        "C) 15:14",
+        "D) 15:13",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Calculate 100 + increase % for X and 100 - decrease % for Y. Take their lowest ratio terms."
+    },
+    {
+      "question_no": 100,
+      "topic": "Mains Data Interpretation",
+      "question": "Q100. Directions (81-100): Study the table showing production of items X and Y across years.\nIn year 2020, if production of X increased by 20% and Y decreased by 5%, find the ratio of updated X to updated Y.",
+      "options": [
+        "A) 10:9",
+        "B) 12:9",
+        "C) 16:11",
+        "D) 14:14",
+        "E) None of these"
+      ],
+      "correct_answer": "A",
+      "explanation": "Calculate 100 + increase % for X and 100 - decrease % for Y. Take their lowest ratio terms."
+    }
+  ]
+}
