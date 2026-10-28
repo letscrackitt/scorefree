@@ -3,7 +3,7 @@
 No API keys, paid services, or runtime network calls are required by the website.
 """
 from __future__ import annotations
-import html, json, os, random, re, subprocess, sys, urllib.request
+import hashlib, html, json, os, random, re, subprocess, sys, urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -454,7 +454,19 @@ def main():
                     lines.append(f"  SF_BANK.{exam}.{subject}[{test}] = current_{exam}_{subject}_{test}.concat({to_js(batch)}.slice(0, Math.max(0, {limit} - current_{exam}_{subject}_{test}.length)));")
     lines.append("})();")
     OUT.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    print("Wrote", OUT.relative_to(ROOT))
+    # Change the asset query only when the generated bank changes, preventing stale browser caches.
+    digest = hashlib.sha256(OUT.read_bytes()).hexdigest()[:10]
+    page_path = ROOT / "clerk-mains.html"
+    page = page_path.read_text(encoding="utf-8")
+    page, replacements = re.subn(
+        r'(<script src="./question-bank\\.generated\\.js\\?v=)[^"]+("></script>)',
+        lambda match: match.group(1) + digest + match.group(2),
+        page,
+        count=1,
+    )
+    if replacements:
+        page_path.write_text(page, encoding="utf-8")
+    print("Wrote", OUT.relative_to(ROOT), "with cache key", digest)
     for s in SUBJECTS:
         print(f"{s}: {len(pools[s])} unique questions available")
     print("Reminder: the importer is source-licensed, but factual accuracy still needs review before high-stakes use.")
