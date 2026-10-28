@@ -219,7 +219,7 @@ def generate_quant(n):
             question, topic, exp = f"₹{total} is divided in the ratio {x}:{y}. What is the first share?", "Ratio and proportion", f"First share = {total} × {x}/({x}+{y}) = ₹{ansv}."
         else:
             workers = RNG.choice([4, 5, 6, 8, 10, 12])
-            days = RNG.choice([6, 8, 10, 12, 15, 20])
+            days = RNG.choice([6, 8, 10, 12, 16, 20])
             new_workers = workers * 2
             ansv = days * workers // new_workers
             question, topic, exp = f"{workers} workers finish a job in {days} days. At the same rate, how many days will {new_workers} workers take?", "Time and work", f"Total work is constant: {workers}×{days} = {new_workers}×d, so d = {ansv} days."
