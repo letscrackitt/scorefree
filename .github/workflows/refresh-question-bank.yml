@@ -27,6 +27,8 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.x"
+      - name: Validate generated quantitative answer keys
+        run: python -m unittest discover -s tools -p "test_*.py"
       - name: Build from free/open sources
         run: python tools/build_question_bank.py
       - name: Commit generated question bank
