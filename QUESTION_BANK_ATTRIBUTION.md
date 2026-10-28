@@ -6,7 +6,7 @@ The bulk builder in `tools/build_question_bank.py` is designed to use no paid AP
 
 - **OpenTriviaQA** — https://github.com/uberspot/OpenTriviaQA — CC BY-SA 4.0. The importer reads text question files from the public repository when available. Attribution is retained in question metadata where imported. Adapted bank output containing this material is distributed under CC BY-SA 4.0.
 - **Qulture reviewed question dataset** — https://www.qulture-app.com/open-data/qulture-reviewed-questions.json — CC BY 4.0. The importer selects English-language records, keeps the original question/choices/answer/explanation text, adds a fifth “None of the above” option, and records the source URL and record ID in question metadata.
-- **ScoreFree deterministic practice generators** — original practice items generated locally by `tools/build_question_bank.py` for arithmetic, reasoning patterns and English grammar. No external question text or AI API is used for these items.
+- **ScoreFree deterministic practice generators** — original practice items generated locally by `tools/build_question_bank.py` for arithmetic, reasoning patterns and English grammar. It also creates original banking-awareness questions from stable public facts and records official reference links (RBI, DICGC, NPCI, NABARD, SIDBI, SEBI, IRDAI, PFRDA and government scheme sites). No external question text or AI API is used for these generated items.
 
 ## Important limitations
 
