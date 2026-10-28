@@ -285,43 +285,75 @@ def generate_reasoning(n):
 
 def generate_english(n):
     out, seen = [], set()
-    pairs = [
-        ("Each of the candidates ___ submitted the form.", "has", ["have", "are", "were", "having"], "The subject 'each' is singular, so it takes 'has'.", "Subject–verb agreement"),
-        ("Neither the manager nor the clerks ___ available.", "are", ["is", "was", "has", "be"], "With 'neither...nor', the verb agrees with the nearer subject, 'clerks'.", "Subject–verb agreement"),
-        ("She has been working here ___ 2021.", "since", ["for", "from", "by", "during"], "'Since' is used with a starting point in time.", "Prepositions"),
-        ("The report is different ___ the one we received yesterday.", "from", ["than", "to", "with", "by"], "The standard construction is 'different from'.", "Prepositions"),
-        ("He is ___ honest officer.", "an", ["a", "the", "no article", "some"], "'Honest' begins with a vowel sound, so 'an' is used.", "Articles"),
-        ("If I ___ about the delay, I would have called you.", "had known", ["knew", "would know", "have known", "know"], "The third conditional uses 'if + past perfect' and 'would have + past participle'.", "Conditional sentences"),
-        ("The committee ___ submitted its final report.", "has", ["have", "are", "were", "having"], "When the committee is treated as one body, the singular verb 'has' is appropriate.", "Subject–verb agreement"),
-        ("No sooner had the train left ___ it began to rain.", "than", ["when", "then", "that", "while"], "The fixed correlative construction is 'no sooner...than'.", "Conjunctions"),
-        ("The data ___ consistent with the earlier findings.", "are", ["is", "was", "has", "be"], "'Data' is conventionally treated as a plural noun in formal examination grammar.", "Subject–verb agreement"),
-        ("He insisted ___ paying the bill himself.", "on", ["for", "to", "at", "with"], "'Insist on' is followed by a noun or gerund.", "Prepositions"),
-        ("The new policy will ___ all regional offices.", "affect", ["effect", "affects", "effected", "affecting"], "'Affect' is the verb meaning to influence.", "Vocabulary in context"),
-        ("The principal, along with the teachers, ___ attending the meeting.", "is", ["are", "were", "have", "be"], "The main subject is singular 'principal'; 'along with the teachers' does not change it.", "Subject–verb agreement"),
+    contexts = [
+        ["candidates", "applicants", "trainees", "officers", "students", "participants", "employees", "customers", "clerks", "analysts", "volunteers", "inspectors", "cashiers", "supervisors", "interns", "delegates", "members", "auditors", "managers", "researchers"],
+        ["clerks", "officers", "agents", "assistants", "candidates", "tellers", "analysts", "cashiers", "supervisors", "inspectors", "auditors", "trainees", "employees", "managers", "members", "delegates", "volunteers", "reviewers", "consultants", "representatives"],
+        [str(y) for y in range(2005, 2025)],
+        ["recruitment", "verification", "account opening", "loan processing", "customer service", "risk review", "data entry", "branch operations", "cash management", "staff training", "compliance checks", "document review", "payment settlement", "audit planning", "record keeping", "fraud monitoring", "credit assessment", "complaint handling", "digital onboarding", "report preparation"],
+        ["honest", "honourable", "hourly", "heir to the estate", "unusual", "experienced", "eligible", "efficient", "important", "accurate", "optimistic", "educated", "innovative", "independent", "alert", "experienced", "ethical", "impartial", "organised", "effective"],
+        ["the schedule", "the warning", "the instruction", "the revised policy", "the email", "the circular", "the deadline", "the change", "the notice", "the message", "the update", "the new rule", "the request", "the alert", "the correction", "the reminder", "the announcement", "the instruction manual", "the revised timetable", "the supervisor's advice"],
+        ["committee", "board", "panel", "council", "team", "jury", "task force", "selection panel", "review committee", "finance board", "audit committee", "advisory council", "working group", "management team", "ethics committee", "steering committee", "executive board", "assessment panel", "planning committee", "disciplinary board"],
+        ["training session", "morning briefing", "review meeting", "orientation", "interview", "presentation", "conference", "workshop", "inspection", "audit", "seminar", "staff meeting", "announcement", "demonstration", "webinar", "negotiation", "consultation", "hearing", "lecture", "discussion"],
+        ["the survey", "customer feedback", "the audit", "the interviews", "the field study", "the inspection", "the questionnaire", "the assessment", "the review", "the experiment", "the branch visits", "the report", "the observation", "the pilot project", "the trial", "the interviews", "the records", "the sample", "the analysis", "the evaluation"],
+        ["the totals", "the balance sheet", "the ledger", "the cash flow", "the transaction log", "the annual report", "the statement", "the spreadsheet", "the reconciliation", "the account entries", "the invoices", "the loan schedule", "the audit trail", "the payment file", "the daily figures", "the monthly summary", "the register", "the receipts", "the records", "the final calculation"],
+        ["reduce delays", "improve access", "support customers", "protect records", "simplify payments", "strengthen controls", "improve reporting", "reduce errors", "support branches", "speed up verification", "protect deposits", "improve service", "reduce costs", "support lending", "improve accuracy", "prevent fraud", "support onboarding", "improve compliance", "reduce paperwork", "strengthen security"],
+        ["principal", "director", "manager", "supervisor", "auditor", "accountant", "officer", "chairperson", "secretary", "treasurer", "coordinator", "registrar", "inspector", "controller", "administrator", "team leader", "branch head", "examiner", "reviewer", "consultant"],
+        ["the first draft", "the previous quarter", "the original report", "last year's figures", "the earlier version", "the previous audit", "the old procedure", "the initial proposal", "the first estimate", "the prior statement", "the earlier record", "the original schedule", "the former policy", "the first submission", "the earlier forecast", "the previous plan", "the initial result", "the first calculation", "the old register", "the earlier document"],
+        ["the three teams", "the regional offices", "the five departments", "the two branches", "the project groups", "the review panels", "the working units", "the field officers", "the support desks", "the audit teams", "the partner banks", "the service counters", "the shortlisted applicants", "the local committees", "the three vendors", "the project members", "the supervisors", "the clerical staff", "the branch managers", "the training groups"],
+        ["heavy workload", "unexpected delays", "limited resources", "staff shortages", "technical problems", "a tight schedule", "poor weather", "several interruptions", "a late start", "system downtime", "a difficult audit", "a large backlog", "last-minute changes", "a transport strike", "uncertain data", "a demanding client", "equipment failure", "multiple revisions", "a power cut", "competing deadlines"],
+        ["the opening session", "the morning briefing", "the audit", "the interview", "the training", "the presentation", "the review", "the inspection", "the conference", "the workshop", "the examination", "the negotiation", "the hearing", "the demonstration", "the webinar", "the staff meeting", "the orientation", "the discussion", "the consultation", "the assessment"],
+        ["the application", "the final report", "the figures", "the checklist", "the contract", "the ledger", "the draft", "the proposal", "the minutes", "the statement", "the schedule", "the payment file", "the account", "the summary", "the record", "the form", "the notice", "the spreadsheet", "the submission", "the invoice"],
+        ["manage", "supervise", "audit", "inspect", "operate", "review", "monitor", "coordinate", "maintain", "verify", "process", "examine", "handle", "support", "approve", "prepare", "update", "reconcile", "evaluate", "record"],
+        ["the policy change", "the recruitment drive", "the service launch", "the new branch", "the online portal", "the revised process", "the public notice", "the payment facility", "the training programme", "the digital campaign", "the customer helpline", "the new circular", "the updated form", "the revised deadline", "the merger", "the awareness drive", "the new scheme", "the branch relocation", "the mobile app", "the revised guidelines"],
+        ["the disputed transaction", "the incomplete form", "the audit finding", "the delay", "the missing document", "the complaint", "the mismatch", "the revised estimate", "the payment issue", "the data gap", "the error", "the discrepancy", "the pending request", "the failed transfer", "the unexpected result", "the unusual entry", "the shortfall", "the system alert", "the incorrect total", "the unresolved case"],
+    ]
+    templates = [
+        ("Each of the {v} ___ completed the application.", "has", ["have", "are", "were", "having"], "The subject 'each' is singular, so it takes 'has'.", "Subject–verb agreement", 0),
+        ("Neither the supervisor nor the {v} ___ available for the audit.", "are", ["is", "was", "has", "be"], "With 'neither...nor', the verb agrees with the nearer subject, which is plural here.", "Subject–verb agreement", 1),
+        ("The applicant has worked at the branch ___ {v}.", "since", ["for", "from", "during", "by"], "'Since' is used with a starting point in time.", "Prepositions", 2),
+        ("The revised procedure is different ___ the earlier procedure for {v}.", "from", ["than", "to", "with", "by"], "The standard construction is 'different from'.", "Prepositions", 3),
+        ("She is ___ {v} employee.", "an", ["a", "the", "some", "no article"], "The adjective begins with a vowel sound, so 'an' is appropriate.", "Articles", 4),
+        ("If the team ___, it would have avoided the delay involving {v}.", "had heeded the instruction", ["heeded the instruction", "would heed the instruction", "has heeded the instruction", "had heeded the instruction"], "The third conditional uses 'if + past perfect' and 'would have + past participle'.", "Conditional sentences", 5),
+        ("The {v} ___ approved its annual report.", "has", ["have", "are", "were", "having"], "A collective body treated as one unit takes a singular verb here.", "Subject–verb agreement", 6),
+        ("No sooner had the {v} ended ___ the lights went out.", "than", ["when", "then", "that", "while"], "The fixed correlative construction is 'no sooner...than'.", "Conjunctions", 7),
+        ("The data collected during {v} ___ consistent with the findings.", "are", ["is", "was", "has", "be"], "'Data' is conventionally treated as plural in formal examination grammar.", "Subject–verb agreement", 8),
+        ("The analyst insisted ___ checking {v}.", "on", ["for", "to", "at", "with"], "'Insist on' is followed by a noun or gerund.", "Prepositions", 9),
+        ("The new policy may ___ to {v}.", "affect", ["effect", "affects", "effected", "affecting"], "'Affect' is the verb meaning to influence.", "Vocabulary in context", 10),
+        ("The {v}, along with its assistants, ___ attending the review.", "is", ["are", "were", "have", "be"], "The main subject is singular; the phrase 'along with...' does not change it.", "Subject–verb agreement", 11),
+        ("There are ___ errors in the revised version than in {v}.", "fewer", ["less", "little", "few", "least"], "'Fewer' is used with countable plural nouns such as errors.", "Determiners", 12),
+        ("The tasks were divided ___ {v}.", "among", ["between", "beside", "within", "across"], "'Among' is appropriate when distributing something to more than two groups.", "Prepositions", 13),
+        ("___ {v}, the staff met the deadline.", "Despite", ["Although", "Because", "Since", "Unless"], "'Despite' is followed by a noun phrase, not a full clause.", "Conjunctions and connectors", 14),
+        ("Hardly had {v} begun ___ the alarm rang.", "when", ["than", "then", "that", "while"], "The standard construction is 'hardly...when'.", "Conjunctions", 15),
+        ("You had better ___ {v} before submitting it.", "verify", ["to verify", "verified", "verifying", "verifies"], "'Had better' is followed by the base form of the verb.", "Verb forms", 16),
+        ("One of the officers who ___ the branch is absent because of {v}.", "manage", ["manages", "managing", "has managed", "is manage"], "The relative pronoun 'who' refers to the plural 'officers', so use 'manage'.", "Subject–verb agreement", 17),
+        ("The number of applications ___ increased after {v}.", "has", ["have", "are", "were", "having"], "'The number' is singular and takes 'has'.", "Subject–verb agreement", 18),
+        ("Neither of the two explanations ___ convincing in {v}.", "is", ["are", "were", "have", "be"], "'Neither' is singular in formal examination grammar.", "Subject–verb agreement", 19),
     ]
     while len(out) < n:
-        sentence, answer, wrongs, explanation, topic = pairs[len(out) % len(pairs)]
-        # Vary contexts and order while retaining an independently checkable rule.
-        cycle = len(out) // len(pairs)
-        if cycle:
-            sentence = sentence.replace("the form", f"the form (set {cycle+1})").replace("the bill", f"the bill (case {cycle+1})")
-        opts = wrongs[:]
-        opts.append(answer)
-        opts = list(dict.fromkeys(opts))
-        while len(opts) < 5: opts.append("None of these")
-        opts = opts[:5]
-        # Ensure correct answer is present, then shuffle.
-        if answer not in opts: opts[-1] = answer
-        RNG.shuffle(opts)
-        item = qobj(topic, sentence, opts, opts.index(answer), explanation)
+        template_index = len(out) % len(templates)
+        variant_index = (len(out) // len(templates)) % 20
+        sentence, answer, wrongs, explanation, topic, context_index = templates[template_index]
+        context = contexts[context_index][variant_index]
+        question = sentence.format(v=context)
+        options = list(dict.fromkeys(list(wrongs) + [answer]))
+        if len(options) < 5:
+            for filler in ["None of these", "All of these"]:
+                if filler not in options:
+                    options.append(filler)
+                if len(options) == 5:
+                    break
+        options = options[:5]
+        if answer not in options:
+            options[-1] = answer
+        RNG.shuffle(options)
+        item = qobj(topic, question, options, options.index(answer), explanation)
         before = len(out)
         add_unique(out, seen, item)
         if len(out) == before:
-            # Deterministically vary the prompt to avoid duplicate records.
-            sentence = sentence.rstrip(".?") + f" (practice item {len(out)+1})."
-            opts = wrongs[:4] + [answer]
-            RNG.shuffle(opts)
-            add_unique(out, seen, qobj(topic, sentence, opts, opts.index(answer), explanation))
+            # Each template/context pair should be unique; this is a safe fallback.
+            question = question.rstrip(".?") + f" (variant {len(out)+1})."
+            RNG.shuffle(options)
+            add_unique(out, seen, qobj(topic, question, options, options.index(answer), explanation))
     return out
 
 def to_js(value):
@@ -336,7 +368,8 @@ def main():
         generated = generator(TARGET_PER_EXAM_SUBJECT * 2)
         for item in generated:
             add_unique(pools[subject], seen[subject], item)
-    # Avoid source questions taking up all space; keep at most 400 awareness items.
+    # Mix categories before selecting a balanced, deterministic sample of awareness questions.
+    RNG.shuffle(pools["awareness"])
     pools["awareness"] = pools["awareness"][:TARGET_PER_EXAM_SUBJECT * 2]
     lines = [
         "/* AUTO-GENERATED by tools/build_question_bank.py. Do not edit by hand.",
