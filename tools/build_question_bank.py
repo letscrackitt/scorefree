@@ -460,7 +460,7 @@ def main():
     page_path = ROOT / "clerk-mains.html"
     page = page_path.read_text(encoding="utf-8")
     page, replacements = re.subn(
-        r'(<script src="./question-bank.generated.js?v=)[^"]+("></script>)',
+        r'(<script src="./question-bank.generated.js\?v=)[^"]+("></script>)',
         lambda match: match.group(1) + digest + match.group(2),
         page,
         count=1,
