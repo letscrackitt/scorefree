@@ -86,7 +86,9 @@ def import_open_trivia(pools, seen_by_subject):
             subprocess.run(["git", "clone", "--depth", "1", OPENTRIVIA_REPO, str(clone)],
                            check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=180)
         count = 0
-        for path in clone.rglob("*.txt"):
+        for path in (clone / "categories").rglob("*"):
+            if not path.is_file() or path.suffix.lower() in (".py", ".json", ".db", ".csv", ".rb"):
+                continue
             if any(part.startswith(".") for part in path.parts):
                 continue
             subject = classify_path(path.relative_to(clone))
@@ -108,20 +110,24 @@ def import_open_trivia(pools, seen_by_subject):
                 options = [clean(x) for x in options if clean(x)]
                 if not any(norm(x) == norm(answer) for x in options):
                     options.append(clean(answer))
-                # Retain at most four distractors plus the correct answer.
+                # OpenTriviaQA commonly supplies four choices including the answer.
+                # Add a neutral fifth option in that case; never invent a new answer.
+                if len(options) == 4 and any(norm(x) == norm(answer) for x in options):
+                    options.append("None of the above")
                 correct = next((i for i, x in enumerate(options) if norm(x) == norm(answer)), None)
                 if correct is None:
                     current = None
                     return
-                correct_text = options[correct]
-                distractors = [x for i, x in enumerate(options) if i != correct and norm(x) != norm(correct_text)]
-                distractors = list(dict.fromkeys(distractors))[:4]
-                if len(distractors) < 4:
+                # Preserve the source's choices and correct answer, capped at five.
+                if len(options) > 5:
+                    correct_text = options[correct]
+                    options = [x for x in options if norm(x) != norm(correct_text)][:4] + [correct_text]
+                if len(options) != 5 or len({norm(x) for x in options}) != 5:
                     current = None
                     return
-                opts = distractors[:4] + [correct_text]
+                opts = options[:]
                 RNG.shuffle(opts)
-                ans = next(i for i, x in enumerate(opts) if norm(x) == norm(correct_text))
+                ans = next(i for i, x in enumerate(opts) if norm(x) == norm(answer))
                 item = qobj("Open trivia" if subject == "awareness" else "Open practice",
                             question, opts, ans, "Answer key imported from the open dataset; verify before high-stakes use.",
                             {"name": "OpenTriviaQA", "url": "https://github.com/uberspot/OpenTriviaQA",
