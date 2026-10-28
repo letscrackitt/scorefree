@@ -33,7 +33,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add question-bank.generated.js
+          git add question-bank.generated.js clerk-mains.html
           if git diff --cached --quiet; then
             echo "Question bank unchanged."
           else
