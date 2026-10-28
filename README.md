@@ -37,10 +37,12 @@ SCOREFREE provides a transparent **practice score out of 100** using relevance, 
 The IBPS Comprehension bank contains 50 complete practice passages. Each test includes the reading passage, a question, topic guidance, and a clearly labelled practice word target. The practice target is not presented as an official IBPS word limit.
 
 
-## Clerk Mains objective practice interface
+## Clerk Mains objective practice and bulk question bank
 
-- The new `clerk-mains.html` page provides an exam-style interface preview: one question at a time, countdown timer, question palette, Save & Next, Clear Response, Mark for Review & Next, submit confirmation, and post-submit answer explanations.
-- The current page is explicitly labelled as an **interface preview**, not a full-length mock. Its short sample questions are not the planned 60-test bank.
-- Planned scope: 10 tests each for IBPS Clerk Mains and SBI Clerk Mains in Reasoning, Quantitative Aptitude, and English Language. General/Financial Awareness is excluded.
-- Scorefree's SBI Core Reasoning practice excludes Computer Aptitude. The custom 55-minute setting is a Scorefree practice format, not SBI's official combined-section timing.
-- Official SBI Junior Associate Mains pattern lists 40 English questions / 35 minutes, 50 Quantitative Aptitude questions / 45 minutes, and a combined 50-question Reasoning Ability & Computer Aptitude section / 45 minutes. IBPS Clerk Mains structure should be checked against the latest CRP-CSA-XVI notification before the full mock metadata is finalized.
+- `clerk-mains.html` uses the existing exam-style interface: one question at a time, timer, question palette, Save & Next, Clear Response, Mark for Review, submit confirmation, scoring, and answer explanations.
+- The objective bank supports 10 test slots per subject for both IBPS Clerk Mains and SBI Clerk Mains: Quantitative Aptitude, Reasoning, English, and General/Financial Awareness. These are currently **partial practice tests**, not full-length mocks: the bulk builder supplies up to 20 generated/imported questions per test, while the UI retains the section's official question count and timer.
+- `question-bank.js` remains the hand-maintained source. `tools/build_question_bank.py` creates `question-bank.generated.js` separately and appends questions without replacing the hand-maintained items.
+- The bulk builder uses free/open inputs only: OpenTriviaQA (CC BY-SA 4.0), the Qulture reviewed question dataset (CC BY 4.0), and original deterministic questions generated locally from templates and stable public financial facts. It requires no paid API or API key.
+- GitHub Actions runs the builder on a weekly schedule and can also be run manually from the repository's **Actions** tab. The workflow now runs regression tests against the generated quantitative answer keys before publishing the updated static file.
+- Read `QUESTION_BANK_ATTRIBUTION.md` for attribution, licensing, and known limitations. Imported public question datasets are not official IBPS/SBI papers, and generated/imported answers should be reviewed before high-stakes use.
+- The section interface keeps its own timing and marking configuration. Verify official exam patterns against the latest IBPS/SBI notifications before describing any practice configuration as official.
