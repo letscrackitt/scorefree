@@ -38,6 +38,15 @@ jobs:
             echo "Question bank unchanged."
           else
             git commit -m "Refresh generated open question bank"
-            git pull --rebase origin main
-            git push
+            if ! git push; then
+              echo "Remote changed during build; rebuilding against latest main."
+              git fetch origin main
+              git reset --hard origin/main
+              python tools/build_question_bank.py
+              git add question-bank.generated.js clerk-mains.html
+              if ! git diff --cached --quiet; then
+                git commit -m "Refresh generated open question bank"
+              fi
+              git push
+            fi
           fi
