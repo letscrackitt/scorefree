@@ -156,33 +156,54 @@ def import_open_trivia(pools, seen_by_subject):
         print("OpenTriviaQA unavailable; continuing with generated practice:", exc)
 
 def generate_quant(n):
+    """Generate original quantitative questions with exact integer answer keys.
+
+    Each template constrains its random inputs so the stated answer is exact;
+    do not use floor division to hide fractional results in an integer MCQ.
+    """
     out, seen = [], set()
     attempts = 0
-    while len(out) < n and attempts < n * 20:
+    percentage_values = [5, 10, 12, 15, 20, 25, 30, 35, 40]
+    percentage_bases = [100, 120, 150, 180, 200, 240, 300, 400, 500, 800]
+    increase_rates = [10, 15, 20, 25, 30, 40]
+    profit_rates = [10, 15, 20, 25, 30, 40, 50]
+    costs = [200, 250, 300, 400, 500, 600, 800, 1000]
+    totals = [60, 72, 84, 90, 96, 108, 120, 144]
+    while len(out) < n and attempts < n * 40:
         attempts += 1
         typ = RNG.randrange(8)
-        a, b = RNG.randint(12, 950), RNG.randint(2, 45)
         if typ == 0:
-            pct = RNG.choice([5, 10, 12, 15, 20, 25, 30, 35, 40])
-            base = RNG.choice([100, 120, 150, 180, 200, 240, 300, 400, 500, 800])
+            valid = [(base, pct) for base in percentage_bases for pct in percentage_values
+                     if (base * pct) % 100 == 0]
+            base, pct = RNG.choice(valid)
             ansv = base * pct // 100
             question, topic, exp = f"What is {pct}% of {base}?", "Percentage", f"{pct}/100 × {base} = {ansv}."
         elif typ == 1:
-            x = RNG.randint(20, 200); p = RNG.choice([10, 15, 20, 25, 30, 40])
+            valid = [(x, p) for x in range(20, 201) for p in increase_rates
+                     if (x * (100 + p)) % 100 == 0]
+            x, p = RNG.choice(valid)
             ansv = x * (100 + p) // 100
             question, topic, exp = f"A value of {x} is increased by {p}%. What is the new value?", "Percentage change", f"New value = {x} × (1 + {p}/100) = {ansv}."
         elif typ == 2:
             principal = RNG.choice([1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000])
-            rate = RNG.choice([4, 5, 6, 8, 10, 12]); years = RNG.choice([2, 3, 4])
-            ansv = principal * rate * years // 100
+            rate = RNG.choice([4, 5, 6, 8, 10, 12])
+            years = RNG.choice([2, 3, 4])
+            numerator = principal * rate * years
+            if numerator % 100:
+                continue
+            ansv = numerator // 100
             question, topic, exp = f"Find the simple interest on ₹{principal} at {rate}% per annum for {years} years.", "Simple interest", f"SI = PRT/100 = {principal}×{rate}×{years}/100 = ₹{ansv}."
         elif typ == 3:
-            x, y = RNG.randint(20, 90), RNG.randint(20, 90)
+            x = RNG.randint(20, 90)
+            y = RNG.randint(20, 90)
+            if (x + y) % 2:
+                continue
             ansv = (x + y) // 2
             question, topic, exp = f"The average of {x} and {y} is what?", "Average", f"Average = ({x} + {y})/2 = {ansv}."
         elif typ == 4:
-            rate = RNG.choice([10, 15, 20, 25, 30, 40, 50])
-            cost = RNG.choice([200, 250, 300, 400, 500, 600, 800, 1000])
+            valid = [(cost, rate) for cost in costs for rate in profit_rates
+                     if (cost * (100 + rate)) % 100 == 0]
+            cost, rate = RNG.choice(valid)
             ansv = cost * (100 + rate) // 100
             question, topic, exp = f"An item costs ₹{cost}. At a profit of {rate}%, what is its selling price?", "Profit and loss", f"SP = {cost} × (100 + {rate})/100 = ₹{ansv}."
         elif typ == 5:
@@ -191,8 +212,9 @@ def generate_quant(n):
             ansv = speed * hours
             question, topic, exp = f"A vehicle travels at {speed} km/h for {hours} hours. How far does it travel?", "Speed, time and distance", f"Distance = speed × time = {speed} × {hours} = {ansv} km."
         elif typ == 6:
-            x, y = RNG.randint(2, 9), RNG.randint(2, 9)
-            total = RNG.choice([60, 72, 84, 90, 96, 108, 120, 144])
+            valid = [(total, x, y) for total in totals for x in range(2, 10) for y in range(2, 10)
+                     if (total * x) % (x + y) == 0]
+            total, x, y = RNG.choice(valid)
             ansv = total * x // (x + y)
             question, topic, exp = f"₹{total} is divided in the ratio {x}:{y}. What is the first share?", "Ratio and proportion", f"First share = {total} × {x}/({x}+{y}) = ₹{ansv}."
         else:
@@ -202,14 +224,18 @@ def generate_quant(n):
             ansv = days * workers // new_workers
             question, topic, exp = f"{workers} workers finish a job in {days} days. At the same rate, how many days will {new_workers} workers take?", "Time and work", f"Total work is constant: {workers}×{days} = {new_workers}×d, so d = {ansv} days."
         key = norm(question)
-        if key in seen: continue
+        if key in seen:
+            continue
         seen.add(key)
         opts = {ansv}
         while len(opts) < 5:
             delta = RNG.choice([-25, -20, -15, -10, -5, 5, 10, 15, 20, 25])
             opts.add(max(0, ansv + delta))
-        choices = list(opts); RNG.shuffle(choices)
-        add_unique(out, set(), qobj(topic, question, [str(v) for v in choices], choices.index(ansv), exp))
+        choices = list(opts)
+        RNG.shuffle(choices)
+        item = qobj(topic, question, [str(v) for v in choices], choices.index(ansv), exp)
+        if item:
+            out.append(item)
     return out
 
 def generate_reasoning(n):
