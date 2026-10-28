@@ -34,5 +34,6 @@ jobs:
             echo "Question bank unchanged."
           else
             git commit -m "Refresh generated open question bank"
+            git pull --rebase origin main
             git push
           fi
