@@ -46,3 +46,9 @@ The IBPS Comprehension bank contains 50 complete practice passages. Each test in
 - GitHub Actions runs the builder on a weekly schedule and can also be run manually from the repository's **Actions** tab. The workflow now runs regression tests against the generated quantitative answer keys before publishing the updated static file.
 - Read `QUESTION_BANK_ATTRIBUTION.md` for attribution, licensing, and known limitations. Imported public question datasets are not official IBPS/SBI papers, and generated/imported answers should be reviewed before high-stakes use.
 - The section interface keeps its own timing and marking configuration. Verify official exam patterns against the latest IBPS/SBI notifications before describing any practice configuration as official.
+
+
+## Mains question quality benchmarks
+
+- The Clerk Mains page now links to Adda247, Oliveboard, Guidely and Testbook as external references for real-world Mains difficulty and question formats. Their questions are not republished without permission.
+- See [MAINS_BENCHMARKS.md](MAINS_BENCHMARKS.md) for the subject-by-subject quality checklist, answer verification requirements, and source/licensing workflow.
