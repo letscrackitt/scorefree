@@ -51,6 +51,7 @@ def add_unique(pool, seen, item):
 def import_qulture(pool, seen):
     try:
         data = get_json(QULTURE_URL)
+        before_count = len(pool)
         for row in data.get("records", []):
             if row.get("language") != "en":
                 continue
@@ -65,7 +66,7 @@ def import_qulture(pool, seen):
                         {"name": "Qulture reviewed question dataset", "url": QULTURE_URL,
                          "license": "CC BY 4.0", "record_id": row.get("id")})
             add_unique(pool, seen, item)
-        print("Qulture imported:", len(pool))
+        print("Qulture imported:", len(pool) - before_count)
     except Exception as exc:
         print("Qulture source unavailable; continuing with other sources:", exc)
 
