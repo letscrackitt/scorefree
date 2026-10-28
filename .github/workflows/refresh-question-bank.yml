@@ -9,6 +9,10 @@ on:
       - "tools/build_question_bank.py"
       - ".github/workflows/refresh-question-bank.yml"
 
+concurrency:
+  group: scorefree-question-bank-refresh
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
