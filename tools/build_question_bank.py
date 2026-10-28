@@ -89,7 +89,7 @@ def import_open_trivia(pools, seen_by_subject):
         for path in (clone / "categories").rglob("*"):
             if not path.is_file() or path.suffix.lower() in (".py", ".json", ".db", ".csv", ".rb"):
                 continue
-            if any(part.startswith(".") for part in path.parts):
+            if any(part.startswith(".") for part in path.relative_to(clone).parts):
                 continue
             subject = classify_path(path.relative_to(clone))
             try:
@@ -215,7 +215,7 @@ def generate_reasoning(n):
     out, seen = [], set()
     for i in range(n * 4):
         if len(out) >= n: break
-        typ = i % 4
+        typ = i % 7
         if typ == 0:
             start = RNG.randint(2, 30); step = RNG.choice([3, 4, 5, 6, 7, 8, 9, 11])
             seq = [start + j * step for j in range(5)]; ansv = seq[-1] + step
@@ -238,20 +238,48 @@ def generate_reasoning(n):
             RNG.shuffle(options)
             item = qobj("Inequalities", q, options, options.index(ansv), f"Since A > B and B > {a}, transitivity gives A > {a}.")
             add_unique(out, seen, item); continue
-        else:
+        elif typ == 3:
             x = RNG.randint(2, 20)
-            q = f"In a row, Mira is {x}th from the left and there are {RNG.randint(2, 10)} people to her left. What is Mira's position from the left?"
-            # Construct consistent phrasing with position = people to left + 1
             left = x - 1
-            q = f"There are {left} people to Mira's left in a row. What is her position from the left?"
+            person = RNG.choice(["Mira", "Rohan", "Kavya", "Arjun", "Neha", "Aman", "Priya", "Dev"])
+            q = f"There are {left} people to {person}'s left in a row. What is {person}'s position from the left?"
             ansv = x
             topic = "Ranking and order"
-            exp = f"Position from the left = people to her left + 1 = {left} + 1 = {x}."
-        if typ in (0, 1, 3):
+            exp = f"Position from the left = people to the left + 1 = {left} + 1 = {x}."
+        elif typ == 4:
+            east, north = RNG.choice([(3,4),(5,12),(6,8),(8,15),(7,24),(9,12),(12,16)])
+            ansv = int((east*east+north*north) ** 0.5)
+            q = f"A person walks {east} m east and then {north} m north. What is the straight-line distance from the starting point?"
+            topic = "Direction and distance"
+            exp = f"By Pythagoras, distance = √({east}² + {north}²) = {ansv} m."
+        elif typ == 5:
+            word = RNG.choice(["BANK", "LOAN", "RISK", "CASH", "RATE", "FUND", "CREDIT", "DEBIT", "MONEY", "TRADE"])
+            shift = RNG.choice([1, 2, 3])
+            ansv = "".join(chr((ord(ch)-65+shift)%26+65) for ch in word)
+            q = f"If each letter is moved {shift} place(s) forward in the alphabet, how is {word} coded?"
+            topic = "Coding-decoding"
+            exp = f"Move each letter forward by {shift}: {word} becomes {ansv}."
+        elif typ == 6:
+            x = RNG.randint(10, 90)
+            q = f"Statements: A > B, B > {x}. Which conclusion follows?"
+            ansv = f"A > {x}"
+            options = [ansv, f"A < {x}", f"A = {x}", f"B < {x}", "A and B are equal"]
+            RNG.shuffle(options)
+            item = qobj("Inequalities", q, options, options.index(ansv), f"Since A > B and B > {x}, A > {x} by transitivity.")
+            add_unique(out, seen, item)
+            continue
+        if typ in (0, 1, 3, 4):
             opts = {ansv}
             while len(opts) < 5: opts.add(ansv + RNG.choice([-13, -9, -5, -3, 3, 5, 9, 13]))
             choices = list(opts); RNG.shuffle(choices)
             item = qobj(topic, q, [str(v) for v in choices], choices.index(ansv), exp)
+        elif typ == 5:
+            wrongs = set()
+            while len(wrongs) < 4:
+                candidate = "".join(chr((ord(ch)-65+RNG.choice([shift-1, shift+1, shift+2]))%26+65) for ch in word)
+                if candidate != ansv: wrongs.add(candidate)
+            choices = list(wrongs) + [ansv]; RNG.shuffle(choices)
+            item = qobj(topic, q, choices, choices.index(ansv), exp)
         add_unique(out, seen, item)
     return out
 
