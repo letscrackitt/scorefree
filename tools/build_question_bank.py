@@ -322,7 +322,7 @@ def generate_english(n):
         ("The {v}, along with the other reviewers, ___ attending the review.", "is", ["are", "were", "have", "be"], "The main subject is singular; the phrase 'along with...' does not change it.", "Subject–verb agreement", 11),
         ("There are ___ errors in the revised version than in {v}.", "fewer", ["less", "little", "few", "least"], "'Fewer' is used with countable plural nouns such as errors.", "Determiners", 12),
         ("The tasks were divided ___ {v}.", "among", ["between", "beside", "within", "across"], "'Among' is appropriate when distributing something to more than two groups.", "Prepositions", 13),
-        ("Despite the {v}, the staff met the deadline.", "Despite", ["Although", "Because", "Since", "Unless"], "'Despite' is followed by a noun phrase, not a full clause.", "Conjunctions and connectors", 14),
+        ("___ the {v}, the staff met the deadline.", "Despite", ["Although", "Because", "Since", "Unless"], "'Despite' is followed by a noun phrase, not a full clause.", "Conjunctions and connectors", 14),
         ("Hardly had {v} begun ___ the alarm rang.", "when", ["than", "then", "that", "while"], "The standard construction is 'hardly...when'.", "Conjunctions", 15),
         ("You had better ___ {v} before submitting it.", "verify", ["to verify", "verified", "verifying", "verifies"], "'Had better' is followed by the base form of the verb.", "Verb forms", 16),
         ("One of the officers who ___ the branch is absent because of {v}.", "manage", ["manages", "managing", "has managed", "is manage"], "The relative pronoun 'who' refers to the plural 'officers', so use 'manage'.", "Subject–verb agreement", 17),
