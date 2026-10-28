@@ -319,7 +319,9 @@ def main():
             for test in range(1, 11):
                 batch = exam_pool[(test-1)*20:test*20]
                 if batch:
-                    limit = ({"ibps": {"quant": 35, "reasoning": 40, "english": 40, "awareness": 40}, "sbi": {"quant": 50, "reasoning": 50, "english": 40, "awareness": 50}})[exam][subject];\n                    lines.append(f"  var current_{exam}_{subject}_{test} = SF_BANK.{exam}.{subject}[{test}] || [];")\n                    lines.append(f"  SF_BANK.{exam}.{subject}[{test}] = current_{exam}_{subject}_{test}.concat({to_js(batch)}.slice(0, Math.max(0, {limit} - current_{exam}_{subject}_{test}.length)));")
+                    limit = ({"ibps": {"quant": 35, "reasoning": 40, "english": 40, "awareness": 40}, "sbi": {"quant": 50, "reasoning": 50, "english": 40, "awareness": 50}})[exam][subject]
+                    lines.append(f"  var current_{exam}_{subject}_{test} = SF_BANK.{exam}.{subject}[{test}] || [];")
+                    lines.append(f"  SF_BANK.{exam}.{subject}[{test}] = current_{exam}_{subject}_{test}.concat({to_js(batch)}.slice(0, Math.max(0, {limit} - current_{exam}_{subject}_{test}.length)));")
     lines.append("})();")
     OUT.write_text("\n".join(lines) + "\n", encoding="utf-8")
     print("Wrote", OUT.relative_to(ROOT))
