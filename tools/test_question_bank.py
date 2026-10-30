@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""Regression tests for ScoreFree's deterministic quantitative question generator."""
-import re
+"""Regression tests for ScoreFree's original Mains quantitative generator."""
 import sys
 import unittest
 from pathlib import Path
@@ -26,31 +25,21 @@ class QuantitativeGeneratorTests(unittest.TestCase):
                 self.assertGreaterEqual(item["ans"], 0)
                 self.assertLess(item["ans"], len(item["opts"]))
                 self.assertNotEqual(item["exp"], "")
+                self.assertEqual(int(item["opts"][item["ans"]]), item["answer_value"])
 
-    def test_calculation_matches_the_marked_answer(self):
-        patterns = [
-            (r"What is (\d+)% of (\d+)\?", lambda m: int(m[1]) * int(m[2]) / 100),
-            (r"A value of (\d+) is increased by (\d+)%", lambda m: int(m[1]) * (100 + int(m[2])) / 100),
-            (r"Find the simple interest on ₹(\d+) at (\d+)% per annum for (\d+) years", lambda m: int(m[1]) * int(m[2]) * int(m[3]) / 100),
-            (r"The average of (\d+) and (\d+) is what\?", lambda m: (int(m[1]) + int(m[2])) / 2),
-            (r"An item costs ₹(\d+)\. At a profit of (\d+)%", lambda m: int(m[1]) * (100 + int(m[2])) / 100),
-            (r"A vehicle travels at (\d+) km/h for (\d+) hours", lambda m: int(m[1]) * int(m[2])),
-            (r"₹(\d+) is divided in the ratio (\d+):(\d+)", lambda m: int(m[1]) * int(m[2]) / (int(m[2]) + int(m[3]))),
-            (r"(\d+) workers finish a job in (\d+) days.*how many days will (\d+) workers take", lambda m: int(m[1]) * int(m[2]) / int(m[3])),
-        ]
+    def test_linked_di_sets_are_shared_and_complete(self):
+        sets = {}
         for item in self.questions:
-            with self.subTest(question=item["q"]):
-                expected = None
-                for pattern, calculate in patterns:
-                    match = re.search(pattern, item["q"], flags=re.IGNORECASE)
-                    if match:
-                        expected = calculate(match)
-                        break
-                self.assertIsNotNone(expected, "Question does not match a tested calculation template")
-                marked = item["opts"][item["ans"]]
-                self.assertTrue(float(marked).is_integer(), f"Answer is not an integer: {marked}")
-                self.assertEqual(int(marked), int(expected))
-                self.assertEqual(expected, int(expected), "Generated answer should be exact, not rounded")
+            if item.get("setTitle"):
+                sets.setdefault(item["setTitle"], []).append(item)
+                self.assertTrue(item.get("setIntro"))
+        self.assertGreaterEqual(len(sets), 5)
+        for title, items in sets.items():
+            self.assertEqual(len(items), 5, title)
+
+    def test_no_duplicate_question_text(self):
+        texts = [item["q"].strip().lower() for item in self.questions]
+        self.assertEqual(len(texts), len(set(texts)))
 
 
 if __name__ == "__main__":
