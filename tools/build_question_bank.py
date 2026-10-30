@@ -197,10 +197,10 @@ def generate_quant(n):
         qs = [
             ("Data interpretation · Table", f"What is the total deposit collected by branches A, C and E?", a+c+e,
              f"Required total = {a} + {c} + {e} = {a+c+e} lakh."),
-            ("Data interpretation · Table", f"Deposits of branch D are what percent of the combined deposits of A and B?", d*100//(a+b),
-             f"Required percentage = {d}/({a}+{b}) × 100 = {d*100//(a+b)}%."),
-            ("Data interpretation · Table", f"If branch B increases its deposits by 20% and branch E decreases by 10%, what is the revised combined deposit of B and E?", b*120//100+e*90//100,
-             f"Revised B = {b}×1.20 = {b*120//100}; revised E = {e}×0.90 = {e*90//100}; total = {b*120//100+e*90//100}."),
+            ("Data interpretation · Table", f"Deposits of branch D are what percent of the combined deposits of A and B?", d*100/(a+b),
+             f"Required percentage = {d}/({a}+{b}) × 100 ≈ {d*100/(a+b):.2f}%."),
+            ("Data interpretation · Table", f"If branch B increases its deposits by 20% and branch E decreases by 10%, what is the revised combined deposit of B and E?", round(b*1.2+e*0.9),
+             f"Revised B = {b}×1.20 = {b*1.2:.2f}; revised E = {e}×0.90 = {e*0.9:.2f}; combined deposit ≈ ₹{round(b*1.2+e*0.9)} lakh."),
             ("Data interpretation · Table", f"Find the ratio of deposits of C and D in simplest form.", (c//5)//__import__('math').gcd(c//5,d//5)*1 if False else (c//__import__('math').gcd(c,d)),
              f"Ratio C:D = {c}:{d}; divide both terms by {__import__('math').gcd(c,d)} to obtain {c//__import__('math').gcd(c,d)}:{d//__import__('math').gcd(c,d)}."),
             ("Data interpretation · Table", f"By what amount do the deposits of D exceed the average deposits of A, B and C?", d-(a+b+c)//3,
@@ -229,7 +229,9 @@ def generate_quant(n):
             exp=f"Marked price = {cp}×{100+profit+disc}/100 = {cp*(100+profit+disc)//100}; selling price = marked price×{100-disc}/100 = {ans}."
         elif typ == 1:
             p=RNG.choice([4000,5000,6000,8000,10000]); r=RNG.choice([5,10,12]); t=RNG.choice([2,3])
-            ans=p*((100+r)**t-100**t)//(100**t)
+            num=p*((100+r)**t-100**t)
+            if num % (100**t): continue
+            ans=num//(100**t)
             q=f"Find the compound interest on ₹{p} at {r}% per annum, compounded annually, for {t} years."
             exp=f"Amount = {p}×(1+{r}/100)^{t} = ₹{p+ans}; compound interest = amount − principal = ₹{ans}."
         elif typ == 2:
@@ -272,13 +274,18 @@ def generate_quant(n):
             exp=f"Combined rate = 1/{a}+1/{b}+1/{c} = {(a*b+b*c+c*a)}/{a*b*c}; time = {ans} days."
         elif typ == 7:
             cp=RNG.choice([600,750,900,1200,1500]); gain=RNG.choice([20,25,30,40]); discount=RNG.choice([10,15,20])
-            mp=cp*(100+gain)//100*100//(100-discount)
-            ans=mp
+            sp_num=cp*(100+gain)
+            if sp_num % 100: continue
+            sp=sp_num//100
+            if sp*100 % (100-discount): continue
+            mp=sp*100//(100-discount); ans=mp
             q=f"After allowing a discount of {discount}% on the marked price, a trader earns {gain}% profit on an article costing ₹{cp}. Find the marked price."
             exp=f"Required selling price = {cp}×{100+gain}/100 = ₹{cp*(100+gain)//100}. Marked price = selling price×100/{100-discount} = ₹{ans}."
         elif typ == 8:
             old=RNG.choice([30,36,40,45,48,50,60]); new=old+RNG.choice([6,9,12,15]); time=RNG.choice([4,5,6,8])
-            ans=old*new*time//(new-old)
+            num=old*new*time
+            if num % (new-old): continue
+            ans=num//(new-old)
             q=f"A person reduces the time taken for a journey by {time} hours by increasing speed from {old} km/h to {new} km/h. Find the distance travelled."
             exp=f"Let distance be D. D/{old} − D/{new} = {time}; D×({new-old})/({old}×{new}) = {time}; D = {ans} km."
         elif typ == 9:
