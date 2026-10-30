@@ -213,6 +213,10 @@
     out.push(makeQ('Successive Percentage Change','A value of '+basev+' is increased by '+inc+'% and then decreased by '+dec+'%. Find the final value.',finalv,'Final value = '+basev+' × '+(100+inc)+'/100 × '+(100-dec)+'/100 = '+finalv.toFixed(2)+'.'));
     var dist2=180+20*n, s1=40+n%5*5, s2=s1+10+n%3*5, timeDiff=dist2/s1-dist2/s2;
     out.push(makeQ('Speed, Time and Distance','A car covers a fixed distance at '+s1+' km/h. If its speed were '+s2+' km/h, it would take '+timeDiff.toFixed(2)+' hours less. Find the distance.',dist2,'Let distance be D. D/'+s1+' − D/'+s2+' = '+timeDiff.toFixed(2)+'. Solving gives D = '+dist2+' km.'));
+    var p2=10000+1000*n, r2=10+n%4, ciMinusSi=p2*Math.pow(r2/100,2);
+    out.push(makeQ('Simple and Compound Interest','Find the difference between compound interest and simple interest on ₹'+p2+' for 2 years at '+r2+'% per annum.',ciMinusSi,'For 2 years, CI − SI = P × (R/100)² = '+p2+' × ('+r2+'/100)² = ₹'+ciMinusSi.toFixed(2)+'.'));
+    var cheap=30+n%5*5, dear=60+n%4*5, target=cheap+((dear-cheap)*(2+(n%3)))/5, mixqty=50+5*n, cheapqty=mixqty*(dear-target)/(dear-cheap);
+    out.push(makeQ('Alligation','Tea worth ₹'+cheap+' per kg is mixed with tea worth ₹'+dear+' per kg to obtain a mixture worth ₹'+target.toFixed(2)+' per kg. How many kg of the cheaper tea are required to prepare '+mixqty+' kg of the mixture?',cheapqty,'By alligation, cheaper:dearer quantity = ('+dear+' − '+target.toFixed(2)+'):('+target.toFixed(2)+' − '+cheap+') = '+(dear-target).toFixed(2)+':'+(target-cheap).toFixed(2)+'. Cheaper tea required = '+mixqty+' × '+(dear-target).toFixed(2)+'/'+(dear-cheap)+' = '+cheapqty.toFixed(2)+' kg.'));
     return out;
   }
   for(var test=1;test<=10;test++){var qs=buildTest(test);['ibps','sbi'].forEach(function(exam){SF_BANK[exam].quant[test]=qs.slice();});}
