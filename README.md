@@ -52,3 +52,9 @@ The IBPS Comprehension bank contains 50 complete practice passages. Each test in
 
 - The Clerk Mains page now links to Adda247, Oliveboard, Guidely and Testbook as external references for real-world Mains difficulty and question formats. Their questions are not republished without permission.
 - See [MAINS_BENCHMARKS.md](MAINS_BENCHMARKS.md) for the subject-by-subject quality checklist, answer verification requirements, and source/licensing workflow.
+
+## Mains-level Quantitative Aptitude (original questions)
+
+`question-bank.mains-quant.js` fills **IBPS Clerk Mains Quants (35 Q)** and **SBI Clerk Mains Quants (50 Q)**, Tests 1–10, with original questions: quadratic-equation relations, number series (missing and wrong term), four-to-five-question Data Interpretation sets with real tables and charts (table, bar, line, pie and mixture sets), multi-step arithmetic caselets, approximation, and (SBI) data sufficiency and quantity comparison. Every question has five options, one correct key and a step-by-step solution shown in the post-test review.
+
+The file is generated. Edit `tools/build_mains_quant.py`, then run `python tools/build_mains_quant.py`. The builder derives every answer twice (forward from hidden values, then from the printed data) and `tools/test_mains_quant.py` re-checks structure on every CI run. The file loads after `question-bank.generated.js` and replaces the quant tests, so the weekly open-bank refresh cannot mix basic items back into Mains quants.
