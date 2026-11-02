@@ -5,6 +5,7 @@ Rebuilds all 20 tests in memory (the builder re-solves every question from its p
 asserts equality) and checks structure, key validity, sets and absence of duplicates."""
 import sys
 import unittest
+from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,16 +31,42 @@ class MainsQuantTests(unittest.TestCase):
                     self.assertTrue(0 <= q["ans"] < 5)
                     self.assertTrue(q["exp"].strip())
 
-    def test_di_sets_have_five_questions_and_a_diagram_or_table(self):
+    def test_di_sets_have_four_or_five_questions_and_a_diagram_or_table(self):
         for (exam, t), qs in self.tests.items():
             sets = {}
             for q in qs:
                 if q.get("setTitle"):
                     sets.setdefault(q["setTitle"], []).append(q)
-                    self.assertTrue("<table" in q["setIntro"] or "<svg" in q["setIntro"])
-            self.assertEqual(len(sets), 3 if exam == "ibps" else 4, (exam, t))
+                    self.assertTrue("<table" in q["setIntro"] or "<svg" in q["setIntro"] or "<ul" in q["setIntro"])
+            self.assertIn(len(sets), (2, 3) if exam == "ibps" else (3, 4), (exam, t))
             for title, items in sets.items():
-                self.assertEqual(len(items), 5, title)
+                self.assertIn(len(items), (4, 5), title)
+                idx = [i for i, q in enumerate(qs) if q.get("setTitle") == title]
+                self.assertEqual(idx, list(range(idx[0], idx[0] + len(idx))), "a DI set must stay contiguous")
+
+    def test_tests_do_not_share_the_same_pattern(self):
+        """Reviewer feedback: every test used the same layout. Each test must now differ in mix, counts and order."""
+        for exam in ("ibps", "sbi"):
+            seqs, firsts, mixes = set(), set(), set()
+            for t in range(1, 11):
+                topics = [q["topic"] for q in self.tests[(exam, t)]]
+                seqs.add(tuple(topics[:8]))
+                firsts.add(topics[0])
+                mixes.add(tuple(sorted(Counter(topics).items())))
+                self.assertGreaterEqual(len(set(topics)), 12, (exam, t))
+                self.assertLessEqual(Counter(topics).most_common(1)[0][1], 7, (exam, t))
+            self.assertEqual(len(seqs), 10, exam)
+            self.assertEqual(len(mixes), 10, exam)
+            self.assertGreaterEqual(len(firsts), 6, exam)
+            for topic in ("Quadratic Equations", "Number Series", "Simplification", "Approximation"):
+                counts = {sum(q["topic"] == topic for q in self.tests[(exam, t)]) for t in range(1, 11)}
+                self.assertGreaterEqual(len(counts), 3, (exam, topic, counts))
+
+    def test_question_formats_vary_within_a_topic(self):
+        for exam in ("ibps", "sbi"):
+            for topic, minimum in (("Number Series", 3), ("Quadratic Equations", 2)):
+                stems = {q["q"].split("\n")[0][:40] for t in range(1, 11) for q in self.tests[(exam, t)] if q["topic"] == topic}
+                self.assertGreaterEqual(len(stems), minimum, (exam, topic, stems))
 
     def test_no_duplicate_questions_within_a_test(self):
         for key, qs in self.tests.items():

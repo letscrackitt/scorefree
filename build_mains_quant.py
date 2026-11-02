@@ -11,6 +11,7 @@ Every question is built forward from hidden values, then re-solved from the
 printed data only; ``assert`` statements make the build fail if the two disagree.
 Run:  python tools/build_mains_quant.py
 """
+import itertools
 import json
 import math
 import random
@@ -497,6 +498,20 @@ def pie_svg(labels, pcts, title):
     return "".join(s) + "</svg>"
 
 
+def take_questions(rng, fns, nq):
+    """Run templates in random order and keep the first `nq` that produce a question."""
+    fns = list(fns)
+    rng.shuffle(fns)
+    qs = []
+    for f in fns:
+        q = f()
+        if q:
+            qs.append(q)
+        if len(qs) == nq:
+            return qs
+    return None
+
+
 def pick_nice(rng, items, test, tries=None):
     items = list(items)
     rng.shuffle(items)
@@ -512,7 +527,7 @@ DEPTS = ["Operations", "Finance", "Marketing", "Human Resources", "Technology", 
 RATIOS = [(3, 2), (5, 3), (7, 5), (4, 3), (5, 4), (2, 1), (7, 3), (9, 7), (3, 1), (11, 9), (8, 7), (5, 2)]
 
 
-def di_shift(rng):
+def di_shift(rng, nq=5):
     names = rng.sample(DEPTS, 5)
     rows = []
     for _ in names:
@@ -618,22 +633,25 @@ def di_shift(rng):
         return numq(rng, T, f"What is the difference between the number of men on night shift in {names[x]} and the number of women on night shift in {names[y]}?", v, exp,
                     mistakes=[rows[x]["nm"] + rows[y]["nw"]])
 
-    fns = [t1, t2, t3, t4, t5, t6, t7]
-    rng.shuffle(fns)
-    for f in fns:
-        q = f()
-        if q:
-            qs.append(q)
-        if len(qs) == 5:
-            break
-    assert len(qs) == 5
+    def t8():
+        tm, tt = sum(r["men"] for r in rows), sum(r["total"] for r in rows)
+        v = Fr(tm * 100, tt)
+        if not nice(v, 2):
+            return None
+        exp = f"Total men = {' + '.join(str(r['men']) for r in rows)} = {tm}; total employees = {tt}.<br>Required % = {tm}/{tt} × 100 = <b>{fmt(v)}%</b>."
+        return numq(rng, T, "Men form what percent of the total number of employees in all five departments together?", v, exp,
+                    mistakes=[Fr(sum(r['women'] for r in rows) * 100, tt)])
+
+    qs = take_questions(rng, [t1, t2, t3, t4, t5, t6, t7, t8], nq)
+    if not qs:
+        return di_shift(rng, nq)
     return title, intro, qs
 
 
 NICE_SOLD = [160, 200, 240, 250, 300, 320, 400, 450, 480, 500, 600, 640, 750, 800]
 
 
-def di_bar(rng):
+def di_bar(rng, nq=5):
     start = rng.randint(2017, 2020)
     cats = [str(start + i) for i in range(6)]
     sold = [rng.choice(NICE_SOLD) for _ in range(6)]
@@ -707,16 +725,48 @@ def di_bar(rng):
         return numq(rng, T, f"In the following year, production is expected to be {p}% more than the average production of {cats[i]} and {cats[j]}, and the units sold are expected to be {q}% of that production. How many units (in thousands) are expected to remain unsold?", uns, exp,
                     mistakes=[prodn * Fr(q, 100), Fr(prod[i] + prod[j], 2) * Fr(100 - q, 100)])
 
-    for f in (b1, b2, b3, b4, b5):
-        q = f()
-        if q is None:
-            return di_bar(rng)
-        qs.append(q)
-    rng.shuffle(qs)
+    def b6():
+        x, y, z, w = rng.sample(range(6), 4)
+        p_, s_ = prod[x] + prod[y], sold[z] + sold[w]
+        exp = f"Produced in {cats[x]} and {cats[y]} = {prod[x]} + {prod[y]} = {p_}; sold in {cats[z]} and {cats[w]} = {sold[z]} + {sold[w]} = {s_}.<br>Ratio = {p_}:{s_} = <b>{ratio_str(p_, s_)}</b>."
+        opts, ans = ratio_options(rng, p_, s_)
+        return Q(T, f"What is the ratio of the total units produced in {cats[x]} and {cats[y]} to the total units sold in {cats[z]} and {cats[w]}?", opts, ans, exp)
+
+    def b7():
+        L = rng.choice([4, 5])
+        i = rng.randint(0, 6 - L)
+        v = Fr(sum(sold[i:i + L]), L)
+        if not nice(v, 2):
+            return None
+        exp = f"Sales {cats[i]}–{cats[i + L - 1]}: {', '.join(str(x) for x in sold[i:i + L])}.<br>Average = {sum(sold[i:i + L])}/{L} = <b>{fmt(v)}</b> thousand."
+        return numq(rng, T, f"What was the average number of units sold (in thousands) from {cats[i]} to {cats[i + L - 1]}?", v, exp, mistakes=[Fr(sum(prod[i:i + L]), L)])
+
+    def b8():
+        top = max(unsold)
+        if unsold.count(top) != 1:
+            return None
+        k = unsold.index(top)
+        others = [c for c in cats if c != cats[k]]
+        rng.shuffle(others)
+        opts, ans = text_options(rng, cats[k], others[:4], sort_key=lambda c: int(c))
+        exp = "Unsold units (produced − sold): " + ", ".join(f"{cats[i]}: {unsold[i]}" for i in range(6)) + f".<br>The maximum is in <b>{cats[k]}</b>."
+        return Q(T, "In which year was the difference between the units produced and the units sold the maximum?", opts, ans, exp)
+
+    def b9():
+        v = Fr(sum(unsold) * 100, sum(prod))
+        if not nice(v, 2):
+            return None
+        exp = f"Total unsold = {sum(unsold)}; total produced = {sum(prod)}.<br>Required % = {sum(unsold)}/{sum(prod)} × 100 = <b>{fmt(v)}%</b>."
+        return numq(rng, T, "The total number of units left unsold over the six years is what percent of the total number of units produced?", v, exp,
+                    mistakes=[Fr(sum(sold) * 100, sum(prod))])
+
+    qs = take_questions(rng, [b1, b2, b3, b4, b5, b6, b7, b8, b9], nq)
+    if not qs:
+        return di_bar(rng, nq)
     return title, intro, qs
 
 
-def di_line(rng):
+def di_line(rng, nq=5):
     start = rng.randint(2016, 2020)
     cats = [str(start + i) for i in range(6)]
     pcts = [10, 12.5, 15, 20, 25, 30, 35, 40, 45, 50]
@@ -724,11 +774,11 @@ def di_line(rng):
     Pf = [Fr(rng.choice(pcts)).limit_denominator(10) for _ in range(6)]
     R = [e * (1 + p / 100) for e, p in zip(E, Pf)]
     if any(r.denominator != 1 for r in R):
-        return di_line(rng)
+        return di_line(rng, nq)
     R = [int(r) for r in R]
     P = [r - e for r, e in zip(R, E)]
     if len(set(P)) < 6:
-        return di_line(rng)
+        return di_line(rng, nq)
     ymax = (max(R) // 100 + 1) * 100
     ymin = 0
     fig = line_svg(cats, [("Revenue", R), ("Expenditure", E)], ymin, ymax, 100, "₹ lakh", "Revenue and expenditure of a company (₹ lakh)")
@@ -789,19 +839,59 @@ def di_line(rng):
         return numq(rng, T, f"If the expenditure in {cats[x]} had been {k}% lower while the revenue remained the same, what would the profit percent have been?", v, exp,
                     mistakes=[Pf[x] + k, Fr((R[x] - e2) * 100, R[x])])
 
-    for f in (l1, l2, l3, l4, l5):
-        q = f()
-        if q is None:
-            return di_line(rng)
-        qs.append(q)
-    rng.shuffle(qs)
+    def l6():
+        x, y = rng.sample(range(6), 2)
+        v = Fr(P[x] * 100, R[y])
+        if not nice(v, 2):
+            return None
+        exp = f"Profit in {cats[x]} = {R[x]} − {E[x]} = {P[x]}; revenue in {cats[y]} = {R[y]}.<br>Required % = {P[x]}/{R[y]} × 100 = <b>{fmt(v)}%</b>."
+        return numq(rng, T, f"The profit earned in {cats[x]} is what percent of the revenue in {cats[y]}?", v, exp, mistakes=[Fr(P[x] * 100, E[y])])
+
+    def l7():
+        pp = [Fr(P[i] * 100, E[i]) for i in range(6)]
+        top = max(pp)
+        if pp.count(top) != 1:
+            return None
+        k = pp.index(top)
+        others = [c for c in cats if c != cats[k]]
+        rng.shuffle(others)
+        opts, ans = text_options(rng, cats[k], others[:4], sort_key=lambda c: int(c))
+        exp = "Profit % = profit/expenditure × 100: " + ", ".join(f"{cats[i]}: {fmt(pp[i])}%" for i in range(6)) + f".<br>The highest is in <b>{cats[k]}</b>."
+        return Q(T, "In which year was the profit percent of the company the highest?", opts, ans, exp)
+
+    def l8():
+        L = rng.choice([4, 5])
+        i = rng.randint(0, 6 - L)
+        v = Fr(sum(E[i:i + L]), L)
+        if not nice(v, 2):
+            return None
+        exp = f"Expenditure {cats[i]}–{cats[i + L - 1]}: {', '.join(str(x) for x in E[i:i + L])}.<br>Average = {sum(E[i:i + L])}/{L} = <b>{fmt(v)}</b> lakh."
+        return numq(rng, T, f"What is the average annual expenditure (in ₹ lakh) of the company from {cats[i]} to {cats[i + L - 1]}?", v, exp, mistakes=[Fr(sum(R[i:i + L]), L)])
+
+    def l9():
+        cands = [(x, k, m) for x in range(6) for k in (10, 20, 25, 50) for m in (10, 20, 25, 40)]
+        def ok(c):
+            x, k, m = c
+            r2, e2 = Fr(R[x] * (100 + k), 100), Fr(E[x] * (100 + m), 100)
+            return (c, r2, e2) if r2 > e2 and nice(r2 - e2, 2) and nice(r2, 2) and nice(e2, 2) else None
+        res = pick_nice(rng, cands, ok)
+        if not res:
+            return None
+        (x, k, m), r2, e2 = res
+        exp = (f"New revenue = {R[x]} × {100 + k}% = {fmt(r2)}; new expenditure = {E[x]} × {100 + m}% = {fmt(e2)}.<br>Profit = {fmt(r2)} − {fmt(e2)} = <b>{fmt(r2 - e2)}</b> lakh.")
+        return numq(rng, T, f"If the revenue in {cats[x]} had been {k}% higher and the expenditure {m}% higher, what would the profit (in ₹ lakh) have been?", r2 - e2, exp,
+                    mistakes=[Fr(P[x]) + k, r2 - E[x]])
+
+    qs = take_questions(rng, [l1, l2, l3, l4, l5, l6, l7, l8, l9], nq)
+    if not qs:
+        return di_line(rng, nq)
     return title, intro, qs
 
 
 STREAMS = ["Science", "Commerce", "Arts", "Engineering", "Medicine", "Law", "Management", "Design"]
 
 
-def di_pie(rng):
+def di_pie(rng, nq=5):
     names = rng.sample(STREAMS, 6)
     for _ in range(20000):
         pct = [rng.choice([5, 10, 15, 20, 25, 30]) for _ in range(5)]
@@ -819,7 +909,7 @@ def di_pie(rng):
                 rat.append((a, b))
                 break
         else:
-            return di_pie(rng)
+            return di_pie(rng, nq)
     boys = [c // (a + b) * a for c, (a, b) in zip(cnt, rat)]
     girls = [c - bb for c, bb in zip(cnt, boys)]
     fig = pie_svg(names, pct, f"Distribution of {ind(N)} students across streams")
@@ -881,16 +971,46 @@ def di_pie(rng):
         return numq(rng, T, f"If {f}% of the girls of {names[x]} shift to {names[y]}, how many students will {names[y]} then have?", v, exp,
                     mistakes=[cnt[y] - moved, cnt[y] + Fr(cnt[x] * f, 100)])
 
-    for f in (p1, p2, p3, p4, p5):
-        q = f()
-        if q is None:
-            return di_pie(rng)
-        qs.append(q)
-    rng.shuffle(qs)
+    def p6():
+        x = rng.randrange(6)
+        v = Fr(pct[x] * 360, 100)
+        exp = f"Central angle = {pct[x]}% of 360° = <b>{fmt(v)}°</b>."
+        return numq(rng, T, f"What is the central angle (in degrees) of the sector representing {names[x]} in the pie chart?", v, exp, mistakes=[Fr(pct[x] * 36, 10) + 10])
+
+    def p7():
+        x, y = rng.sample(range(6), 2)
+        exp = f"Boys in {names[x]} = {boys[x]}; girls in {names[y]} = {girls[y]}.<br>Ratio = {boys[x]}:{girls[y]} = <b>{ratio_str(boys[x], girls[y])}</b>."
+        opts, ans = ratio_options(rng, boys[x], girls[y])
+        return Q(T, f"What is the ratio of the number of boys in {names[x]} to the number of girls in {names[y]}?", opts, ans, exp)
+
+    def p8():
+        pairs = [(x, y) for x in range(6) for y in range(6) if x != y and boys[x] > girls[y] and nice(Fr((boys[x] - girls[y]) * 100, girls[y]), 2)]
+        if not pairs:
+            return None
+        x, y = rng.choice(pairs)
+        v = Fr((boys[x] - girls[y]) * 100, girls[y])
+        exp = f"Boys in {names[x]} = {boys[x]}; girls in {names[y]} = {girls[y]}.<br>Required % = ({boys[x]} − {girls[y]})/{girls[y]} × 100 = <b>{fmt(v)}%</b>."
+        return numq(rng, T, f"The number of boys in {names[x]} is what percent more than the number of girls in {names[y]}?", v, exp,
+                    mistakes=[Fr((boys[x] - girls[y]) * 100, boys[x])])
+
+    def p9():
+        top = max(girls)
+        if girls.count(top) != 1:
+            return None
+        k = girls.index(top)
+        others = [n_ for n_ in names if n_ != names[k]]
+        rng.shuffle(others)
+        opts, ans = text_options(rng, names[k], others[:4], sort_key=str)
+        exp = "Girls: " + ", ".join(f"{names[i]} {girls[i]}" for i in range(6)) + f".<br>The maximum is in <b>{names[k]}</b>."
+        return Q(T, "Which stream has the maximum number of girls?", opts, ans, exp)
+
+    qs = take_questions(rng, [p1, p2, p3, p4, p5, p6, p7, p8, p9], nq)
+    if not qs:
+        return di_pie(rng, nq)
     return title, intro, qs
 
 
-def di_mixture(rng):
+def di_mixture(rng, nq=5):
     names = ["P", "Q", "R", "S", "T"]
     rows = []
     for _ in names:
@@ -981,17 +1101,266 @@ def di_mixture(rng):
         return numq(rng, T, f"Milk costs ₹{c} per litre and water is free. If the whole mixture in vessel {names[x]} is sold at ₹{s} per litre, what is the profit percent?", prof, exp,
                     mistakes=[Fr((s - c) * 100, c) if s > c else prof + 6])
 
-    fns = [m1, m2, m3, m4, m5]
-    for f in fns:
-        q = f()
-        if q is None:
-            return di_mixture(rng)
-        qs.append(q)
-    rng.shuffle(qs)
+    def m6():
+        x, y = rng.sample(range(5), 2)
+        v = rows[x]["water"] + rows[y]["water"]
+        exp = f"Water in {names[x]} = {rows[x]['water']} L; water in {names[y]} = {rows[y]['water']} L.<br>Total = <b>{v} L</b>."
+        return numq(rng, T, f"How many litres of water are there in vessels {names[x]} and {names[y]} together?", v, exp, mistakes=[rows[x]["milk"] + rows[y]["milk"]])
+
+    def m7():
+        x, y = rng.sample(range(5), 2)
+        cands = [10, 20, 25, 40, 50]
+        random_f = rng.sample(cands, len(cands))
+        for f_ in random_f:
+            milk, water = rows[x]["milk"] + rows[y]["milk"], rows[x]["water"] + rows[y]["water"]
+            tot = milk + water
+            left = Fr(milk) * (100 - f_) / 100
+            if nice(left, 2) and left.denominator == 1:
+                exp = (f"Mixing {names[x]} and {names[y]}: milk = {milk} L, water = {water} L, total = {tot} L.<br>"
+                       f"Taking out {f_}% removes {f_}% of the milk as well, so milk left = {milk} × {100 - f_}% = <b>{fmt(left)} L</b>.")
+                return numq(rng, T, f"The contents of vessels {names[x]} and {names[y]} are mixed and {f_}% of the new mixture is taken out. How many litres of milk remain in the mixture?", left, exp,
+                            mistakes=[Fr(milk) * f_ / 100, milk])
+        return None
+
+    def m8():
+        pc = [Fr(r["milk"] * 100, r["total"]) for r in rows]
+        top = max(pc)
+        if pc.count(top) != 1:
+            return None
+        k = pc.index(top)
+        others = [n_ for n_ in names if n_ != names[k]]
+        rng.shuffle(others)
+        opts, ans = text_options(rng, names[k], others[:4], sort_key=str)
+        exp = "Milk percentage: " + ", ".join(f"{names[i]} {float(pc[i]):.1f}%" for i in range(5)) + f".<br>The highest is in vessel <b>{names[k]}</b>."
+        return Q(T, "In which vessel is the percentage of milk the highest?", opts, ans, exp)
+
+    qs = take_questions(rng, [m1, m2, m3, m4, m5, m6, m7, m8], nq)
+    if not qs:
+        return di_mixture(rng, nq)
     return title, intro, qs
 
 
-DI_BUILDERS = [di_shift, di_bar, di_line, di_pie, di_mixture]
+
+
+VILLAGES = ["Ashapur", "Bhimgarh", "Chandpur", "Devnagar", "Ekta Nagar", "Fatehpur", "Govindpur", "Hari Nagar", "Indrapur", "Jaitpur"]
+
+
+def di_literacy(rng, nq=5):
+    names = rng.sample(VILLAGES, 5)
+    rows = []
+    for _ in names:
+        for _t in range(20000):
+            a, b = rng.choice(RATIOS)
+            lo, hi = math.ceil(400 / (a + b)), math.floor(2000 / (a + b))
+            if lo > hi:
+                continue
+            k = rng.randint(lo, hi)
+            men, women = a * k, b * k
+            pm, pw = rng.choice([40, 50, 60, 64, 70, 75, 80, 85]), rng.choice([30, 40, 45, 50, 55, 60, 65, 75])
+            if (men * pm) % 100 == 0 and (women * pw) % 100 == 0:
+                rows.append(dict(total=men + women, a=a, b=b, men=men, women=women, pm=pm, pw=pw, nm=men * pm // 100, nw=women * pw // 100))
+                break
+        else:
+            raise RuntimeError("literacy data")
+    title = "Data Interpretation · Caselet · Literacy in five villages"
+    items = "".join(f"<li><b>{names[i]}</b> has {ind(rows[i]['total'])} residents, with men : women = {rows[i]['a']}:{rows[i]['b']}; "
+                    f"{rows[i]['pm']}% of the men and {rows[i]['pw']}% of the women are literate.</li>" for i in range(5))
+    intro = ("<p>Study the following information about five villages and answer the questions. A person is either literate or illiterate.</p>"
+             f'<ul style="margin:8px 0 0 18px;padding:0;line-height:1.75">{items}</ul>')
+    T = "Data Interpretation · Caselet"
+    L = lambda r: r["nm"] + r["nw"]
+
+    def t1():
+        x, y = rng.sample(range(5), 2)
+        v = L(rows[x]) + L(rows[y])
+        exp = (f"{names[x]}: literate men {rows[x]['men']} × {rows[x]['pm']}% = {rows[x]['nm']}; literate women {rows[x]['women']} × {rows[x]['pw']}% = {rows[x]['nw']}.<br>"
+               f"{names[y]}: literate men {rows[y]['nm']}, literate women {rows[y]['nw']}.<br>Total literate = {L(rows[x])} + {L(rows[y])} = <b>{v}</b>.")
+        return numq(rng, T, f"How many residents of {names[x]} and {names[y]} together are literate?", v, exp, mistakes=[rows[x]["nm"] + rows[y]["nm"], rows[x]["nw"] + rows[y]["nw"]])
+
+    def t2():
+        x, y = rng.sample(range(5), 2)
+        p_, q_ = rows[x]["nw"], rows[y]["men"] - rows[y]["nm"]
+        exp = f"Literate women in {names[x]} = {rows[x]['women']} × {rows[x]['pw']}% = {p_}.<br>Illiterate men in {names[y]} = {rows[y]['men']} − {rows[y]['nm']} = {q_}.<br>Ratio = {p_}:{q_} = <b>{ratio_str(p_, q_)}</b>."
+        opts, ans = ratio_options(rng, p_, q_)
+        return Q(T, f"What is the ratio of the number of literate women in {names[x]} to the number of illiterate men in {names[y]}?", opts, ans, exp)
+
+    def t3():
+        def ok(x):
+            v = Fr(L(rows[x]) * 100, rows[x]["total"])
+            return (x, v) if nice(v, 2) else None
+        res = pick_nice(rng, range(5), ok)
+        if not res:
+            return None
+        x, v = res
+        exp = f"Literate in {names[x]} = {rows[x]['nm']} + {rows[x]['nw']} = {L(rows[x])}.<br>Literacy rate = {L(rows[x])}/{rows[x]['total']} × 100 = <b>{fmt(v)}%</b>."
+        return numq(rng, T, f"What percent of the residents of {names[x]} are literate?", v, exp, mistakes=[Fr(rows[x]["pm"] + rows[x]["pw"], 2)])
+
+    def t4():
+        v = Fr(sum(r["women"] - r["nw"] for r in rows), 5)
+        exp = "Illiterate women = women − literate women: " + ", ".join(f"{names[i]} {rows[i]['women'] - rows[i]['nw']}" for i in range(5)) + f".<br>Average = {sum(r['women'] - r['nw'] for r in rows)}/5 = <b>{fmt(v)}</b>."
+        return numq(rng, T, "What is the average number of illiterate women across the five villages?", v, exp, mistakes=[Fr(sum(r["nw"] for r in rows), 5)])
+
+    def t5():
+        cands = [(x, f, w) for x in range(5) for f in (10, 20, 25, 50) for w in (10, 15, 20, 30, 40)]
+        def ok(c):
+            x, f, w = c
+            r = rows[x]
+            mv = Fr((r["men"] - r["nm"]) * f, 100)
+            if mv.denominator != 1 or w > r["women"] - r["nw"]:
+                return None
+            nl = L(r) + mv + w
+            v = Fr(nl * 100, r["total"])
+            return (c, mv, nl, v) if nice(v, 2) else None
+        res = pick_nice(rng, cands, ok)
+        if not res:
+            return None
+        (x, f, w), mv, nl, v = res
+        r = rows[x]
+        exp = (f"Illiterate men in {names[x]} = {r['men']} − {r['nm']} = {r['men'] - r['nm']}; {f}% of them = {fmt(mv)} become literate. {w} illiterate women also become literate.<br>"
+               f"New literate = {L(r)} + {fmt(mv)} + {w} = {fmt(nl)}.<br>Literacy rate = {fmt(nl)}/{r['total']} × 100 = <b>{fmt(v)}%</b>.")
+        return numq(rng, T, f"In {names[x]}, {f}% of the illiterate men and {w} of the illiterate women become literate. What will then be the literacy rate (in %) of {names[x]}?", v, exp,
+                    mistakes=[Fr((L(r) + mv) * 100, r["total"])])
+
+    def t6():
+        idx = rng.sample(range(5), 3)
+        v = sum(rows[i]["men"] - rows[i]["nm"] for i in idx)
+        exp = "Illiterate men = men − literate men: " + "; ".join(f"{names[i]}: {rows[i]['men']} − {rows[i]['nm']} = {rows[i]['men'] - rows[i]['nm']}" for i in idx) + f".<br>Total = <b>{v}</b>."
+        return numq(rng, T, f"How many men in {names[idx[0]]}, {names[idx[1]]} and {names[idx[2]]} together are illiterate?", v, exp, mistakes=[sum(rows[i]["nm"] for i in idx)])
+
+    def t7():
+        x, y = rng.sample(range(5), 2)
+        v = abs(rows[x]["nm"] - rows[y]["nw"])
+        if v == 0:
+            return None
+        exp = f"Literate men in {names[x]} = {rows[x]['nm']}; literate women in {names[y]} = {rows[y]['nw']}.<br>Difference = <b>{v}</b>."
+        return numq(rng, T, f"What is the difference between the number of literate men in {names[x]} and the number of literate women in {names[y]}?", v, exp, mistakes=[rows[x]["nm"] + rows[y]["nw"]])
+
+    def t8():
+        top = max(r["pm"] for r in rows)
+        if [r["pm"] for r in rows].count(top) != 1:
+            return None
+        k = [r["pm"] for r in rows].index(top)
+        others = [n_ for n_ in names if n_ != names[k]]
+        rng.shuffle(others)
+        opts, ans = text_options(rng, names[k], others[:4], sort_key=str)
+        exp = "Literacy rate among men: " + ", ".join(f"{names[i]} {rows[i]['pm']}%" for i in range(5)) + f".<br>The highest is in <b>{names[k]}</b>."
+        return Q(T, "In which village is the percentage of literate men the highest?", opts, ans, exp)
+
+    qs = take_questions(rng, [t1, t2, t3, t4, t5, t6, t7, t8], nq)
+    if not qs:
+        return di_literacy(rng, nq)
+    return title, intro, qs
+
+
+def di_double_pie(rng, nq=5):
+    names = rng.sample(DEPTS, 5)
+
+    def shares():
+        while True:
+            pc = [rng.choice([5, 10, 15, 20, 25, 30]) for _ in range(4)]
+            last = 100 - sum(pc)
+            if last in (5, 10, 15, 20, 25, 30):
+                return pc + [last]
+    pa, pb = shares(), shares()
+    A_name, B_name = rng.sample(["Alpha Ltd", "Beta Corp", "Zenith Co", "Orbit Pvt", "Nimbus Inc", "Vertex Ltd"], 2)
+    TA, TB = rng.choice([2000, 2400, 3000, 3600]), rng.choice([1600, 2000, 2800, 3200, 4000])
+    ca, cb = [TA * p // 100 for p in pa], [TB * p // 100 for p in pb]
+    fig = ("<div>" + pie_svg(names, pa, f"{A_name}: {ind(TA)} employees") + "</div><div style='height:10px'></div><div>" + pie_svg(names, pb, f"{B_name}: {ind(TB)} employees") + "</div>")
+    title = "Data Interpretation · Double pie chart · Employees by department"
+    intro = f"<p>The pie charts show the percentage distribution of the employees of two companies, {A_name} and {B_name}, across five departments.</p>" + fig
+    T = "Data Interpretation · Pie charts"
+
+    def d1():
+        x, y = rng.sample(range(5), 2)
+        v = abs(ca[x] - cb[y])
+        if v == 0:
+            return None
+        exp = f"{names[x]} in {A_name} = {pa[x]}% of {ind(TA)} = {ca[x]}; {names[y]} in {B_name} = {pb[y]}% of {ind(TB)} = {cb[y]}.<br>Difference = <b>{v}</b>."
+        return numq(rng, T, f"What is the difference between the number of employees in {names[x]} of {A_name} and in {names[y]} of {B_name}?", v, exp, mistakes=[ca[x] + cb[y]])
+
+    def d2():
+        x, y = rng.sample(range(5), 2)
+        exp = f"{names[x]} in {A_name} = {ca[x]}; {names[y]} in {B_name} = {cb[y]}.<br>Ratio = {ca[x]}:{cb[y]} = <b>{ratio_str(ca[x], cb[y])}</b>."
+        opts, ans = ratio_options(rng, ca[x], cb[y])
+        return Q(T, f"What is the ratio of the number of employees in {names[x]} of {A_name} to those in {names[y]} of {B_name}?", opts, ans, exp)
+
+    def d3():
+        cands = list(itertools.combinations(range(5), 2))
+        def ok(c):
+            x, y = c
+            tot = ca[x] + ca[y] + cb[x] + cb[y]
+            v = Fr(tot * 100, TA + TB)
+            return (c, tot, v) if nice(v, 2) else None
+        res = pick_nice(rng, cands, ok)
+        if not res:
+            return None
+        (x, y), tot, v = res
+        exp = (f"{names[x]} + {names[y]}: {A_name} {ca[x]} + {ca[y]}, {B_name} {cb[x]} + {cb[y]} → {tot} employees.<br>Total of both companies = {TA} + {TB} = {TA + TB}.<br>"
+               f"Required % = {tot}/{TA + TB} × 100 = <b>{fmt(v)}%</b>.")
+        return numq(rng, T, f"The employees of {names[x]} and {names[y]} departments of both companies together form what percent of the total employees of both companies?", v, exp, mistakes=[Fr((pa[x] + pa[y] + pb[x] + pb[y]), 2)])
+
+    def d4():
+        pairs = [(x, y) for x in range(5) for y in range(5) if x != y and cb[x] > cb[y]]
+        if not pairs:
+            return None
+        x, y = rng.choice(pairs)
+        v = cb[x] - cb[y]
+        exp = f"In {B_name}: {names[x]} = {cb[x]}, {names[y]} = {cb[y]}.<br>Difference = <b>{v}</b>."
+        return numq(rng, T, f"In {B_name}, how many more employees are there in {names[x]} than in {names[y]}?", v, exp, mistakes=[ca[x] - ca[y] if ca[x] > ca[y] else v + 40])
+
+    def d5():
+        cands = [(x, f) for x in range(5) for f in (10, 20, 25, 40, 50)]
+        def ok(c):
+            x, f = c
+            mv = Fr(ca[x] * f, 100)
+            return (c, mv) if mv.denominator == 1 else None
+        res = pick_nice(rng, cands, ok)
+        if not res:
+            return None
+        (x, f), mv = res
+        v = cb[x] + mv
+        exp = f"{f}% of {names[x]} employees of {A_name} = {fmt(mv)}.<br>New strength of {names[x]} in {B_name} = {cb[x]} + {fmt(mv)} = <b>{fmt(v)}</b>."
+        return numq(rng, T, f"If {f}% of the employees of {names[x]} in {A_name} move to the {names[x]} department of {B_name}, how many employees will {B_name} then have in {names[x]}?", v, exp,
+                    mistakes=[cb[x] - mv, ca[x] - mv])
+
+    def d6():
+        x = rng.randrange(5)
+        v = Fr(ca[x] + cb[x], 2)
+        exp = f"{names[x]}: {A_name} {ca[x]}, {B_name} {cb[x]}.<br>Average = ({ca[x]} + {cb[x]})/2 = <b>{fmt(v)}</b>."
+        return numq(rng, T, f"What is the average number of employees in the {names[x]} department of the two companies?", v, exp, mistakes=[ca[x] + cb[x]])
+
+    def d7():
+        diffs = [abs(ca[i] - cb[i]) for i in range(5)]
+        top = max(diffs)
+        if diffs.count(top) != 1:
+            return None
+        k = diffs.index(top)
+        others = [n_ for n_ in names if n_ != names[k]]
+        rng.shuffle(others)
+        opts, ans = text_options(rng, names[k], others[:4], sort_key=str)
+        exp = "Difference between the two companies: " + ", ".join(f"{names[i]} {diffs[i]}" for i in range(5)) + f".<br>The maximum is in <b>{names[k]}</b>."
+        return Q(T, "In which department is the difference between the number of employees of the two companies the maximum?", opts, ans, exp)
+
+    def d8():
+        cands = [(x, y) for x in range(5) for y in range(5)]
+        def ok(c):
+            x, y = c
+            v = Fr(ca[x] * 100, cb[y])
+            return (c, v) if nice(v, 2) and v != 100 else None
+        res = pick_nice(rng, cands, ok)
+        if not res:
+            return None
+        (x, y), v = res
+        exp = f"{names[x]} in {A_name} = {ca[x]}; {names[y]} in {B_name} = {cb[y]}.<br>Required % = {ca[x]}/{cb[y]} × 100 = <b>{fmt(v)}%</b>."
+        return numq(rng, T, f"The number of employees in {names[x]} of {A_name} is what percent of the number of employees in {names[y]} of {B_name}?", v, exp, mistakes=[Fr(cb[y] * 100, ca[x])])
+
+    qs = take_questions(rng, [d1, d2, d3, d4, d5, d6, d7, d8], nq)
+    if not qs:
+        return di_double_pie(rng, nq)
+    return title, intro, qs
+
+
+DI_BUILDERS = [di_shift, di_bar, di_line, di_pie, di_mixture, di_literacy, di_double_pie]
 
 
 # --------------------------------------------------- arithmetic caselet builders
@@ -1405,9 +1774,449 @@ def ar_prob(rng):
     return dict(topic="Probability", stem=stem, value=right, exp=exp, mistakes=[], custom=(opts, opts_v.index(right)))
 
 
+
+
+# ------------------------------------------------ more arithmetic caselets (added for variety)
+def ar_pnc_committee(rng):
+    for _ in range(500):
+        m, w = rng.randint(4, 8), rng.randint(3, 6)
+        n = m + w
+        k = rng.randint(4, min(6, n - 3))
+        cond = rng.choice(["atleast", "exactly", "included", "notboth"])
+        people = [f"M{i}" for i in range(m)] + [f"W{i}" for i in range(w)]
+        comb = math.comb
+        if cond == "atleast":
+            r = rng.choice([2, 3])
+            if r > w or k - r > m and False:
+                continue
+            val = sum(comb(w, i) * comb(m, k - i) for i in range(r, min(w, k) + 1) if k - i <= m)
+            chk = sum(1 for c in itertools.combinations(people, k) if sum(1 for x in c if x[0] == "W") >= r)
+            cond_txt = f"at least {r} women"
+            how = " + ".join(f"C({w},{i})×C({m},{k - i})" for i in range(r, min(w, k) + 1) if k - i <= m)
+        elif cond == "exactly":
+            r = rng.randint(1, min(3, m, k - 1))
+            if k - r > w:
+                continue
+            val = comb(m, r) * comb(w, k - r)
+            chk = sum(1 for c in itertools.combinations(people, k) if sum(1 for x in c if x[0] == "M") == r)
+            cond_txt = f"exactly {r} men"
+            how = f"C({m},{r}) × C({w},{k - r})"
+        elif cond == "included":
+            val = comb(n - 1, k - 1)
+            chk = sum(1 for c in itertools.combinations(people, k) if "W0" in c)
+            cond_txt = "a particular woman is always included"
+            how = f"The particular woman is fixed, so choose the remaining {k - 1} from {n - 1}: C({n - 1},{k - 1})"
+        else:
+            val = comb(n, k) - comb(n - 2, k - 2)
+            chk = sum(1 for c in itertools.combinations(people, k) if not ("M0" in c and "M1" in c))
+            cond_txt = "two particular men are not together on the committee"
+            how = f"C({n},{k}) − (ways with both men) = C({n},{k}) − C({n - 2},{k - 2})"
+        assert chk == val, (cond, chk, val)
+        if val < 20:
+            continue
+        stem = f"A committee of {k} members is to be formed from {m} men and {w} women so that {cond_txt}. In how many different ways can this be done?"
+        exp = f"{how} = <b>{val}</b>."
+        return P("Permutation and Combination", stem, val, exp, [comb(n, k), val + comb(n - 1, k - 1) // 2])
+    raise RuntimeError("pnc committee")
+
+
+def ar_pnc_word(rng):
+    words = ["DEPOSIT", "PAYMENT", "CREDIT", "BANKER", "TRADING", "MONEY", "LOANS", "FUNDS", "TAXING", "MARKET"]
+    words = [w_ for w_ in words if len(set(w_)) == len(w_)]
+    w = rng.choice(words)
+    n = len(w)
+    vow = [c for c in w if c in "AEIOU"]
+    v = len(vow)
+    if v == 0 or v == n:
+        return ar_pnc_word(rng)
+    f = math.factorial
+    cond = rng.choice(["together", "apart", "ends", "even"] if n >= 6 else ["together", "apart", "ends"])
+    perms = itertools.permutations(w)
+    if cond == "together":
+        val = f(n - v + 1) * f(v)
+        chk = sum(1 for p_ in perms if max(i for i, c in enumerate(p_) if c in "AEIOU") - min(i for i, c in enumerate(p_) if c in "AEIOU") == v - 1)
+        txt = "all the vowels come together"
+        how = f"Treat the {v} vowels as one block: ({n} − {v} + 1)! × {v}! = {f(n - v + 1)} × {f(v)} = {val}"
+    elif cond == "apart":
+        val = f(n - v) * math.perm(n - v + 1, v)
+        chk = sum(1 for p_ in perms if all(not (p_[i] in "AEIOU" and p_[i + 1] in "AEIOU") for i in range(n - 1)))
+        txt = "no two vowels come together"
+        how = f"Arrange the {n - v} consonants in {n - v}! = {f(n - v)} ways; the vowels then go into {n - v + 1} gaps in P({n - v + 1},{v}) = {math.perm(n - v + 1, v)} ways → {val}"
+    elif cond == "ends":
+        val = v * (n - v) * f(n - 2)
+        chk = sum(1 for p_ in perms if p_[0] in "AEIOU" and p_[-1] not in "AEIOU")
+        txt = "the arrangement begins with a vowel and ends with a consonant"
+        how = f"First place: {v} choices, last place: {n - v} choices, the middle {n - 2} letters: {n - 2}! = {f(n - 2)} → {v} × {n - v} × {f(n - 2)} = {val}"
+    else:
+        ev = n // 2
+        if v > ev:
+            return ar_pnc_word(rng)
+        val = math.perm(ev, v) * f(n - v)
+        chk = sum(1 for p_ in perms if all(p_[i] not in "AEIOU" for i in range(0, n, 2)))
+        txt = "the vowels occupy only the even places (2nd, 4th, 6th, …)"
+        how = f"Even places available = {ev}; vowels can fill them in P({ev},{v}) = {math.perm(ev, v)} ways; the {n - v} consonants fill the rest in {n - v}! = {f(n - v)} ways → {val}"
+    assert chk == val, (w, cond, chk, val)
+    stem = f"In how many different ways can the letters of the word '{w}' be arranged so that {txt}?"
+    return P("Permutation and Combination", stem, val, f"{how}.<br><b>{val} ways</b>.", [f(n), f(n) // 2])
+
+
+def ar_lcm_bells(rng):
+    for _ in range(500):
+        a, b, c = rng.sample([6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36, 40, 45, 60], 3)
+        L = math.lcm(a, b, c)
+        H = rng.choice([2, 3, 4, 5, 6, 8, 12])
+        times = (60 * H) // L + 1
+        if not 3 <= times <= 14 or L > 360:
+            continue
+        sim = sum(1 for mm in range(0, 60 * H + 1) if mm % a == 0 and mm % b == 0 and mm % c == 0)
+        assert sim == times
+        stem = (f"Three bells ring at intervals of {a}, {b} and {c} minutes respectively. They ring together at 9:00 a.m. "
+                f"How many times will they ring together in the next {H} hours (counting the ring at 9:00 a.m.)?")
+        exp = (f"They ring together every LCM({a}, {b}, {c}) = {L} minutes.<br>In {H} hours = {60 * H} minutes: {60 * H}/{L} → {(60 * H) // L} more times, plus the first ring at 9:00 a.m. → <b>{times}</b>.")
+        return P("HCF and LCM", stem, times, exp, [times - 1, (60 * H) // L + 2])
+    raise RuntimeError("bells")
+
+
+def ar_hcf_rem(rng):
+    for _ in range(500):
+        g = rng.randint(7, 37)
+        r = rng.randint(1, g - 1)
+        ks = rng.sample(range(5, 70), 3)
+        nums = sorted(g * k + r for k in ks)
+        gg = math.gcd(nums[1] - nums[0], nums[2] - nums[1])
+        if gg <= r or len({x % gg for x in nums}) != 1:
+            continue
+        best = max(d for d in range(2, nums[2] - nums[0] + 1) if len({x % d for x in nums}) == 1)
+        assert best == gg
+        rem = nums[0] % gg
+        ask_rem = rng.random() < 0.4
+        stem = (f"What is the greatest number that divides {nums[0]}, {nums[1]} and {nums[2]} leaving the same remainder in each case"
+                + (", and what is that remainder? (Choose the remainder.)" if ask_rem else "?"))
+        exp = (f"The required number is the HCF of the differences: {nums[1]} − {nums[0]} = {nums[1] - nums[0]} and {nums[2]} − {nums[1]} = {nums[2] - nums[1]} → HCF = {gg}.<br>"
+               + (f"Remainder = {nums[0]} mod {gg} = <b>{rem}</b>." if ask_rem else f"<b>{gg}</b>."))
+        val = rem if ask_rem else gg
+        if ask_rem and rem == 0:
+            continue
+        return P("HCF and LCM", stem, val, exp, [gg + 3, gg - 2] if not ask_rem else [rem + 1, rem + 2])
+    raise RuntimeError("hcf rem")
+
+
+def ar_remainder_pow(rng):
+    m = rng.choice([7, 8, 9, 11, 13])
+    for _ in range(200):
+        a, b = rng.randint(2, 19), rng.randint(2, 19)
+        p, q = rng.randint(12, 60), rng.randint(12, 60)
+        if rng.random() < 0.5:
+            val = (a ** p + b ** q) % m
+            assert val == (pow(a, p, m) + pow(b, q, m)) % m
+            stem = f"What is the remainder when {a}{sup(p)} + {b}{sup(q)} is divided by {m}?"
+            exp = (f"Work modulo {m}: {a}{sup(p)} ≡ {pow(a, p, m)} and {b}{sup(q)} ≡ {pow(b, q, m)} (using the repeating cycle of powers).<br>"
+                   f"Sum ≡ {pow(a, p, m)} + {pow(b, q, m)} ≡ <b>{val}</b> (mod {m}).")
+            pool = [x for x in range(m) if x != val]
+        else:
+            val = (a ** p * b ** q) % 10
+            stem = f"What is the unit digit of {a}{sup(p)} × {b}{sup(q)}?"
+            exp = (f"Unit digit of {a}{sup(p)} = {pow(a, p, 10)}; unit digit of {b}{sup(q)} = {pow(b, q, 10)} (digits of powers repeat in cycles).<br>"
+                   f"{pow(a, p, 10)} × {pow(b, q, 10)} = {pow(a, p, 10) * pow(b, q, 10)} → unit digit <b>{val}</b>.")
+            pool = [x for x in range(10) if x != val]
+        rng.shuffle(pool)
+        items = sorted([val] + pool[:4])
+        return dict(topic="Number System", stem=stem, value=Fr(val), exp=exp, mistakes=[], custom=([str(x) for x in items], items.index(val)))
+    raise RuntimeError("remainder")
+
+
+def ar_melt(rng):
+    if rng.random() < 0.6:
+        for _ in range(5000):
+            r, h, s = rng.randint(3, 21), rng.randint(4, 40), rng.choice([1, 2, 3, 6])
+            n = Fr(3 * r * r * h, 4 * s ** 3)
+            if n.denominator == 1 and 8 <= n <= 200:
+                break
+        else:
+            return ar_melt(rng)
+        stem = (f"A solid metal cylinder of radius {r} cm and height {h} cm is melted and recast into small solid spheres of radius {s} cm each. "
+                f"How many such spheres can be made? (No metal is wasted.)")
+        exp = (f"Volume of cylinder = π × {r}² × {h}; volume of one sphere = (4/3) × π × {s}³.<br>"
+               f"Number of spheres = ({r * r} × {h}) ÷ ((4/3) × {s ** 3}) = <b>{int(n)}</b>.")
+        return P("Mensuration", stem, n, exp, [n * 2, n // 2 + 1])
+    for _ in range(5000):
+        R, H, r = rng.randint(6, 30), rng.randint(6, 40), rng.randint(2, 12)
+        hh = Fr(R * R * H, 3 * r * r)
+        if hh.denominator == 1 and 3 <= hh <= 60:
+            break
+    else:
+        return ar_melt(rng)
+    stem = (f"A solid metal cone of base radius {R} cm and height {H} cm is melted and recast into a solid cylinder of base radius {r} cm. "
+            f"What is the height of the cylinder (in cm)?")
+    exp = (f"Volume of cone = (1/3)π × {R}² × {H}; volume of cylinder = π × {r}² × h.<br>"
+           f"h = ({R * R} × {H}) ÷ (3 × {r * r}) = <b>{int(hh)} cm</b>.")
+    return P("Mensuration", stem, hh, exp, [hh * 3, hh // 3 + 2])
+
+
+def ar_circular_track(rng):
+    kind = rng.choice(["same", "opp", "lap"])
+    for _ in range(2000):
+        if kind in ("same", "opp"):
+            vA, vB = rng.sample([2, 3, 4, 5, 6, 7, 8, 9, 10, 12], 2)
+            if kind == "same" and vA < vB:
+                vA, vB = vB, vA
+            rel = vA - vB if kind == "same" else vA + vB
+            L = rng.choice([300, 400, 450, 500, 600, 800, 900, 1000, 1200])
+            t = Fr(L, rel)
+            if not nice(t, 2) or t < 5:
+                continue
+            stem = (f"A and B start from the same point of a circular track {L} m long at the same time with speeds {vA} m/s and {vB} m/s. "
+                    f"If they run in the {'same' if kind == 'same' else 'opposite'} directions, after how many seconds will they meet for the first time?")
+            exp = (f"Relative speed = {vA} {'−' if kind == 'same' else '+'} {vB} = {rel} m/s ({'same' if kind == 'same' else 'opposite'} directions).<br>"
+                   f"They meet when the faster runner gains one full lap ({'one lap' if kind == 'same' else 'together they cover one lap'}): {L}/{rel} = <b>{fmt(t)} s</b>.")
+            return P("Time, Speed and Distance", stem, t, exp, [Fr(L, vA + vB) if kind == "same" else Fr(L, abs(vA - vB)), t * 2])
+        tA, tB = rng.sample([12, 15, 18, 20, 24, 30, 36, 40, 45, 60, 72, 90], 2)
+        L = math.lcm(tA, tB)
+        if not 60 <= L <= 600:
+            continue
+        sim = next(sec for sec in range(1, L + 1) if sec % tA == 0 and sec % tB == 0)
+        assert sim == L
+        stem = (f"Two runners A and B start together from the starting point of a circular track in the same direction. A completes one lap in {tA} seconds and B in {tB} seconds. "
+                f"After how many seconds will they both be at the starting point together again?")
+        exp = f"They are at the start together at common multiples of {tA} and {tB}: LCM({tA}, {tB}) = <b>{L} s</b>."
+        return P("Time, Speed and Distance", stem, L, exp, [tA + tB, math.gcd(tA, tB) * 3])
+    raise RuntimeError("track")
+
+
+def ar_dice_cards(rng):
+    from math import comb
+    if rng.random() < 0.5:
+        outs = [(a, b) for a in range(1, 7) for b in range(1, 7)]
+        pr = {2, 3, 5, 7, 11}
+        ev = {"the sum of the numbers is a multiple of 4": [o for o in outs if (o[0] + o[1]) % 4 == 0],
+              "the sum of the numbers is a prime number": [o for o in outs if o[0] + o[1] in pr],
+              "the product of the numbers is even": [o for o in outs if (o[0] * o[1]) % 2 == 0],
+              "the two numbers differ by exactly 2": [o for o in outs if abs(o[0] - o[1]) == 2],
+              "the sum of the numbers is greater than 8": [o for o in outs if o[0] + o[1] > 8],
+              "the product of the numbers is a multiple of 6": [o for o in outs if (o[0] * o[1]) % 6 == 0],
+              "the two numbers are both prime": [o for o in outs if o[0] in (2, 3, 5) and o[1] in (2, 3, 5)]}
+        name = rng.choice(list(ev))
+        fr = {k: Fr(len(v), 36) for k, v in ev.items()}
+        right = fr[name]
+        stem = f"Two fair dice are thrown together. What is the probability that {name}?"
+        exp = f"Total outcomes = 36. Favourable outcomes = {len(ev[name])}.<br>P = {len(ev[name])}/36 = <b>{right.numerator}/{right.denominator}</b>."
+    else:
+        tot = comb(52, 2)
+        ev = {"both are face cards (J, Q, K)": comb(12, 2), "both are red": comb(26, 2), "one is a king and the other is a queen": 4 * 4,
+              "both are of the same suit": 4 * comb(13, 2), "both are aces or both are kings": 2 * comb(4, 2), "one is a heart and the other is a spade": 13 * 13}
+        name = rng.choice(list(ev))
+        fr = {k: Fr(v, tot) for k, v in ev.items()}
+        right = fr[name]
+        stem = f"Two cards are drawn at random, without replacement, from a well-shuffled pack of 52 cards. What is the probability that {name}?"
+        exp = f"Total ways = C(52,2) = {tot}. Favourable ways = {ev[name]}.<br>P = {ev[name]}/{tot} = <b>{right.numerator}/{right.denominator}</b>."
+    pool = [v for k, v in fr.items() if k != name and v != right and 0 < v < 1]
+    pool = list(dict.fromkeys(pool))
+    rng.shuffle(pool)
+    items = sorted([right] + pool[:4])
+    return dict(topic="Probability", stem=stem, value=right, exp=exp, mistakes=[], custom=([f"{v.numerator}/{v.denominator}" for v in items], items.index(right)))
+
+
+def ar_alligation(rng):
+    if rng.random() < 0.5:
+        for _ in range(3000):
+            a, b = rng.sample([24, 30, 36, 40, 45, 48, 50, 54, 60, 64, 72, 80], 2)
+            if a > b:
+                a, b = b, a
+            x, y = rng.choice([(1, 2), (2, 3), (3, 2), (3, 1), (2, 1), (1, 3), (3, 5), (5, 3)])
+            c = Fr(a * x + b * y, x + y)
+            if c.denominator != 1 or not (a < c < b):
+                continue
+            ratio = (b - c, c - a)
+            g = math.gcd(int(ratio[0]), int(ratio[1]))
+            if (int(ratio[0]) // g, int(ratio[1]) // g) != (x, y) and ((int(ratio[0]) // g) + (int(ratio[1]) // g)) > 15:
+                continue
+            break
+        else:
+            raise RuntimeError("alligation")
+        p_, q_ = int(ratio[0]) // g, int(ratio[1]) // g
+        opts, ans = ratio_options(rng, p_, q_)
+        stem = (f"In what ratio must rice costing ₹{a} per kg be mixed with rice costing ₹{b} per kg so that the mixture is worth ₹{int(c)} per kg? "
+                "(Give the ratio cheaper : dearer.)")
+        exp = (f"Alligation: cheaper : dearer = (dearer − mean) : (mean − cheaper) = ({b} − {int(c)}) : ({int(c)} − {a}) = {int(ratio[0])}:{int(ratio[1])} = <b>{p_}:{q_}</b>.")
+        return dict(topic="Mixtures and Alligation", stem=stem, value=Fr(p_, q_), exp=exp, mistakes=[], custom=(opts, ans))
+    for _ in range(3000):
+        a, b = rng.sample([24, 30, 36, 40, 45, 48, 50, 60, 64, 72, 80, 90], 2)
+        x, y = rng.choice([(1, 2), (2, 3), (3, 2), (3, 1), (2, 1), (4, 1), (3, 5)])
+        cost = Fr(a * x + b * y, x + y)
+        pf = rng.choice([10, 12, 15, 20, 25, 30])
+        sp = cost * (100 + pf) / 100
+        if sp.denominator == 1 and nice(cost, 2):
+            break
+    else:
+        raise RuntimeError("alligation2")
+    stem = (f"A trader mixes two varieties of tea costing ₹{a} per kg and ₹{b} per kg in the ratio {x}:{y} and sells the mixture at a profit of {pf}%. "
+            f"At what price per kg (in ₹) does he sell the mixture?")
+    exp = (f"Cost of {x + y} kg of mixture = {x}×{a} + {y}×{b} = {a * x + b * y}, so cost per kg = {fmt(cost)}.<br>"
+           f"Selling price per kg = {fmt(cost)} × {100 + pf}% = <b>₹{fmt(sp)}</b>.")
+    return P("Mixtures and Alligation", stem, sp, exp, [cost, cost + pf])
+
+
+def ar_wages(rng):
+    for _ in range(5000):
+        a, b = rng.sample([6, 8, 10, 12, 15, 18, 20, 24, 30], 2)
+        d = rng.randint(2, 6)
+        done = d * (Fr(1, a) + Fr(1, b))
+        if done >= 1:
+            continue
+        Wk = rng.choice([1800, 2400, 3000, 3600, 4800, 6000, 7200, 9000])
+        bw = d * Fr(1, b) + (1 - done) * 0
+        # A leaves after d days; B finishes the rest
+        b_work = d * Fr(1, b) + (1 - done)
+        a_work = d * Fr(1, a)
+        assert a_work + b_work == 1
+        share = Wk * b_work
+        if share.denominator == 1 and Wk * a_work == int(Wk * a_work):
+            break
+    else:
+        raise RuntimeError("wages")
+    stem = (f"A can complete a piece of work in {a} days and B in {b} days. They start working together, but A leaves after {d} days and B completes the remaining work alone. "
+            f"If the total payment for the work is ₹{ind(Wk)}, shared in proportion to the work done, how much does B receive (in ₹)?")
+    exp = (f"A's work = {d}/{a} = {fmt(a_work)} of the job. So B did 1 − {fmt(a_work)} = {fmt(b_work)}.<br>"
+           f"B's share = {ind(Wk)} × {fmt(b_work)} = <b>₹{ind(share)}</b>.")
+    return P("Time and Work", stem, share, exp, [Wk * a_work, Wk * Fr(1, b) * d])
+
+
+def ar_overtake(rng):
+    for _ in range(3000):
+        vA, vB = rng.sample([10, 15, 20, 25, 30, 35], 2)
+        if vA < vB:
+            vA, vB = vB, vA
+        t = rng.randint(12, 40)
+        total = (vA - vB) * t
+        L1 = rng.randrange(60, max(70, total - 30), 10)
+        L2 = total - L1
+        if L2 < 40 or L2 % 5:
+            continue
+        break
+    kA, kB = vA * 18 // 5, vB * 18 // 5
+    ask_len = rng.random() < 0.5
+    if ask_len:
+        stem = (f"A train {L1} m long running at {kA} km/h overtakes another train running in the same direction at {kB} km/h in {t} seconds. What is the length of the second train (in metres)?")
+        val = L2
+        exp = (f"Relative speed = ({kA} − {kB}) km/h = {kA - kB} × 5/18 = {vA - vB} m/s. Distance covered while overtaking = {vA - vB} × {t} = {total} m = {L1} + length of the second train.<br>"
+               f"Length of second train = {total} − {L1} = <b>{L2} m</b>.")
+        mist = [total, L1 + t]
+    else:
+        stem = (f"A train {L1} m long running at {kA} km/h overtakes another train {L2} m long running in the same direction at {kB} km/h. How many seconds does it take to overtake it completely?")
+        val = t
+        exp = (f"Relative speed = ({kA} − {kB}) km/h = {vA - vB} m/s. Distance = {L1} + {L2} = {total} m.<br>Time = {total}/{vA - vB} = <b>{t} s</b>.")
+        mist = [Fr(total, vA + vB), t + 5]
+    return P("Trains", stem, val, exp, mist)
+
+
+def ar_income_exp(rng):
+    for _ in range(5000):
+        a, b = rng.sample(range(2, 10), 2)
+        c, d = rng.sample(range(2, 10), 2)
+        if (a - b) * (c - d) <= 0:
+            continue
+        k = rng.choice([100, 200, 250, 300, 400, 500])
+        x, y = (c - d) * k, (a - b) * k
+        if x <= 0 or y <= 0:
+            continue
+        S = a * x - c * y
+        if S <= 0 or b * x - d * y != S:
+            continue
+        break
+    else:
+        raise RuntimeError("income")
+    det = a * (-d) - (-c) * b
+    xs = Fr(S * (-d) - (-c) * S, det)
+    ys = Fr(a * S - b * S, det)
+    assert (xs, ys) == (x, y)
+    stem = (f"The incomes of A and B are in the ratio {a}:{b} and their expenditures are in the ratio {c}:{d}. If each of them saves ₹{ind(S)}, what is A's income (in ₹)?")
+    exp = (f"Let the incomes be {a}x and {b}x and expenditures {c}y and {d}y. Saving: {a}x − {c}y = {ind(S)} and {b}x − {d}y = {ind(S)}.<br>"
+           f"Subtracting: {a - b}x = {c - d}y → x : y = {c - d} : {a - b}. Put x = {c - d}k, y = {a - b}k: {a}×{c - d}k − {c}×{a - b}k = {a * (c - d) - c * (a - b)}k = {ind(S)} → k = {ind(k)}.<br>"
+           f"A's income = {a}x = {a} × {c - d} × {ind(k)} = <b>₹{ind(a * x)}</b>.")
+    return P("Ratio and Proportion", stem, a * x, exp, [b * x, c * y])
+
+
+# ------------------------------------------------ extra single-question types
+def quad_numeric(rng):
+    for _ in range(500):
+        eq = quad_eq(rng)
+        roots = sorted(eq[0], reverse=True)
+        if roots[0] == roots[1]:
+            continue
+        al, be = roots
+        opts_expr = [("α − β", lambda a_, b_: a_ - b_, "α − β"), ("α² + β²", lambda a_, b_: a_ * a_ + b_ * b_, "α² + β²"),
+                     ("αβ", lambda a_, b_: a_ * b_, "αβ"), ("2α + β", lambda a_, b_: 2 * a_ + b_, "2α + β"),
+                     ("α² − β²", lambda a_, b_: a_ * a_ - b_ * b_, "α² − β²"), ("3α − 2β", lambda a_, b_: 3 * a_ - 2 * b_, "3α − 2β")]
+        name, fn, _ = rng.choice(opts_expr)
+        v = fn(al, be)
+        if not nice(v, 2) or v <= 0:
+            continue
+        stem = f"If α and β (α > β) are the roots of the equation {poly(*eq[1], 'x')[:-4]} = 0, find the value of {name}."
+        exp = f"{solve_text(eq, 'x')}.<br>So α = {mf(al)} and β = {mf(be)}.<br>{name} = <b>{mf(v)}</b>."
+        return numq(rng, "Quadratic Equations", stem, v, exp, mistakes=[fn(be, al) if fn(be, al) > 0 else v + 3, v + 4], none_ok=False)
+    raise RuntimeError("quad numeric")
+
+
+def series_two_missing(rng):
+    fam, t, steps, summary = series_terms(rng, [0, 1, 2, 3, 4, 6, 7])
+    j1, j2 = rng.randint(1, 2), rng.randint(4, 5)
+    shown = [("?" if i in (j1, j2) else str(v)) for i, v in enumerate(t[:7])]
+    q = "Find the sum of the two missing terms ('?') in the series:\n" + ", ".join(shown)
+    val = t[j1] + t[j2]
+    exp = f"Pattern: {summary}.<br>" + "<br>".join(steps) + f"<br>Missing terms: {t[j1]} and {t[j2]} → sum = <b>{val}</b>."
+    return numq(rng, "Number Series", q, val, exp, mistakes=[t[j1] + t[j2 - 1], t[j1 - 1] + t[j2]], none_ok=False)
+
+
+def simplification(rng):
+    for _ in range(300):
+        kind = rng.randint(0, 4)
+        if kind == 0:
+            fr = rng.choice([Fr(3, 4), Fr(5, 6), Fr(2, 3), Fr(7, 8), Fr(5, 12)])
+            N1 = fr.denominator * rng.randint(10, 40)
+            p, N2 = rng.choice([15, 20, 25, 35, 45]), rng.choice([200, 240, 320, 400, 480, 600])
+            d, c = rng.choice([3, 4, 5, 6, 7, 9]), rng.randint(5, 19)
+            val = (fr * N1 - Fr(p * N2, 100)) / d + c * c
+            text = f"({fr.numerator}/{fr.denominator} of {N1} − {p}% of {N2}) ÷ {d} + {c}²"
+            exp = f"{fr.numerator}/{fr.denominator} of {N1} = {fmt(fr * N1)}; {p}% of {N2} = {fmt(Fr(p * N2, 100))}.<br>({fmt(fr * N1)} − {fmt(Fr(p * N2, 100))}) ÷ {d} + {c * c} = {fmt((fr * N1 - Fr(p * N2, 100)) / d)} + {c * c} = <b>{fmt(val)}</b>."
+        elif kind == 1:
+            a_, m_, c_, d_, k_ = rng.choice([121, 144, 169, 196, 225, 256, 289, 324]), rng.randint(3, 12), rng.randint(3, 9), rng.choice([3, 9, 27]), rng.randint(10, 60)
+            root = math.isqrt(a_)
+            val = root * m_ + Fr(c_ ** 3, d_) - k_
+            text = f"√{a_} × {m_} + {c_}³ ÷ {d_} − {k_}"
+            exp = f"√{a_} = {root}; {root} × {m_} = {root * m_}; {c_}³ ÷ {d_} = {c_ ** 3}/{d_} = {fmt(Fr(c_ ** 3, d_))}.<br>{root * m_} + {fmt(Fr(c_ ** 3, d_))} − {k_} = <b>{fmt(val)}</b>."
+        elif kind == 2:
+            dens = rng.choice([(2, 3, 4), (3, 4, 6), (4, 6, 8), (3, 5, 6), (2, 5, 10), (4, 5, 10)])
+            fr3 = [Fr(rng.randint(1, d_ - 1), d_) for d_ in dens]
+            L = math.lcm(*dens) * rng.choice([1, 2, 3, 5])
+            val = (fr3[0] + fr3[1] - fr3[2]) * L
+            text = f"({fr3[0].numerator}/{fr3[0].denominator} + {fr3[1].numerator}/{fr3[1].denominator} − {fr3[2].numerator}/{fr3[2].denominator}) × {L}"
+            inner = fr3[0] + fr3[1] - fr3[2]
+            exp = f"{fr3[0]} + {fr3[1]} − {fr3[2]} = {inner}.<br>{inner} × {L} = <b>{fmt(val)}</b>."
+        elif kind == 3:
+            p1, p2 = rng.choice([12.5, 37.5, 62.5, 7.5, 22.5, 17.5]), rng.choice([15, 35, 45, 55, 65])
+            N1, N2 = rng.choice([160, 240, 320, 480, 640, 800]), rng.choice([200, 300, 400, 600])
+            x_, y_ = rng.randint(6, 14), rng.randint(5, 12)
+            val = Fr(p1).limit_denominator(10) * N1 / 100 + Fr(p2 * N2, 100) - x_ * y_
+            text = f"{p1}% of {N1} + {p2}% of {N2} − {x_} × {y_}"
+            exp = f"{p1}% of {N1} = {fmt(Fr(p1).limit_denominator(10) * N1 / 100)}; {p2}% of {N2} = {fmt(Fr(p2 * N2, 100))}; {x_} × {y_} = {x_ * y_}.<br>Result = <b>{fmt(val)}</b>."
+        else:
+            a_, b_, c_, d_, e_ = rng.randint(14, 40), rng.randint(5, 13), rng.randint(3, 12), rng.randint(3, 12), rng.randint(4, 15)
+            if a_ == b_:
+                continue
+            val = Fr(a_ * a_ - b_ * b_, a_ - b_) + c_ * d_ - e_ * e_
+            text = f"({a_}² − {b_}²) ÷ ({a_} − {b_}) + {c_} × {d_} − {e_}²"
+            exp = f"({a_}² − {b_}²) ÷ ({a_} − {b_}) = {a_ + b_} (since a² − b² = (a + b)(a − b)).<br>{a_ + b_} + {c_ * d_} − {e_ * e_} = <b>{fmt(val)}</b>."
+        if not nice(val, 0) or val <= 0 or val > 5000:
+            continue
+        q = "Find the value of the following expression:\n" + text + " = ?"
+        return numq(rng, "Simplification", q, val, exp, none_ok=False)
+    raise RuntimeError("simplification")
+
 ARITH = [ar_boats1, ar_boats2, ar_mixture, ar_interest, ar_pipes, ar_cycle, ar_partner, ar_pl, ar_ages,
-         ar_trains1, ar_trains2, ar_avg, ar_digits, ar_wire, ar_salary, ar_meet, ar_prob]
-QC_GROUPS = [[ar_interest, ar_pl, ar_salary, ar_partner], [ar_boats2, ar_meet, ar_pipes]]   # same unit within a group
+         ar_trains1, ar_trains2, ar_avg, ar_digits, ar_wire, ar_salary, ar_meet, ar_prob,
+         ar_pnc_committee, ar_pnc_word, ar_lcm_bells, ar_hcf_rem, ar_remainder_pow, ar_melt, ar_circular_track, ar_dice_cards,
+         ar_alligation, ar_wages, ar_overtake, ar_income_exp]
+QC_GROUPS = [[ar_interest, ar_pl, ar_salary, ar_partner, ar_wages, ar_income_exp], [ar_boats2, ar_meet, ar_pipes], [ar_pnc_committee, ar_pnc_word], [ar_trains2, ar_overtake, ar_circular_track]]   # same unit within a group
 
 
 def finish(rng, p):
@@ -1540,32 +2349,96 @@ def qc_question(rng, want):
 
 
 # ---------------------------------------------------------------- assembly
+_BP_CACHE = {}
+
+
+def blueprints(exam):
+    """Ten different test blueprints per exam: counts of every question type, DI set sizes and the order of the blocks."""
+    if exam in _BP_CACHE:
+        return _BP_CACHE[exam]
+    sbi = exam == "sbi"
+    total = SBI_Q if sbi else IBPS_Q
+    for salt in range(200):
+        rng = random.Random(f"scorefree-mains-quant-blueprint-{exam}-{salt}")
+        plans, seen = [], set()
+        guard = 0
+        while len(plans) < 10 and guard < 20000:
+            guard += 1
+            k = rng.choice([3, 4]) if sbi else rng.choice([2, 3])
+            di = [rng.choice([4, 5]) for _ in range(k)]
+            quad = rng.choice([0, 3, 4, 5, 5])
+            qnum = rng.choice([0, 1, 2]) if quad else 0
+            series = rng.choice([0, 3, 4, 5])
+            two = 1 if series >= 4 and rng.random() < 0.4 else 0
+            simp = rng.choice([0, 3, 4, 5])
+            approx = rng.choice([0, 3, 4, 5])
+            ds = rng.choice([2, 3, 4]) if sbi else rng.choice([0, 1, 2, 3])
+            qc = rng.choice([0, 2, 3]) if sbi else rng.choice([0, 0, 2])
+            if sum(1 for x in (quad, series, simp, approx) if x) < 2:
+                continue
+            fixed = sum(di) + quad + qnum + series + simp + approx + ds + qc
+            arith = total - fixed
+            if not (10 <= arith <= 20 if sbi else 7 <= arith <= 14):
+                continue
+            key = (quad, qnum, series, simp, approx, ds, qc, tuple(sorted(di)))
+            if key in seen:
+                continue
+            seen.add(key)
+            units = [f"di{i}" for i in range(k)] + [n for n, c in (("quad", quad + qnum), ("series", series), ("simp", simp), ("approx", approx), ("ds", ds + qc)) if c]
+            a1 = rng.randint(3, arith - 3) if arith >= 8 else arith
+            units += ["ar_a", "ar_b"] if arith >= 8 else ["ar_a"]
+            rng.shuffle(units)
+            plans.append(dict(di=di, quad=quad, qnum=qnum, series=series, two=two, simp=simp, approx=approx, ds=ds, qc=qc, arith=arith, a1=a1, units=units))
+        if len(plans) < 10:
+            continue
+        firsts = [p_["units"][0].rstrip("0123456789") for p_ in plans]
+        from collections import Counter
+        if max(Counter(firsts).values()) <= 3 and all(firsts[i] != firsts[i + 1] for i in range(9)):
+            _BP_CACHE[exam] = plans
+            return plans
+    raise RuntimeError("blueprints")
+
+
 def build_test(exam, t):
     rng = random.Random(f"scorefree-mains-quant-{exam}-{t}")
     sbi = exam == "sbi"
+    bp = blueprints(exam)[t - 1]
+    di_fns = rng.sample(DI_BUILDERS, len(bp["di"]))
+    arith_pool = rng.sample(ARITH, bp["arith"])
+    arith_a, arith_b = arith_pool[:bp["a1"]], arith_pool[bp["a1"]:]
     out = []
-    out += build_quadratics(rng, 5)
-    out += [series_missing(rng), series_missing(rng), series_missing(rng), series_wrong(rng), series_wrong(rng)]
-    di_n = 4 if sbi else 3
-    for i in range(di_n):
-        fn = DI_BUILDERS[(t + i * 2 + (1 if sbi else 0)) % len(DI_BUILDERS)]
-        title, intro, qs = fn(rng)
-        for q in qs:
-            q["setTitle"], q["setIntro"] = title, intro
-        out += qs
-    pool = ARITH + [approx_question]
-    pick = rng.sample(pool, 15 if sbi else 10)
-    for fn in pick:
-        if fn is approx_question:
-            out.append(approx_question(rng))
-        else:
-            out.append(finish(rng, fn(rng)))
-    if sbi:
-        wants = [0, 1, 2, 3, 4]
-        rng.shuffle(wants)
-        out += [ds_question(rng, w) for w in wants[:3]]
-        out += [qc_question(rng, w) for w in rng.sample([0, 2, 4], 2)]
-    assert len(out) == (SBI_Q if sbi else IBPS_Q), len(out)
+    for unit in bp["units"]:
+        if unit.startswith("di"):
+            i = int(unit[2:])
+            title, intro, qs = di_fns[i](rng, bp["di"][i])
+            for q in qs:
+                q["setTitle"], q["setIntro"] = title, intro
+            out += qs
+        elif unit == "quad":
+            qs = build_quadratics(rng, bp["quad"]) if bp["quad"] else []
+            qs += [quad_numeric(rng) for _ in range(bp["qnum"])]
+            rng.shuffle(qs)
+            out += qs
+        elif unit == "series":
+            n = bp["series"]
+            kinds = ["two"] * bp["two"] + ["wrong"] * (1 if n < 5 else 2) + ["missing"] * n
+            kinds = kinds[:n]
+            qs = [{"two": series_two_missing, "wrong": series_wrong, "missing": series_missing}[k_](rng) for k_ in kinds]
+            rng.shuffle(qs)
+            out += qs
+        elif unit == "simp":
+            out += [simplification(rng) for _ in range(bp["simp"])]
+        elif unit == "approx":
+            out += [approx_question(rng) for _ in range(bp["approx"])]
+        elif unit == "ds":
+            wants = [0, 1, 2, 3, 4]
+            rng.shuffle(wants)
+            qs = [ds_question(rng, w) for w in wants[:bp["ds"]]]
+            qs += [qc_question(rng, w) for w in rng.sample([0, 2, 4], min(3, bp["qc"]))] if bp["qc"] else []
+            out += qs
+        elif unit in ("ar_a", "ar_b"):
+            out += [finish(rng, fn(rng)) for fn in (arith_a if unit == "ar_a" else arith_b)]
+    assert len(out) == (SBI_Q if sbi else IBPS_Q), (len(out), bp)
     seen = set()
     for q in out:
         key = (q["q"], q.get("setTitle", ""))
