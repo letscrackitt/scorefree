@@ -452,7 +452,7 @@ function formatReasoningPrompt(q){
  if(!structured)return promptEscape(raw).replace(/\n/g,'<br>');
  const lines=raw.split(/\n+/).map(x=>x.trim()).filter(Boolean);
  const keyLines=lines.filter(x=>/\bmeans\b/i.test(x)&&(/[$%©@★#&δ*+×−]/.test(x)||/\b[A-Z]\s+\w+\s+[A-Z]\b/.test(x)));
- const rest=lines.filter(x=>!keyLines.includes(x)&&!/^\\s*(symbol|code)\s+key\s*:?$/i.test(x));
+ const rest=lines.filter(x=>!keyLines.includes(x)&&!/^\s*(symbol|code)\s+key\s*:?$/i.test(x));
  let legend='';
  if(keyLines.length){
   legend='<div class="prompt-key-grid">'+keyLines.map(line=>{
@@ -464,7 +464,7 @@ function formatReasoningPrompt(q){
 }
 function formatPromptSections(raw){
  const lines=String(raw).split(/\n+/).map(x=>x.trim()).filter(Boolean);
- const heading=/^(Directions|Statements?|Conclusions?|Premises?|Question|Rules|Illustration|New Input|Input|Relation|Data Set|Data|Statement I|Statement II|Step [IVX]+)\s*:?\s*(.*)$/i;
+ const heading=/^(Directions|Statement I|Statement II|Statements?|Conclusions?|Premises?|Question|Rules|Illustration|New Input|Input|Relation|Data Set|Data|Step [IVX]+)\s*:?\s*(.*)$/i;
  let html='',plain=[];
  function flush(){if(plain.length){html+='<div class="prompt-item-list">'+plain.map(x=>'<div class="prompt-item">'+promptEscape(x)+'</div>').join('')+'</div>';plain=[];}}
  for(let i=0;i<lines.length;i++){
@@ -472,9 +472,9 @@ function formatPromptSections(raw){
   if(!m){plain.push(line);continue;}
   flush();
   const label=m[1].toLowerCase(),value=m[2]||'';
-  const title=label.startsWith('direction')?'Directions':label.startsWith('statement')?'Statements':label.startsWith('conclusion')?'Conclusions':label==='premises'?'Premises':label==='rules'?'Rules':label==='illustration'?'Illustration':label==='new input'?'New Input':label==='input'?'Input':label==='relation'?'Coded Relation':label==='data set'?'Data Set':label==='data'?'Data':label==='question'?'Question':label.startsWith('step')?m[1]:'Statements';
+  const title=label.startsWith('direction')?'Directions':label==='statement i'?'Statement I':label==='statement ii'?'Statement II':label.startsWith('statement')?'Statements':label.startsWith('conclusion')?'Conclusions':label==='premises'?'Premises':label==='rules'?'Rules':label==='illustration'?'Illustration':label==='new input'?'New Input':label==='input'?'Input':label==='relation'?'Coded Relation':label==='data set'?'Data Set':label==='data'?'Data':label==='question'?'Question':label.startsWith('step')?m[1]:'Statements';
   const isStep=label.startsWith('step');
-  const items=[];if(value)items.push(value);
+  const items=[];if(value){if(label.startsWith('statement')&&!/^statement [ivx]+$/i.test(label)){items.push(...value.split(/(?<=[.!?])\s+(?=[A-Z])/).filter(Boolean));}else items.push(value);}
   if(!isStep){while(i+1<lines.length&&!heading.test(lines[i+1]))items.push(lines[++i]);}
   const cls=isStep?'prompt-section prompt-step':label.startsWith('direction')?'prompt-section prompt-direction':'prompt-section';
   const body=items.map(x=>'<div class="prompt-item">'+promptEscape(x)+'</div>').join('');
