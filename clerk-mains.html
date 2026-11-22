@@ -444,7 +444,7 @@ function qs(){
   while(list.length<total)list.push({empty:true,topic:'Not added yet',q:'This question is being prepared and has not been added to this test yet.',opts:[],exp:''});
   return list;
 }
-function showSet(pid,gid,q){const p=document.getElementById(pid),g=document.getElementById(gid),has=!!(q.setTitle||q.setIntro);p.classList.toggle('hidden',!has);g.classList.toggle('has-set',has);if(has&&p.dataset.t!==q.setTitle){p.dataset.t=q.setTitle||'';p.scrollTop=0}p.innerHTML=has?'<p class="eyebrow">Directions</p><h3>'+promptEscape(q.setTitle||'')+'</h3><div class="setbody">'+promptEscape(q.setIntro||'').replace(/\\n/g,'<br>')+'</div>':''}
+function showSet(pid,gid,q){const p=document.getElementById(pid),g=document.getElementById(gid),has=!!(q.setTitle||q.setIntro);p.classList.toggle('hidden',!has);g.classList.toggle('has-set',has);if(has&&p.dataset.t!==q.setTitle){p.dataset.t=q.setTitle||'';p.scrollTop=0}p.innerHTML=has?'<p class="eyebrow">Directions</p><h3>'+promptEscape(q.setTitle||'')+'</h3><div class="setbody">'+(q.setIntro||'')+'</div>':''}
 function promptEscape(value){return String(value).replace(/[&<>"']/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];});}
 function formatReasoningPrompt(q){
  const raw=String(q.q||'');
