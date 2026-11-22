@@ -467,18 +467,19 @@ function formatPromptSections(raw){
  function flush(){if(plain.length){html+='<div class="prompt-lines">'+plain.map(x=>'<div class="prompt-line">'+promptEscape(x)+'</div>').join('')+'</div>';plain=[];}}
  for(let i=0;i<lines.length;i++){
   const line=lines[i],m=line.match(/^(Statements?|Conclusions?|Premises?|Question)\s*:\s*(.*)$/i);
-  if(m){flush();const label=m[1].toLowerCase(),value=m[2];
-   const kind=label.startsWith('conclusion')?'prompt-conclusions':'prompt-block';
-   const heading=label.startsWith('conclusion')?'Conclusions':label.startsWith('statement')?'Statements':label==='premises'?'Premises':'Question';
-   let body=value;
-   if(!body&&i+1<lines.length&&!/^(Statements?|Conclusions?|Premises?|Question)\s*:/i.test(lines[i+1]))body=lines[++i];
-   if(label.startsWith('conclusion')&&body){const items=body.split(/(?=\b(?:I|II|III|IV)\s*\.)/).map(x=>x.trim()).filter(Boolean);html+='<div class="'+kind+'"><span class="prompt-label">'+heading+'</span>'+items.map(x=>'<div class="prompt-conclusion">'+promptEscape(x)+'</div>').join('')+'</div>';}
-   else html+='<div class="'+kind+'"><span class="prompt-label">'+heading+'</span><div>'+promptEscape(body)+'</div></div>';
-  }else plain.push(line);
+  if(!m){plain.push(line);continue;}
+  flush();
+  const label=m[1].toLowerCase(),heading=label.startsWith('conclusion')?'Conclusions':label.startsWith('statement')?'Statements':label==='premises'?'Premises':'Question';
+  const items=[];if(m[2])items.push(m[2]);
+  while(i+1<lines.length&&!/^(Statements?|Conclusions?|Premises?|Question)\s*:/i.test(lines[i+1]))items.push(lines[++i]);
+  if(label.startsWith('conclusion')){
+   html+='<div class="prompt-conclusions"><span class="prompt-label">'+heading+'</span>'+items.map(x=>'<div class="prompt-conclusion">'+promptEscape(x)+'</div>').join('')+'</div>';
+  }else{
+   html+='<div class="prompt-block"><span class="prompt-label">'+heading+'</span><div class="prompt-lines">'+items.map(x=>'<div class="prompt-line">'+promptEscape(x)+'</div>').join('')+'</div></div>';
+  }
  }
  flush();return '<div class="reasoning-prompt">'+html+'</div>';
 }
-
 function renderQ(){const list=qs();if(idx>=list.length)idx=list.length-1;visited[idx]=true;const q=list[idx];document.getElementById('qcount').textContent='Question '+(idx+1);document.getElementById('qmarks').textContent=(exam==='ibps'?'Official section: '+sectionMeta().questions+' Q · '+sectionMeta().marks+' marks · '+sectionMeta().minutes+' min':'Official section: '+sectionMeta().questions+' Q · '+sectionMeta().marks+' marks · '+sectionMeta().minutes+' min')+' · '+list.filter(x=>!x.empty).length+' of '+list.length+' questions added';document.getElementById('qtopic').textContent=q.topic;showSet('setPane','testGrid',q);document.getElementById('qtext').innerHTML=formatReasoningPrompt(q);document.getElementById('options').innerHTML=(q.opts||[]).map((o,i)=>'<label class="option"><input type="radio" name="option" value="'+i+'" '+(answers[idx]===i?'checked':'')+' onchange="chooseAnswer('+i+')"><span><b>'+String.fromCharCode(65+i)+'.</b> '+o+'</span></label>').join('');drawPalette()}
 function chooseAnswer(i){answers[idx]=i;drawPalette()}
 function drawPalette(){const list=qs();document.getElementById('palette').innerHTML=list.map((q,i)=>{const status=answers[i]!==undefined?(reviews[i]?'both':'answered'):(reviews[i]?'review':(visited[i]?'notanswered':'notvisited'));return '<button class="qnum '+status+' '+(i===idx?'current':'')+'" onclick="jump('+i+')">'+(i+1)+'</button>'}).join('');document.getElementById('answeredN').textContent=Object.keys(answers).length;document.getElementById('reviewN').textContent=Object.keys(reviews).filter(k=>reviews[k]).length}
