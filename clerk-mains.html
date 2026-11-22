@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>IBPS &amp; SBI Clerk Mains Free Sectional Test Window | SCOREFREE</title>
-<meta name="description" content="Take free IBPS Clerk Mains and SBI Clerk Mains sectional tests in an exam-style window with timer, question palette and negative marking. No login needed."><meta property="og:title" content="Free IBPS &amp; SBI Clerk Mains Sectional Tests"><meta property="og:type" content="website"><meta property="og:url" content="https://letscrackitt.github.io/scorefree/clerk-mains.html">
+<meta name="description" content="Prepare for IBPS Clerk Mains and SBI Clerk Mains with free, challenging Quantitative Aptitude and Reasoning Ability sectional tests, timed practice and solutions."><meta name="robots" content="index, follow"><meta property="og:title" content="IBPS &amp; SBI Clerk Mains Quant and Reasoning Practice | SCOREFREE"><meta property="og:description" content="Free timed Quant and Reasoning sectional tests for IBPS Clerk Mains and SBI Clerk Mains."><meta name="twitter:card" content="summary"><meta name="twitter:title" content="IBPS &amp; SBI Clerk Mains Quant and Reasoning Practice"><meta name="twitter:description" content="Free challenging timed sectional tests with solutions."><meta property="og:type" content="website"><meta property="og:url" content="https://letscrackitt.github.io/scorefree/clerk-mains.html">
 <link rel="canonical" href="https://letscrackitt.github.io/scorefree/clerk-mains.html">
 <style>
 :root{--ink:#202037;--muted:#686982;--line:#e4e4ee;--purple:#5b4ce2;--pale:#f6f5ff;--green:#16845b;--amber:#b97912;--red:#c44949;--bg:#f5f6fb}
@@ -241,11 +241,10 @@ body.focus-mode{background:#f2f5fb}
 <div class="grid">
 <article class="card"><span class="pill">IBPS Clerk Mains</span><h2>Reasoning Ability</h2><p class="muted">40 questions · 60 marks · 35 minutes</p><button class="primary" onclick="openDemo('ibps','reasoning')">Start sectional practice</button></article>
 <article class="card"><span class="pill">IBPS Clerk Mains</span><h2>Quantitative Aptitude</h2><p class="muted">35 questions · 50 marks · 30 minutes</p><button class="primary" onclick="openDemo('ibps','quant')">Start sectional practice</button></article>
-<article class="card"><span class="pill">IBPS Clerk Mains</span><h2>English Language</h2><p class="muted">40 questions · 40 marks · 35 minutes</p><button class="primary" onclick="openDemo('ibps','english')">Start sectional practice</button></article>
-<article class="card"><span class="pill">IBPS Clerk Mains</span><h2>General / Financial Awareness</h2><p class="muted">40 questions · 50 marks · 20 minutes</p><button class="primary" onclick="openDemo('ibps','awareness')">Start sectional practice</button></article>
+<article class="card"><span class="pill">IBPS Clerk Mains</span>
 <article class="card"><span class="pill">SBI Clerk Mains</span><h2>Reasoning &amp; Computer Aptitude</h2><p class="muted">50 questions · 60 marks · 45 minutes</p><button class="primary" onclick="openDemo('sbi','reasoning')">Start sectional practice</button></article>
 <article class="card"><span class="pill">SBI Clerk Mains</span><h2>Quantitative Aptitude</h2><p class="muted">50 questions · 50 marks · 45 minutes</p><button class="primary" onclick="openDemo('sbi','quant')">Start sectional practice</button></article>
-<article class="card"><span class="pill">SBI Clerk Mains</span><h2>English Language</h2><p class="muted">40 questions · 40 marks · 35 minutes</p><button class="primary" onclick="openDemo('sbi','english')">Start sectional practice</button></article><article class="card"><span class="pill">SBI Clerk Mains</span><h2>General / Financial Awareness</h2><p class="muted">50 questions · 50 marks · 35 minutes</p><button class="primary" onclick="openDemo('sbi','awareness')">Start sectional practice</button></article>
+
 </div>
 
 <p class="muted">Pattern source: the official IBPS CRP-CSA-XV detailed notification and SBI Junior Associates 2026 detailed advertisement and SBI Junior Associates 2026 detailed advertisement. These are sectional practice previews using the official section timing and scoring weight; the question bank is not yet complete to the full official question count. Newly written practice is not labelled as previous-year material.</p>
@@ -607,7 +606,7 @@ function beginNormalTest(){startSelectedTest();}
 if(launchParams.get('exam') && launchParams.get('subject')){
   // Correct flow: selected test -> instructions and marking scheme -> user starts test.
   const e=launchParams.get('exam'),s=launchParams.get('subject');
-  if(!['ibps','sbi'].includes(e) || !['reasoning','quant','english','awareness'].includes(s)){
+  if(!['ibps','sbi'].includes(e) || !['reasoning','quant'].includes(s)){
     document.getElementById('launchTitle').textContent='Invalid test selection';
     document.getElementById('instructionSubtitle').textContent='Please return to SCOREFREE and choose an exam, subject and test.';
   }
