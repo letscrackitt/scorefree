@@ -11,10 +11,10 @@
     section.className='card';
     section.style.cssText='max-width:960px;margin:40px auto 10px';
     section.innerHTML=`
-      <p class="eyebrow">Free bank exam descriptive practice</p>
-      <h2>IBPS Clerk, SBI Clerk &amp; PO Practice</h2>
-      <p class="muted">SCOREFREE is a free practice platform for bank exam aspirants: IBPS Clerk Mains and SBI Clerk Mains sectional tests, plus IBPS PO essay and comprehension and SBI PO email, situation analysis, report and précis writing.</p>
-      <p class="muted">Use SCOREFREE to build exam-ready writing habits with practice tests, word-count guidance, transparent practice scoring and learning pointers.</p>
+      <p class="eyebrow">Free Clerk Mains Quant and Reasoning practice</p>
+      <h2>IBPS &amp; SBI Clerk Mains Quant and Reasoning</h2>
+      <p class="muted">SCOREFREE is a free practice platform focused on IBPS Clerk Mains and SBI Clerk Mains Quantitative Aptitude and Reasoning Ability. Practise challenging timed sectional tests, mixed-topic questions and detailed solutions.</p>
+      <p class="muted">Build speed, accuracy and problem-solving ability with exam-style Quant and Reasoning practice for both Clerk Mains exams.</p>
     `;
     app.appendChild(section);
   }
